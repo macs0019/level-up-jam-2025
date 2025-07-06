@@ -1,14 +1,26 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FoodSelector : MonoBehaviour
+public class FoodSelector : InteractableBase
 {
     public List<Food> foods; // Lista de alimentos asignada desde el Inspector
     public SpriteRenderer targetRenderer; // SpriteRenderer donde se mostrará el sprite del alimento seleccionado
     public GameObject hiddenObject; // Objeto que se volverá visible
+    public float activeTime = 5.0f; // Tiempo que el objeto estará activo
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
+    {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public void ShowFoodAndObject()
     {
         if (foods != null && foods.Count > 0 && targetRenderer != null)
         {
@@ -22,6 +34,7 @@ public class FoodSelector : MonoBehaviour
             if (hiddenObject != null)
             {
                 hiddenObject.SetActive(true);
+                StartCoroutine(DeactivateAfterTime()); // Desactivar después de un tiempo
             }
             else
             {
@@ -34,9 +47,23 @@ public class FoodSelector : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator DeactivateAfterTime()
     {
-        
+        yield return new WaitForSeconds(activeTime);
+        if (hiddenObject != null)
+        {
+            hiddenObject.SetActive(false);
+        }
+    }
+
+    // Implementación del método de la interfaz InteractableBase
+    public void Interact()
+    {
+        //ShowFoodAndObject();
+    }
+
+    public override void OnInteract()
+    {
+        throw new System.NotImplementedException();
     }
 }
