@@ -5,9 +5,7 @@ using UnityEngine;
 
 public class AlienVisualController : MonoBehaviour
 {
-    [SerializeField] private List<Sprite> torsoList;
-    [SerializeField] private List<Sprite> headList;
-    [SerializeField] private List<Sprite> faceList;
+    [SerializeField] private CharacterSpriteSO characterSprite;
 
     [SerializeField] private SpriteRenderer torsoRenderer;
     [SerializeField] private SpriteRenderer headRenderer;
@@ -20,9 +18,9 @@ public class AlienVisualController : MonoBehaviour
     private void Awake()
     {
         // Asignamos sprites aleatorios para cada uno de los aliens
-        assignedTorso = torsoList[Random.Range(0, torsoList.Count)];
-        assignedHead = headList[Random.Range(0, headList.Count)];
-        assignedFace = faceList[Random.Range(0, faceList.Count)];
+        assignedTorso = characterSprite.GetRandomTorso();
+        assignedHead = characterSprite.GetRandomHead();
+        assignedFace = characterSprite.GetRandomFace();
 
         torsoRenderer.sprite = assignedTorso;
         headRenderer.sprite = assignedHead;
