@@ -231,8 +231,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void HandleError()
+    public bool HandleError()
     {
+        bool hasError = error;
+
         if (error)
         {
             SubtractLife(); // Restar una vida si hay un error
@@ -240,6 +242,8 @@ public class GameManager : MonoBehaviour
 
         error = false; // Resetear el estado de error
         lastInteractedFoodSelector = null; // Eliminar el último FoodSelector interactuado
+
+        return hasError;
     }
 
     public void ClearEnteredWords()
