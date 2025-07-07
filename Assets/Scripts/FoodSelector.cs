@@ -8,16 +8,33 @@ public class FoodSelector : InteractableBase
     public SpriteRenderer targetRenderer; // SpriteRenderer donde se mostrará el sprite del alimento seleccionado
     public GameObject hiddenObject; // Objeto que se volverá visible
     public float activeTime = 5.0f; // Tiempo que el objeto estará activo
+    public int sortingOffset = 0;
+    private SpriteRenderer sr;
+
+    public List<SpriteRenderer> renderers; // Lista de SpriteRenderers para ordenar
+    private PlayerController playerController; // Referencia al PlayerController
+
+    private bool isFoodActive = false; // Indica si la comida está activa
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-    }
+        sr = GetComponent<SpriteRenderer>();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // Buscar al jugador por el tag "Player"
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            playerController = player.GetComponent<PlayerController>();
+            if (playerController == null)
+            {
+                Debug.LogError("PlayerController no encontrado en el objeto con tag 'Player'.");
+            }
+        }
+        else
+        {
+            Debug.LogError("No se encontró ningún objeto con el tag 'Player'.");
+        }
     }
 
     public void ShowFoodAndObject()
@@ -34,6 +51,7 @@ public class FoodSelector : InteractableBase
             if (hiddenObject != null)
             {
                 hiddenObject.SetActive(true);
+                isFoodActive = true; // Activar el indicador de comida activa
                 StartCoroutine(DeactivateAfterTime()); // Desactivar después de un tiempo
             }
             else
@@ -53,6 +71,7 @@ public class FoodSelector : InteractableBase
         if (hiddenObject != null)
         {
             hiddenObject.SetActive(false);
+            isFoodActive = false;
         }
     }
 
@@ -64,6 +83,78 @@ public class FoodSelector : InteractableBase
 
     public override void OnInteract()
     {
-        throw new System.NotImplementedException();
+        if (GameManager.Instance != null && GameManager.Instance.GetLastInteractedFoodSelector() != null && GameManager.Instance.GetLastInteractedFoodSelector() != this)
+        {
+            Debug.Log("No puedes interactuar con este FoodSelector porque no es el último interactuado.");
+            return;
+        }
+
+        if (isFoodActive) // Verificar si la comida está activa
+        {
+            if (playerController != null)
+            {
+                Debug.Log("Interactuando con " + gameObject.name);
+
+                // Meter animación mirar al muncho
+
+                // Llamar al GameManager para agregar el comando
+                if (GameManager.Instance != null && foods != null && targetRenderer != null)
+                {
+                    Food selectedFood = foods.Find(f => f.foodSprite == targetRenderer.sprite);
+                    if (selectedFood != null)
+                    {
+                        GameManager.Instance.AddCommand(selectedFood.foodName, this);
+                    }
+                    else
+                    {
+                        Debug.LogError("No se encontró el alimento correspondiente al sprite actual.");
+                    }
+                }
+                else
+                {
+                    Debug.LogError("GameManager.Instance o datos necesarios no están disponibles.");
+                }
+            }
+            else
+            {
+                Debug.LogError("PlayerController no está asignado.");
+            }
+        }
+        else
+        {
+            Debug.Log("No hay comida activa para interactuar.");
+        }
+    }
+
+    protected override void ShowInteractionPrompt()
+    {
+        if (GameManager.Instance != null && GameManager.Instance.GetLastInteractedFoodSelector() != null && GameManager.Instance.GetLastInteractedFoodSelector() != this)
+        {
+            return; // No mostrar el texto de interacción si no es el último interactuado
+        }
+
+        if (isFoodActive) // Mostrar el texto de interacción solo si la comida está activa
+        {
+            base.ShowInteractionPrompt();
+        }
+    }
+
+    void LateUpdate()
+    {
+        if (renderers != null && renderers.Count > 0 && playerController != null)
+        {
+            float playerDistance = Vector3.Distance(transform.position, playerController.transform.position);
+
+            for (int i = 0; i < renderers.Count; i++)
+            {
+                var renderer = renderers[i];
+                if (renderer != null)
+                {
+                    // Orden basado en la distancia al jugador: más cerca, mayor z-index
+                    float sortingValue = 1 / (playerDistance + 0.1f); // Evitar división por cero
+                    renderer.sortingOrder = 1000 + (int)(sortingValue * 1000) + sortingOffset + i; // Añadir offset incremental
+                }
+            }
+        }
     }
 }

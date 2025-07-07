@@ -57,4 +57,19 @@ public class PlayerController : MonoBehaviour
         Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
         rb.MovePosition(rb.position + move * speed * Time.fixedDeltaTime);
     }
+
+    public void LookTo(Transform target)
+    {
+        if (cameraTransform != null && target != null)
+        {
+            Vector3 direction = (target.position - cameraTransform.position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+
+            // Apply rotation to the camera
+            cameraTransform.rotation = Quaternion.Euler(lookRotation.eulerAngles.x, lookRotation.eulerAngles.y, 0f);
+
+            // Apply horizontal rotation to the player body
+            transform.rotation = Quaternion.Euler(0f, lookRotation.eulerAngles.y, 0f);
+        }
+    }
 }
