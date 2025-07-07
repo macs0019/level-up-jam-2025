@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public abstract class InteractableBase : MonoBehaviour, IInteractable
 {
@@ -16,6 +17,7 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
 
     private void Update()
     {
+        Debug.Log("Checking interaction range..." + this.name);
         if (playerTransform != null)
         {
             float distance = Vector3.Distance(transform.position, playerTransform.position);

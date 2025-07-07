@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening; // Asegúrate de tener la referencia a DOTween
 
 public class FoodSelector : InteractableBase
 {
@@ -20,6 +21,9 @@ public class FoodSelector : InteractableBase
     private Sprite selectedFoodSprite; // Sprite de la comida seleccionada
 
     private int showFoodAndObjectCalls = 0; // Contador de llamadas a ShowFoodAndObject
+
+    private Tween deactivateTween; // Referencia al Tween de desactivación
+    private float remainingTime; // Tiempo restante para la desactivación
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -41,6 +45,8 @@ public class FoodSelector : InteractableBase
             Debug.LogError("No se encontró ningún objeto con el tag 'Player'.");
         }
     }
+
+    public bool IsFoodActive => isFoodActive; // Propiedad para acceder al estado de la comida activa
 
     public int ShowFoodAndObjectCalls => showFoodAndObjectCalls; // Propiedad para acceder al contador
 
@@ -64,7 +70,7 @@ public class FoodSelector : InteractableBase
             {
                 hiddenObject.SetActive(true);
                 isFoodActive = true; // Activar el indicador de comida activa
-                StartCoroutine(DeactivateAfterTime()); // Desactivar después de un tiempo
+                DeactivateAfterTime(); // Iniciar la coroutine de desactivación
             }
             else
             {
@@ -77,20 +83,40 @@ public class FoodSelector : InteractableBase
         }
     }
 
-    private IEnumerator DeactivateAfterTime()
+    private void DeactivateAfterTime()
     {
-        yield return new WaitForSeconds(activeTime);
         if (hiddenObject != null)
         {
-            hiddenObject.SetActive(false);
-            isFoodActive = false;
+            // Detener cualquier Tween existente antes de crear uno nuevo
+            if (deactivateTween != null && deactivateTween.IsActive())
+            {
+                deactivateTween.Kill(false); // Detener el Tween sin completar la acción
+            }
+
+            remainingTime = activeTime; // Inicializar el tiempo restante
+            deactivateTween = DOVirtual.DelayedCall(remainingTime, () =>
+            {
+                hiddenObject.SetActive(false);
+                isFoodActive = false;
+            });
         }
     }
 
-    // Implementación del método de la interfaz InteractableBase
-    public void Interact()
+    public void PauseDeactivationTween()
     {
-        //ShowFoodAndObject();
+        if (deactivateTween != null && deactivateTween.IsPlaying())
+        {
+            remainingTime = deactivateTween.Elapsed(false); // Guardar el tiempo restante
+            deactivateTween.Pause(); // Pausar el Tween sin eliminarlo
+        }
+    }
+
+    public void ResumeDeactivationTween()
+    {
+        if (hiddenObject != null && isFoodActive && deactivateTween != null)
+        {
+            deactivateTween.Play();
+        }
     }
 
     public override void OnInteract()
@@ -106,8 +132,6 @@ public class FoodSelector : InteractableBase
             if (playerController != null)
             {
                 Debug.Log("Interactuando con " + gameObject.name);
-
-                // Meter animación mirar al muncho
 
                 // Llamar al GameManager para agregar el comando
                 if (GameManager.Instance != null && foods != null && targetRenderer != null)
@@ -126,6 +150,7 @@ public class FoodSelector : InteractableBase
                 {
                     Debug.LogError("GameManager.Instance o datos necesarios no están disponibles.");
                 }
+
             }
             else
             {

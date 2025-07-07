@@ -10,12 +10,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; } // Singleton instance
 
-    public FoodSelector[] foodSelectors; // Array de FoodSelectors asignado desde el Inspector
-    public float interval = 5.0f; // Intervalo de tiempo en segundos asignado desde el Inspector
-
-    private float timer;
-    private int lastSelectorIndex = -1; // Índice del último FoodSelector seleccionado
-
     public TMP_InputField commandInputField; // InputField para ingresar el comando
     public TMP_Text enteredWordsText; // Texto para mostrar las palabras ingresadas
 
@@ -40,7 +34,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject munchoPrefab; // Prefab del muncho
 
-    public int numberOfTablesToOccupy = 3; // Número de mesas a ocupar asignado desde el Inspector
+    public int numberOfTablesToOccupy = 4; // Número de mesas a ocupar asignado desde el Inspector
 
     private int occupiedTablesCount = 0; // Contador de mesas ocupadas
     private float spawnTimer = 0f; // Temporizador para el spawn de munchos
@@ -69,46 +63,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
         spawnTimer += Time.deltaTime;
-
-        if (timer >= interval)
-        {
-            timer = 0f;
-
-            Debug.Log("foods: " + foodSelectors.Length);
-
-            if (foodSelectors != null && foodSelectors.Length > 0)
-            {
-                if (foodSelectors.Length == 1 && lastSelectorIndex == 0 && foodSelectors[0].isActiveAndEnabled)
-                {
-
-                    Debug.Log("Solo hay un FoodSelector disponible. Mostrándolo una vez...");
-                    foodSelectors[0].ShowFoodAndObject();
-                    return;
-                }
-
-                int randomIndex;
-                do
-                {
-                    randomIndex = UnityEngine.Random.Range(0, foodSelectors.Length);
-                } while (randomIndex == lastSelectorIndex);
-
-                if (foodSelectors.Length == 0)
-                {
-                    lastSelectorIndex = -1; // Guardar -1 si no hay FoodSelectors disponibles
-                }
-
-                Debug.Log("Seleccionando un nuevo FoodSelector... " + foodSelectors[randomIndex].name);
-                var selector = foodSelectors[randomIndex];
-                if (selector != null)
-                {
-                    selector.ShowFoodAndObject(); // Mostrar la comida y el objeto
-                }
-
-                lastSelectorIndex = randomIndex; // Actualizar el último índice seleccionado
-            }
-        }
 
         // Spawnear munchos cada 10 segundos hasta que se ocupen el número de mesas especificado
         if (spawnTimer >= 10f && occupiedTablesCount < numberOfTablesToOccupy)
@@ -137,11 +92,17 @@ public class GameManager : MonoBehaviour
             commandInputField.gameObject.SetActive(true); // Activar el InputField
             commandInputField.ActivateInputField(); // Darle focus para escribir
 
+
             // Desactivar el movimiento del jugador
             if (playerController != null)
             {
                 playerController.enabled = false;
+                foodSelector.PauseDeactivationTween();
             }
+
+
+            // Almacenar el último FoodSelector interactuado
+            SetLastInteractedFoodSelector(foodSelector);
 
             commandInputField.onEndEdit.RemoveAllListeners(); // Limpiar listeners previos
             commandInputField.onEndEdit.AddListener((input) =>
@@ -164,9 +125,6 @@ public class GameManager : MonoBehaviour
                     {
                         enteredWordsText.text += input + "\n";
                     }
-
-                    // Almacenar el último FoodSelector interactuado
-                    SetLastInteractedFoodSelector(foodSelector);
                 }
 
                 commandInputField.text = string.Empty; // Limpiar el texto
@@ -176,6 +134,7 @@ public class GameManager : MonoBehaviour
                 if (playerController != null)
                 {
                     playerController.enabled = true;
+                    foodSelector.ResumeDeactivationTween();
                 }
             });
 
@@ -192,6 +151,7 @@ public class GameManager : MonoBehaviour
                     if (playerController != null)
                     {
                         playerController.enabled = true;
+                        foodSelector.ResumeDeactivationTween();
                     }
                 }
             });
@@ -280,7 +240,6 @@ public class GameManager : MonoBehaviour
         FoodSelector foodSelector = muncho.GetComponent<FoodSelector>();
         if (foodSelector != null)
         {
-            foodSelector.enabled = false; // Desactivar el FoodSelector inicialmente
 
             // Asignar propiedades desde el Inspector
             foodSelector.interactionUIText = interactionUIText as TextMeshProUGUI;
@@ -299,23 +258,6 @@ public class GameManager : MonoBehaviour
         }
         munchoMovement.SetTableAndPath(targetTable);
 
-        // Mover el muncho a lo largo del camino usando MunchoMovement
-        munchoMovement.MoveAlongPath(() =>
-        {
-            // Al llegar al final, activar el FoodSelector y añadirlo al array de foodSelectors
-            if (foodSelector != null)
-            {
-                foodSelector.enabled = true; // Activar el FoodSelector
-
-                List<FoodSelector> foodSelectorsList = new List<FoodSelector>(foodSelectors);
-                foodSelectorsList.Add(foodSelector);
-                foodSelectors = foodSelectorsList.ToArray();
-            }
-            else
-            {
-                Debug.LogError("El muncho no tiene un componente FoodSelector.");
-            }
-        });
     }
 
     public float probabilityToLeave = 1f; // Probabilidad de que el último FoodSelector se vaya
@@ -335,14 +277,6 @@ public class GameManager : MonoBehaviour
                 // Desactivar el FoodSelector
                 foodSelectorToLeave.enabled = false;
 
-                // Eliminar el FoodSelector del array
-                List<FoodSelector> foodSelectorsList = new List<FoodSelector>(foodSelectors);
-                if (foodSelectorsList.Contains(foodSelectorToLeave))
-                {
-                    foodSelectorsList.Remove(foodSelectorToLeave);
-                    foodSelectors = foodSelectorsList.ToArray();
-                }
-
                 // Manejar la salida usando DOTween
                 HandleFoodSelectorLeavingWithDelay(foodSelectorToLeave);
             }
@@ -353,19 +287,14 @@ public class GameManager : MonoBehaviour
     {
         foodSelector.enabled = false;
 
-        List<FoodSelector> foodSelectorsList = new List<FoodSelector>(foodSelectors);
-        if (foodSelectorsList.Contains(foodSelector))
-        {
-            foodSelectorsList.Remove(foodSelector);
-            foodSelectors = foodSelectorsList.ToArray();
-        }
-
         MunchoMovement munchoMovement = foodSelector.GetComponent<MunchoMovement>();
+
         if (munchoMovement != null)
         {
             munchoMovement.MoveAlongPathReverse(() =>
             {
                 Table targetTable = tables.Find(t => t.isOccupied && t.path[^1] == foodSelector.transform);
+
                 if (targetTable != null)
                 {
                     targetTable.isOccupied = false;
@@ -373,6 +302,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 Destroy(foodSelector.gameObject);
+
             });
         }
     }
