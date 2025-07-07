@@ -109,6 +109,7 @@ public class GameManager : MonoBehaviour
             {
                 if (!string.IsNullOrEmpty(input)) // Detectar cuando se finaliza la edición
                 {
+                    foodSelector.OrderTaken = true; // Marcar que el pedido ha sido tomado
                     if (input.Equals(foodName, System.StringComparison.OrdinalIgnoreCase))
                     {
                         Debug.Log("Correct");
@@ -191,8 +192,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void HandleError()
+    public bool HandleError()
     {
+        bool hasError = error;
+
         if (error)
         {
             SubtractLife(); // Restar una vida si hay un error
@@ -200,6 +203,8 @@ public class GameManager : MonoBehaviour
 
         error = false; // Resetear el estado de error
         lastInteractedFoodSelector = null; // Eliminar el último FoodSelector interactuado
+
+        return hasError;
     }
 
     public void ClearEnteredWords()
@@ -274,16 +279,13 @@ public class GameManager : MonoBehaviour
             {
                 Debug.Log("El último FoodSelector se irá inmediatamente.");
 
-                // Desactivar el FoodSelector
-                foodSelectorToLeave.enabled = false;
-
                 // Manejar la salida usando DOTween
                 HandleFoodSelectorLeavingWithDelay(foodSelectorToLeave);
             }
         }
     }
 
-    private void HandleFoodSelectorLeavingWithDelay(FoodSelector foodSelector)
+    public void HandleFoodSelectorLeavingWithDelay(FoodSelector foodSelector)
     {
         foodSelector.enabled = false;
 
@@ -293,7 +295,7 @@ public class GameManager : MonoBehaviour
         {
             munchoMovement.MoveAlongPathReverse(() =>
             {
-                Table targetTable = tables.Find(t => t.isOccupied && t.path[^1] == foodSelector.transform);
+                Table targetTable = munchoMovement.CurrentTable;
 
                 if (targetTable != null)
                 {

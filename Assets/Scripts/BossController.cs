@@ -1,12 +1,9 @@
 using UnityEngine;
+using DG.Tweening;
 
 public class BossController : InteractableBase
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-
-    }
+    public Transform bossTransform;
 
     public override void OnInteract()
     {
@@ -17,10 +14,21 @@ public class BossController : InteractableBase
 
         Debug.Log("Interacción con el jefe iniciada.");
         GameManager.Instance.InteractWithBossController();
-        GameManager.Instance.HandleError(); // Llamar a la función que comprueba si hay que restar vidas
+        bool error = GameManager.Instance.HandleError(); // Llamar a la función que comprueba si hay que restar vidas
         GameManager.Instance.ClearEnteredWords(); // Limpiar las palabras ingresadas
 
         // Lógica adicional para la interacción con el jefe
+        if (error)
+        {
+            bossTransform.DOShakePosition(
+                duration: 0.8f,
+                strength: new Vector3(1.5f, 1.5f, 0f),
+                vibrato: 15,
+                randomness: 90f,
+                snapping: false,
+                fadeOut: true
+            );
+        }
     }
 
     protected override void ShowInteractionPrompt()

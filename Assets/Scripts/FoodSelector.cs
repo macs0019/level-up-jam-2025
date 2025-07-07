@@ -25,6 +25,17 @@ public class FoodSelector : InteractableBase
     private Tween deactivateTween; // Referencia al Tween de desactivación
     private float remainingTime; // Tiempo restante para la desactivación
 
+
+    private bool orderTaken = false; // Indica si el objeto ha sido grabado
+
+    public bool OrderTaken
+    {
+        get => orderTaken;
+        set
+        {
+            orderTaken = value;
+        }
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -98,6 +109,11 @@ public class FoodSelector : InteractableBase
             {
                 hiddenObject.SetActive(false);
                 isFoodActive = false;
+
+                if (!orderTaken)
+                {
+                    GameManager.Instance.HandleFoodSelectorLeavingWithDelay(this);
+                }
             });
         }
     }

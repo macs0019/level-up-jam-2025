@@ -13,6 +13,11 @@ public class MunchoMovement : MonoBehaviour
 
     private FoodSelector foodSelector; // Referencia al FoodSelector para interactuar con la comida
 
+    private GameManager.Table currentTable;
+
+    public GameManager.Table CurrentTable => currentTable; // Propiedad para acceder a la mesa actual
+
+
     private void Awake()
     {
         foodSelector = this.GetComponent<FoodSelector>();
@@ -26,7 +31,8 @@ public class MunchoMovement : MonoBehaviour
             return;
         }
 
-        path = table.path;
+        currentTable = table;
+        path = currentTable.path;
 
         MoveAlongPath(() =>
         {
@@ -68,7 +74,11 @@ public class MunchoMovement : MonoBehaviour
             return;
         }
 
+        foodSelector.hiddenObject.SetActive(false); // Desactivar el objeto oculto al iniciar el movimiento
+
         Sequence sequence = DOTween.Sequence();
+        sequence.AppendInterval(Random.Range(minWaitTime, maxWaitTime));
+
         for (int i = path.Length - 1; i >= 0; i--)
         {
             float distance = i == path.Length - 1 ? Vector3.Distance(transform.position, path[i].position) : Vector3.Distance(path[i + 1].position, path[i].position);
