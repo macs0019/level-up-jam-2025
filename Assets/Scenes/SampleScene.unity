@@ -1417,12 +1417,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Sprite: {fileID: 21300000, guid: f902483e8dd07044192ff134b9f8492a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2e0edc9a1f5a1384b9cb78b64afa4037, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2.1433334, y: 1.8366667}
+  m_Size: {x: 7.71, y: 6.36}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1823,12 +1823,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Sprite: {fileID: 21300000, guid: 95659f577c0b7c64589573db15003966, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3169cff3b62ba924e87c9b96e8d31719, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2.5666666, y: 2.12}
+  m_Size: {x: 7.7, y: 6.36}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -2831,6 +2831,7 @@ MonoBehaviour:
   speed: 10
   mouseSensitivity: 100
   cameraTransform: {fileID: 0}
+  armsCamTransform: {fileID: 0}
 --- !u!114 &1722368088
 MonoBehaviour:
   m_ObjectHideFlags: 0
