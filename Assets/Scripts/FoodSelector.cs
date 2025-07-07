@@ -19,6 +19,8 @@ public class FoodSelector : InteractableBase
     public Sprite foodCallSprite; // Sprite que se muestra inicialmente
     private Sprite selectedFoodSprite; // Sprite de la comida seleccionada
 
+    private int showFoodAndObjectCalls = 0; // Contador de llamadas a ShowFoodAndObject
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -40,8 +42,12 @@ public class FoodSelector : InteractableBase
         }
     }
 
+    public int ShowFoodAndObjectCalls => showFoodAndObjectCalls; // Propiedad para acceder al contador
+
     public void ShowFoodAndObject()
     {
+        showFoodAndObjectCalls++; // Incrementar el contador cada vez que se llama
+
         if (foods != null && foods.Count > 0 && targetRenderer != null)
         {
             // Seleccionar un alimento aleatorio

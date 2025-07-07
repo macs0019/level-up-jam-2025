@@ -1,7 +1,10 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem; // Importar el nuevo Input System
+using DG.Tweening; // Importar DOTween
 
 public class GameManager : MonoBehaviour
 {
@@ -19,9 +22,34 @@ public class GameManager : MonoBehaviour
     private PlayerController playerController; // Referencia al PlayerController
     private FoodSelector lastInteractedFoodSelector; // Referencia al último FoodSelector con el que se interactuó
 
+    private bool error = false; // Indica si el usuario se ha equivocado al introducir el texto
+
+    public GameObject[] lives; // Array de objetos que representan las vidas del jugador
+    private int currentLives; // Contador de vidas actuales
+
+    [System.Serializable]
+    public class Table
+    {
+        public Transform[] path; // Camino hacia la mesa, donde la última posición es la mesa
+        public bool isOccupied = false; // Estado de la mesa
+    }
+
+    public List<Table> tables; // Lista de mesas con sus caminos
+    [SerializeField]
+    public List<Transform[]> paths; // Lista de caminos (cada camino es un array de puntos)
+
+    public GameObject munchoPrefab; // Prefab del muncho
+
+    public int numberOfTablesToOccupy = 3; // Número de mesas a ocupar asignado desde el Inspector
+
+    private int occupiedTablesCount = 0; // Contador de mesas ocupadas
+    private float spawnTimer = 0f; // Temporizador para el spawn de munchos
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        currentLives = lives.Length; // Inicializar el contador con el número de vidas del array
+
         // Buscar al jugador por el tag "Player"
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
@@ -42,6 +70,8 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
+        spawnTimer += Time.deltaTime;
+
         if (timer >= interval)
         {
             timer = 0f;
@@ -50,11 +80,11 @@ public class GameManager : MonoBehaviour
 
             if (foodSelectors != null && foodSelectors.Length > 0)
             {
-                if (foodSelectors.Length == 1)
+                if (foodSelectors.Length == 1 && lastSelectorIndex == 0 && foodSelectors[0].isActiveAndEnabled)
                 {
+
                     Debug.Log("Solo hay un FoodSelector disponible. Mostrándolo una vez...");
                     foodSelectors[0].ShowFoodAndObject();
-                    enabled = false; // Desactivar el GameManager para evitar más actualizaciones
                     return;
                 }
 
@@ -63,6 +93,11 @@ public class GameManager : MonoBehaviour
                 {
                     randomIndex = UnityEngine.Random.Range(0, foodSelectors.Length);
                 } while (randomIndex == lastSelectorIndex);
+
+                if (foodSelectors.Length == 0)
+                {
+                    lastSelectorIndex = -1; // Guardar -1 si no hay FoodSelectors disponibles
+                }
 
                 Debug.Log("Seleccionando un nuevo FoodSelector... " + foodSelectors[randomIndex].name);
                 var selector = foodSelectors[randomIndex];
@@ -73,6 +108,14 @@ public class GameManager : MonoBehaviour
 
                 lastSelectorIndex = randomIndex; // Actualizar el último índice seleccionado
             }
+        }
+
+        // Spawnear munchos cada 10 segundos hasta que se ocupen el número de mesas especificado
+        if (spawnTimer >= 10f && occupiedTablesCount < numberOfTablesToOccupy)
+        {
+            Debug.Log("Spawneando un nuevo muncho...");
+            spawnTimer = 0f;
+            SendMunchoToTable();
         }
     }
 
@@ -108,10 +151,12 @@ public class GameManager : MonoBehaviour
                     if (input.Equals(foodName, System.StringComparison.OrdinalIgnoreCase))
                     {
                         Debug.Log("Correct");
+                        error = false;
                     }
                     else
                     {
                         Debug.Log("Incorrect");
+                        error = true;
                     }
 
                     // Agregar la palabra ingresada al texto
@@ -166,5 +211,165 @@ public class GameManager : MonoBehaviour
     public FoodSelector GetLastInteractedFoodSelector()
     {
         return lastInteractedFoodSelector;
+    }
+
+    public bool HasError()
+    {
+        return error;
+    }
+
+    public void SubtractLife()
+    {
+        for (int i = lives.Length - 1; i >= 0; i--)
+        {
+            if (lives[i].activeSelf)
+            {
+                lives[i].SetActive(false); // Deshabilitar la vida más a la derecha
+                currentLives--; // Restar una vida del contador
+                break;
+            }
+        }
+    }
+
+    public void HandleError()
+    {
+        if (error)
+        {
+            SubtractLife(); // Restar una vida si hay un error
+        }
+
+        error = false; // Resetear el estado de error
+        lastInteractedFoodSelector = null; // Eliminar el último FoodSelector interactuado
+    }
+
+    public void ClearEnteredWords()
+    {
+        if (enteredWordsText != null)
+        {
+            enteredWordsText.text = string.Empty; // Limpiar el texto ingresado
+        }
+    }
+
+    public TMP_Text interactionUIText; // Texto de la UI de interacción asignado desde el Inspector
+    public Transform playerTransform; // Transform del jugador asignado desde el Inspector
+
+    public void SendMunchoToTable()
+    {
+        // Filtrar mesas disponibles
+        List<Table> availableTables = tables.FindAll(table => !table.isOccupied);
+        if (availableTables.Count == 0)
+        {
+            Debug.LogError("No hay mesas disponibles.");
+            return;
+        }
+
+        // Seleccionar una mesa aleatoria de las disponibles
+        Table targetTable = availableTables[UnityEngine.Random.Range(0, availableTables.Count)];
+
+        // Marcar la mesa como ocupada inmediatamente
+        targetTable.isOccupied = true;
+        occupiedTablesCount++; // Incrementar el contador de mesas ocupadas
+
+        // Usar el camino asociado a la mesa seleccionada
+        Transform[] path = targetTable.path;
+
+        // Instanciar el muncho
+        GameObject muncho = Instantiate(munchoPrefab, path[0].position, Quaternion.identity);
+
+        // Configurar propiedades adicionales del muncho
+        FoodSelector foodSelector = muncho.GetComponent<FoodSelector>();
+        if (foodSelector != null)
+        {
+            foodSelector.enabled = false; // Desactivar el FoodSelector inicialmente
+
+            // Asignar propiedades desde el Inspector
+            foodSelector.interactionUIText = interactionUIText as TextMeshProUGUI;
+            foodSelector.playerTransform = playerTransform;
+        }
+        else
+        {
+            Debug.LogError("El muncho no tiene un componente FoodSelector.");
+        }
+
+        // Asignar la mesa al MunchoMovement
+        MunchoMovement munchoMovement = muncho.GetComponent<MunchoMovement>();
+        if (munchoMovement == null)
+        {
+            munchoMovement = muncho.AddComponent<MunchoMovement>();
+        }
+        munchoMovement.SetTableAndPath(targetTable);
+
+        // Mover el muncho a lo largo del camino usando MunchoMovement
+        munchoMovement.MoveAlongPath(() =>
+        {
+            // Al llegar al final, activar el FoodSelector y añadirlo al array de foodSelectors
+            if (foodSelector != null)
+            {
+                foodSelector.enabled = true; // Activar el FoodSelector
+
+                List<FoodSelector> foodSelectorsList = new List<FoodSelector>(foodSelectors);
+                foodSelectorsList.Add(foodSelector);
+                foodSelectors = foodSelectorsList.ToArray();
+            }
+            else
+            {
+                Debug.LogError("El muncho no tiene un componente FoodSelector.");
+            }
+        });
+    }
+
+    public float probabilityToLeave = 1f; // Probabilidad de que el último FoodSelector se vaya
+
+    public void InteractWithBossController()
+    {
+        Debug.Log("Interacting with BossController...");
+        Debug.Log("Último FoodSelector interactuado: " + (lastInteractedFoodSelector != null ? lastInteractedFoodSelector.name : "Ninguno"));
+        FoodSelector foodSelectorToLeave = lastInteractedFoodSelector;
+        if (foodSelectorToLeave != null && UnityEngine.Random.value < probabilityToLeave)
+        {
+            Debug.Log("El último FoodSelector se irá inmediatamente.");
+
+            // Desactivar el FoodSelector
+            foodSelectorToLeave.enabled = false;
+
+            // Eliminar el FoodSelector del array
+            List<FoodSelector> foodSelectorsList = new List<FoodSelector>(foodSelectors);
+            if (foodSelectorsList.Contains(foodSelectorToLeave))
+            {
+                foodSelectorsList.Remove(foodSelectorToLeave);
+                foodSelectors = foodSelectorsList.ToArray();
+            }
+
+            // Manejar la salida usando DOTween
+            HandleFoodSelectorLeavingWithDelay(foodSelectorToLeave);
+        }
+    }
+
+    private void HandleFoodSelectorLeavingWithDelay(FoodSelector foodSelector)
+    {
+        foodSelector.enabled = false;
+
+        List<FoodSelector> foodSelectorsList = new List<FoodSelector>(foodSelectors);
+        if (foodSelectorsList.Contains(foodSelector))
+        {
+            foodSelectorsList.Remove(foodSelector);
+            foodSelectors = foodSelectorsList.ToArray();
+        }
+
+        MunchoMovement munchoMovement = foodSelector.GetComponent<MunchoMovement>();
+        if (munchoMovement != null)
+        {
+            munchoMovement.MoveAlongPathReverse(() =>
+            {
+                Table targetTable = tables.Find(t => t.isOccupied && t.path[^1] == foodSelector.transform);
+                if (targetTable != null)
+                {
+                    targetTable.isOccupied = false;
+                    occupiedTablesCount--;
+                }
+
+                Destroy(foodSelector.gameObject);
+            });
+        }
     }
 }
