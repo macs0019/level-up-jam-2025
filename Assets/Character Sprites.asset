@@ -13,23 +13,53 @@ MonoBehaviour:
   m_Name: Character Sprites
   m_EditorClassIdentifier: 
   torsoSprites:
-  - {fileID: 21300000, guid: a0d443edab9860141b64672943e29a8b, type: 3}
+  - sprites:
+    - {fileID: 111982818, guid: 4f202ea1c7ad01d47bb54a281cae22c5, type: 3}
+    - {fileID: 446354484, guid: 4f202ea1c7ad01d47bb54a281cae22c5, type: 3}
   headSprites:
-  - {fileID: 856402094, guid: 85da757b97181204498f40fd46791b4d, type: 3}
-  - {fileID: 1498941396, guid: 85da757b97181204498f40fd46791b4d, type: 3}
-  - {fileID: -1559476186, guid: 85da757b97181204498f40fd46791b4d, type: 3}
-  - {fileID: 259920637, guid: 85da757b97181204498f40fd46791b4d, type: 3}
-  - {fileID: 1498246276, guid: 85da757b97181204498f40fd46791b4d, type: 3}
-  - {fileID: -1042652934, guid: 85da757b97181204498f40fd46791b4d, type: 3}
-  - {fileID: -617856972, guid: 85da757b97181204498f40fd46791b4d, type: 3}
+  - sprites:
+    - {fileID: -644841981, guid: 4f202ea1c7ad01d47bb54a281cae22c5, type: 3}
+    - {fileID: -1082303198, guid: 4f202ea1c7ad01d47bb54a281cae22c5, type: 3}
+  - sprites:
+    - {fileID: -1335528074, guid: 4f202ea1c7ad01d47bb54a281cae22c5, type: 3}
+    - {fileID: -643636754, guid: 4f202ea1c7ad01d47bb54a281cae22c5, type: 3}
+  - sprites:
+    - {fileID: 786660424, guid: 4f202ea1c7ad01d47bb54a281cae22c5, type: 3}
+    - {fileID: 714315481, guid: 4f202ea1c7ad01d47bb54a281cae22c5, type: 3}
+  - sprites:
+    - {fileID: -1052092345, guid: 4f202ea1c7ad01d47bb54a281cae22c5, type: 3}
+    - {fileID: -1893753895, guid: 4f202ea1c7ad01d47bb54a281cae22c5, type: 3}
+  - sprites:
+    - {fileID: -1672556996, guid: 4f202ea1c7ad01d47bb54a281cae22c5, type: 3}
+    - {fileID: -119568164, guid: 4f202ea1c7ad01d47bb54a281cae22c5, type: 3}
+  - sprites:
+    - {fileID: -704290613, guid: 4f202ea1c7ad01d47bb54a281cae22c5, type: 3}
+    - {fileID: 923154505, guid: 4f202ea1c7ad01d47bb54a281cae22c5, type: 3}
+  - sprites:
+    - {fileID: 605161790, guid: 4f202ea1c7ad01d47bb54a281cae22c5, type: 3}
+    - {fileID: 1350767426, guid: 4f202ea1c7ad01d47bb54a281cae22c5, type: 3}
   faceSprites:
-  - {fileID: 167471629, guid: 16a1ab715a8dcb74093ed75bee4fc34d, type: 3}
-  - {fileID: -1692641363, guid: 16a1ab715a8dcb74093ed75bee4fc34d, type: 3}
-  - {fileID: -907890998, guid: 16a1ab715a8dcb74093ed75bee4fc34d, type: 3}
-  - {fileID: 2107082760, guid: 16a1ab715a8dcb74093ed75bee4fc34d, type: 3}
-  - {fileID: -1975039629, guid: 16a1ab715a8dcb74093ed75bee4fc34d, type: 3}
-  - {fileID: 579743173, guid: 16a1ab715a8dcb74093ed75bee4fc34d, type: 3}
-  - {fileID: -1663210745, guid: 16a1ab715a8dcb74093ed75bee4fc34d, type: 3}
+  - sprites:
+    - {fileID: 21300000, guid: 681b38ea434e6354a8540b54384e2a33, type: 3}
+    - {fileID: 21300000, guid: a95dc4f01aa251e428ddf1eb8e323cd2, type: 3}
+  - sprites:
+    - {fileID: 21300000, guid: ed1be9fa189461042acf2cae5628eeac, type: 3}
+    - {fileID: 21300000, guid: 1a79c98fcedca3e48b80010a9d50c566, type: 3}
+  - sprites:
+    - {fileID: 21300000, guid: 8ab53974a4898724ebede84601c4ed6d, type: 3}
+    - {fileID: 21300000, guid: f75ba8c17403cc0419e9f8af85fb1809, type: 3}
+  - sprites:
+    - {fileID: 21300000, guid: 84e646fe5ca4e0d45b27fe414460cc4d, type: 3}
+    - {fileID: 21300000, guid: e66c635c31bfd264c82db763acdae1a9, type: 3}
+  - sprites:
+    - {fileID: 21300000, guid: 673251557c8c38f45a17cb17b87c3450, type: 3}
+    - {fileID: 21300000, guid: de8ed446547113a4db02435ba8ec40c7, type: 3}
+  - sprites:
+    - {fileID: 21300000, guid: c14d8c620fd178048afcf4329117f528, type: 3}
+    - {fileID: 21300000, guid: ed4a3a055a2f08e48a68220a433f4dad, type: 3}
+  - sprites:
+    - {fileID: 21300000, guid: 10f50dce81fd6ee4db0ecc33370a6e2e, type: 3}
+    - {fileID: 21300000, guid: 81b979ad4e5eb4c47a8a7eba9574c175, type: 3}
   foodSprites:
   - {fileID: 722235802, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
   - {fileID: 2015910258, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}

@@ -1,13 +1,20 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+
+[Serializable]
+public class SpriteGroup
+{
+    public List<Sprite> sprites;
+}
 
 [CreateAssetMenu(fileName = "CharacterSpriteSO", menuName = "ScriptableObjects/CharacterSpriteSO", order = 1)]
 public class CharacterSpriteSO : ScriptableObject
 {
     [Header("Body Sprites")]
-    public List<Sprite> torsoSprites = new List<Sprite>();
-    public List<Sprite> headSprites = new List<Sprite>();
-    public List<Sprite> faceSprites = new List<Sprite>();
+    public List<SpriteGroup> torsoSprites = new List<SpriteGroup>();
+    public List<SpriteGroup> headSprites = new List<SpriteGroup>();
+    public List<SpriteGroup> faceSprites = new List<SpriteGroup>();
 
     [Header("Food Sprites")]
     public List<Sprite> foodSprites = new List<Sprite>();
@@ -18,42 +25,42 @@ public class CharacterSpriteSO : ScriptableObject
     /// <summary>
     /// Devuelve un sprite de torso aleatorio.
     /// </summary>
-    public Sprite GetRandomTorso()
+    public SpriteGroup GetRandomTorso()
     {
         if (torsoSprites == null || torsoSprites.Count == 0)
         {
             Debug.LogWarning("No hay sprites de torso asignados.");
             return null;
         }
-        int index = Random.Range(0, torsoSprites.Count);
+        int index = UnityEngine.Random.Range(0, torsoSprites.Count);
         return torsoSprites[index];
     }
 
     /// <summary>
     /// Devuelve un sprite de cabeza aleatorio.
     /// </summary>
-    public Sprite GetRandomHead()
+    public SpriteGroup GetRandomHead()
     {
         if (headSprites == null || headSprites.Count == 0)
         {
             Debug.LogWarning("No hay sprites de cabeza asignados.");
             return null;
         }
-        int index = Random.Range(0, headSprites.Count);
+        int index = UnityEngine.Random.Range(0, headSprites.Count);
         return headSprites[index];
     }
 
     /// <summary>
     /// Devuelve un sprite de cara aleatorio.
     /// </summary>
-    public Sprite GetRandomFace()
+    public SpriteGroup GetRandomFace()
     {
         if (faceSprites == null || faceSprites.Count == 0)
         {
             Debug.LogWarning("No hay sprites de cara asignados.");
             return null;
         }
-        int index = Random.Range(0, faceSprites.Count);
+        int index = UnityEngine.Random.Range(0, faceSprites.Count);
         return faceSprites[index];
     }
 
@@ -67,7 +74,7 @@ public class CharacterSpriteSO : ScriptableObject
             Debug.LogWarning("No hay sprites de comida asignados.");
             return null;
         }
-        int index = Random.Range(0, foodSprites.Count);
+        int index = UnityEngine.Random.Range(0, foodSprites.Count);
         return foodSprites[index];
     }
 
@@ -81,7 +88,7 @@ public class CharacterSpriteSO : ScriptableObject
             Debug.LogWarning("No hay colores asignados en colorVariants.");
             return Color.white;
         }
-        int index = Random.Range(0, colorVariants.Count);
+        int index = UnityEngine.Random.Range(0, colorVariants.Count);
         return colorVariants[index];
     }
 }
