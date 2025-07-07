@@ -6,6 +6,7 @@ public class MunchoMovement : MonoBehaviour
 {
     public Transform[] path;
     public float speed = 1.0f;
+    public float probabilityToLeave = 1f; // Probabilidad de que el muncho se vaya
 
     public void SetTableAndPath(GameManager.Table table)
     {
@@ -52,5 +53,10 @@ public class MunchoMovement : MonoBehaviour
         }
 
         sequence.OnComplete(() => onComplete?.Invoke());
+    }
+
+    public bool ShouldLeave()
+    {
+        return UnityEngine.Random.value < probabilityToLeave;
     }
 }

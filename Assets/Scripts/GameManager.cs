@@ -325,23 +325,27 @@ public class GameManager : MonoBehaviour
         Debug.Log("Interacting with BossController...");
         Debug.Log("Último FoodSelector interactuado: " + (lastInteractedFoodSelector != null ? lastInteractedFoodSelector.name : "Ninguno"));
         FoodSelector foodSelectorToLeave = lastInteractedFoodSelector;
-        if (foodSelectorToLeave != null && UnityEngine.Random.value < probabilityToLeave)
+        if (foodSelectorToLeave != null)
         {
-            Debug.Log("El último FoodSelector se irá inmediatamente.");
-
-            // Desactivar el FoodSelector
-            foodSelectorToLeave.enabled = false;
-
-            // Eliminar el FoodSelector del array
-            List<FoodSelector> foodSelectorsList = new List<FoodSelector>(foodSelectors);
-            if (foodSelectorsList.Contains(foodSelectorToLeave))
+            MunchoMovement munchoMovement = foodSelectorToLeave.GetComponent<MunchoMovement>();
+            if (munchoMovement != null && munchoMovement.ShouldLeave())
             {
-                foodSelectorsList.Remove(foodSelectorToLeave);
-                foodSelectors = foodSelectorsList.ToArray();
-            }
+                Debug.Log("El último FoodSelector se irá inmediatamente.");
 
-            // Manejar la salida usando DOTween
-            HandleFoodSelectorLeavingWithDelay(foodSelectorToLeave);
+                // Desactivar el FoodSelector
+                foodSelectorToLeave.enabled = false;
+
+                // Eliminar el FoodSelector del array
+                List<FoodSelector> foodSelectorsList = new List<FoodSelector>(foodSelectors);
+                if (foodSelectorsList.Contains(foodSelectorToLeave))
+                {
+                    foodSelectorsList.Remove(foodSelectorToLeave);
+                    foodSelectors = foodSelectorsList.ToArray();
+                }
+
+                // Manejar la salida usando DOTween
+                HandleFoodSelectorLeavingWithDelay(foodSelectorToLeave);
+            }
         }
     }
 
