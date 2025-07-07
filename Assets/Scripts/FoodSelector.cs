@@ -16,6 +16,9 @@ public class FoodSelector : InteractableBase
 
     private bool isFoodActive = false; // Indica si la comida está activa
 
+    public Sprite foodCallSprite; // Sprite que se muestra inicialmente
+    private Sprite selectedFoodSprite; // Sprite de la comida seleccionada
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -44,8 +47,11 @@ public class FoodSelector : InteractableBase
             // Seleccionar un alimento aleatorio
             Food selectedFood = foods[Random.Range(0, foods.Count)];
 
-            // Mostrar el sprite del alimento seleccionado
-            targetRenderer.sprite = selectedFood.foodSprite;
+            // Guardar el sprite de la comida seleccionada
+            selectedFoodSprite = selectedFood.foodSprite;
+
+            // Mostrar el sprite de "foodCall" inicialmente
+            targetRenderer.sprite = foodCallSprite;
 
             // Hacer visible el objeto oculto
             if (hiddenObject != null)
@@ -128,15 +134,15 @@ public class FoodSelector : InteractableBase
 
     protected override void ShowInteractionPrompt()
     {
-        if (GameManager.Instance != null && GameManager.Instance.GetLastInteractedFoodSelector() != null && GameManager.Instance.GetLastInteractedFoodSelector() != this)
+        if (!isFoodActive || targetRenderer == null || selectedFoodSprite == null)
         {
-            return; // No mostrar el texto de interacción si no es el último interactuado
+            return; // No mostrar el texto de interacción si la comida no está activa
         }
 
-        if (isFoodActive) // Mostrar el texto de interacción solo si la comida está activa
-        {
-            base.ShowInteractionPrompt();
-        }
+        // Cambiar el sprite al de la comida seleccionada cuando el jugador esté en rango
+        targetRenderer.sprite = selectedFoodSprite;
+
+        base.ShowInteractionPrompt();
     }
 
     void LateUpdate()

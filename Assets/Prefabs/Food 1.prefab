@@ -45,4 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foodName: tupu
-  foodSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  foodSprite: {fileID: -389598425, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
