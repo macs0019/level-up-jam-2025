@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [Header("Mouse Look")]
     public float mouseSensitivity = 100.0f;
     public Transform cameraTransform; // Assign in Inspector
+    public Transform armsCamTransform; // Assign in Inspector, child of cameraTransform
 
     private float rotationX = 0.0f;
     private Vector2 moveInput;
@@ -48,7 +49,13 @@ public class PlayerController : MonoBehaviour
 
         if (cameraTransform != null)
         {
-            cameraTransform.localEulerAngles = new Vector3(rotationX, 0f, 0f);
+            cameraTransform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
+        }
+
+        // We rotate the inverse on the Arms Camera
+        if (armsCamTransform != null)
+        {
+            armsCamTransform.localRotation = Quaternion.Euler(-rotationX, 0f, 0f);
         }
     }
 

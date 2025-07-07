@@ -6,13 +6,14 @@ public class CharacterSpriteSO : ScriptableObject
 {
     [Header("Body Sprites")]
     public List<Sprite> torsoSprites = new List<Sprite>();
-
     public List<Sprite> headSprites = new List<Sprite>();
-
     public List<Sprite> faceSprites = new List<Sprite>();
 
     [Header("Food Sprites")]
     public List<Sprite> foodSprites = new List<Sprite>();
+
+    [Header("Color Variants")]
+    public List<Color> colorVariants = new List<Color>();
 
     /// <summary>
     /// Devuelve un sprite de torso aleatorio.
@@ -68,5 +69,19 @@ public class CharacterSpriteSO : ScriptableObject
         }
         int index = Random.Range(0, foodSprites.Count);
         return foodSprites[index];
+    }
+
+    /// <summary>
+    /// Devuelve un color aleatorio de la lista de variantes.
+    /// </summary>
+    public Color GetRandomColor()
+    {
+        if (colorVariants == null || colorVariants.Count == 0)
+        {
+            Debug.LogWarning("No hay colores asignados en colorVariants.");
+            return Color.white;
+        }
+        int index = Random.Range(0, colorVariants.Count);
+        return colorVariants[index];
     }
 }

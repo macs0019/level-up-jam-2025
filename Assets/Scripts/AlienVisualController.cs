@@ -15,6 +15,8 @@ public class AlienVisualController : MonoBehaviour
     private Sprite assignedHead;
     private Sprite assignedFace;
 
+    private Color assignedColor;
+
     private void Awake()
     {
         // Asignamos sprites aleatorios para cada uno de los aliens
@@ -22,8 +24,13 @@ public class AlienVisualController : MonoBehaviour
         assignedHead = characterSprite.GetRandomHead();
         assignedFace = characterSprite.GetRandomFace();
 
+        assignedColor = characterSprite.GetRandomColor();
+
         torsoRenderer.sprite = assignedTorso;
         headRenderer.sprite = assignedHead;
         faceRenderer.sprite = assignedFace;
+
+        torsoRenderer.color = assignedColor;
+        headRenderer.color = assignedColor;
     }
 }
