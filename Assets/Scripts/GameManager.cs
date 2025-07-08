@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviour
             commandInputField.onEndEdit.RemoveAllListeners(); // Limpiar listeners previos
             commandInputField.onEndEdit.AddListener((input) =>
             {
-            
+
                 if (!string.IsNullOrEmpty(input)) // Detectar cuando se finaliza la edición
                 {
                     // Almacenar el último FoodSelector interactuado
@@ -158,7 +158,7 @@ public class GameManager : MonoBehaviour
                 commandInputField.gameObject.SetActive(false); // Desactivar el InputField
 
                 // Reactivar el movimiento del jugador
-                Resume(foodSelector);
+                Resume(foodSelector, resetLastInteracted: false);
             });
 
             // Detectar si se presiona Escape para cerrar el InputField sin guardar
@@ -181,16 +181,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Resume(FoodSelector foodSelector)
+    private void Resume(FoodSelector foodSelector, bool resetLastInteracted = true)
     {
         if (playerController != null)
         {
             Debug.Log("Resuming player controller and interaction with FoodSelector: " + foodSelector.name);
+
+            if (resetLastInteracted)
+            {
+                LastInteractedFoodSelector = null; // Resetear el último FoodSelector interactuado
+            }
+
+            foodSelector.HideFoodAnimation();
+            foodSelector.ResumeDeactivationTimer();
             playerController.EndInteractAnimation(() =>
             {
                 playerController.enabled = true;
-                foodSelector.HideFoodAnimation();
-                foodSelector.ResumeDeactivationTimer();
             });
         }
     }
@@ -288,6 +294,9 @@ public class GameManager : MonoBehaviour
         Debug.Log("Interacting with BossController...");
         Debug.Log("Último FoodSelector interactuado: " + (LastInteractedFoodSelector != null ? LastInteractedFoodSelector.name : "Ninguno"));
         FoodSelector foodSelectorToLeave = LastInteractedFoodSelector;
+
+        lastInteractedFoodSelector = null; // Limpiar la referencia al último FoodSelector interactuado
+
         if (foodSelectorToLeave != null)
         {
             MunchoMovement munchoMovement = foodSelectorToLeave.GetComponent<MunchoMovement>();
@@ -320,7 +329,6 @@ public class GameManager : MonoBehaviour
                 }
 
                 Destroy(foodSelector.gameObject);
-
             });
         }
     }

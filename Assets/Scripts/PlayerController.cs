@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [Header("Visual")]
     public Transform leftArm;
     public Transform rightArm;
+    public SpriteRenderer blackScreenOverlay;
 
     [Header("Arm Bob & Shake Settings")]
     public float armBobAmplitude = 0.1f;
@@ -151,9 +152,11 @@ public class PlayerController : MonoBehaviour
 
         leftArm.DOKill(true);
         rightArm.DOKill(true);
-
+        blackScreenOverlay.DOKill(true);
+        
         leftArm.DOLocalMoveY(-0.3f, 0.2f);
         rightArm.DOLocalMoveX(-0.5f, 0.2f);
+        blackScreenOverlay.DOFade(0.8f, 0.2f).SetAutoKill();
 
         // Look at the target balloon
         Vector3 targetPos = cameraTransform.position 
@@ -169,7 +172,9 @@ public class PlayerController : MonoBehaviour
     {
         leftArm.DOKill(true);
         rightArm.DOKill(true);
+        blackScreenOverlay.DOKill(true);
 
+        blackScreenOverlay.DOFade(0f, 0.2f).SetAutoKill();
         leftArm.DOLocalMoveY(0f, 0.2f);
         rightArm.DOLocalMoveX(1.8f, 0.2f).OnComplete(() =>
         {

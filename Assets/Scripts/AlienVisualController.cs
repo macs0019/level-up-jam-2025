@@ -98,7 +98,7 @@ public class AlienVisualController : MonoBehaviour
                 var speechRenderer = speechBalloon.GetComponent<SpriteRenderer>();
                 if (speechRenderer != null)
                 {
-                    speechRenderer.sortingOrder = faceRenderer.sortingOrder + 1;
+                    speechRenderer.sortingOrder = faceRenderer.sortingOrder + 100;
                 }
             }
             if (foodIcon != null)
@@ -106,7 +106,7 @@ public class AlienVisualController : MonoBehaviour
                 var foodIconRenderer = foodIcon.GetComponent<SpriteRenderer>();
                 if (foodIconRenderer != null)
                 {
-                    foodIconRenderer.sortingOrder = faceRenderer.sortingOrder + 2;
+                    foodIconRenderer.sortingOrder = faceRenderer.sortingOrder + 101;
                 }
             }
         }
