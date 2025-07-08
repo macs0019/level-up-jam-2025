@@ -92,6 +92,10 @@ public class PlayerController : MonoBehaviour
         // Movimiento del cuerpo
         Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
         rb.MovePosition(rb.position + move * speed * Time.fixedDeltaTime);
+
+        // Anular fuerzas externas
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
     }
 
     private void StartArmBob()
