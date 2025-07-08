@@ -657,7 +657,8 @@ GameObject:
   m_Component:
   - component: {fileID: 330914131}
   - component: {fileID: 330914132}
-  m_Layer: 0
+  - component: {fileID: 330914133}
+  m_Layer: 7
   m_Name: Counter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -698,7 +699,31 @@ MonoBehaviour:
   interactionUIText: {fileID: 841511084}
   playerTransform: {fileID: 1722368085}
   interactionDistance: 8
+  interactionLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
   bossTransform: {fileID: 1390013546}
+--- !u!65 &330914133
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330914130}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.4499674, y: 3.2115083, z: 2.7305498}
+  m_Center: {x: 1.550992, y: 0.6180256, z: -0.6580882}
 --- !u!1001 &384960532
 PrefabInstance:
   m_ObjectHideFlags: 0

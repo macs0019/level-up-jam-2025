@@ -157,11 +157,13 @@ public class PlayerController : MonoBehaviour
         rightArm.DOLocalMoveX(-0.5f, 0.2f);
 
         // Look at the target balloon
-        Quaternion targetRot = Quaternion.LookRotation(foodSelector.speechBalloon.transform.position - cameraTransform.position, Vector3.up);
-        Vector3 eulerAngles = new Vector3(-targetRot.eulerAngles.x, 0, 0);
+        Vector3 targetPos = cameraTransform.position 
+                          + cameraTransform.forward * 3f;
 
-        armsCamTransform.DOLocalRotate(eulerAngles, 0.3f);
-        cameraTransform.DORotateQuaternion(targetRot, 0.3f);
+        Quaternion targetRot = Quaternion.LookRotation(cameraTransform.forward);
+
+        // Lanza los tweens
+        foodSelector.ShowFoodAnimation(targetPos, targetRot);
     }
 
     public void EndInteractAnimation(Action onComplete = null)
@@ -171,13 +173,6 @@ public class PlayerController : MonoBehaviour
 
         leftArm.DOLocalMoveY(0f, 0.2f);
         rightArm.DOLocalMoveX(1.8f, 0.2f);
-
-        armsCamTransform.DORotateQuaternion(_originalArmsCamRot, 0.3f);
-        cameraTransform.DORotateQuaternion(_originalCamRot, 0.3f)
-        .OnComplete(() =>
-        {
-            onComplete?.Invoke();
-        });
     }
 
     public void StartWritingAnimation()

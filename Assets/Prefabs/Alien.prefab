@@ -117,7 +117,8 @@ GameObject:
   - component: {fileID: 10913393151159155}
   - component: {fileID: 3281858522044968709}
   - component: {fileID: 2594711226097629495}
-  m_Layer: 0
+  - component: {fileID: 4300754228528335970}
+  m_Layer: 7
   m_Name: Alien
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,6 +171,9 @@ MonoBehaviour:
   interactionUIText: {fileID: 0}
   playerTransform: {fileID: 0}
   interactionDistance: 4
+  interactionLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
   foods:
   - {fileID: 6871645171283288517, guid: bd965fe393ab6924e85356c8c1d33fde, type: 3}
   - {fileID: 6871645171283288517, guid: 76adf9da8df9726438b0bdd6e5503f70, type: 3}
@@ -204,6 +208,27 @@ MonoBehaviour:
   minWaitTime: 3
   maxWaitTime: 5
   visualTransform: {fileID: 128753349315368774}
+--- !u!65 &4300754228528335970
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895062331559756760}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.275321, y: 2.3106298, z: 0.35411975}
+  m_Center: {x: 0.0014505386, y: 0.8458922, z: -0.0038772076}
 --- !u!1 &1335678883552825910
 GameObject:
   m_ObjectHideFlags: 0

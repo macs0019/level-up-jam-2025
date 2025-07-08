@@ -110,10 +110,6 @@ public class GameManager : MonoBehaviour
                 foodSelector.PauseDeactivationTween();
             }
 
-
-            // Almacenar el último FoodSelector interactuado
-            SetLastInteractedFoodSelector(foodSelector);
-
             // Para cada letra escrita / borrada, hacemos animación del player
             commandInputField.onValueChanged.AddListener((input) =>
             {
@@ -123,8 +119,12 @@ public class GameManager : MonoBehaviour
             commandInputField.onEndEdit.RemoveAllListeners(); // Limpiar listeners previos
             commandInputField.onEndEdit.AddListener((input) =>
             {
+            
                 if (!string.IsNullOrEmpty(input)) // Detectar cuando se finaliza la edición
                 {
+                    // Almacenar el último FoodSelector interactuado
+                    SetLastInteractedFoodSelector(foodSelector);
+
                     foodSelector.OrderTaken = true; // Marcar que el pedido ha sido tomado
                     if (input.Equals(foodName, System.StringComparison.OrdinalIgnoreCase))
                     {
@@ -175,9 +175,11 @@ public class GameManager : MonoBehaviour
     {
         if (playerController != null)
         {
+            Debug.Log("Resuming player controller and interaction with FoodSelector: " + foodSelector.name);
             playerController.EndInteractAnimation(() =>
             {
                 playerController.enabled = true;
+                foodSelector.HideFoodAnimation();
             });
 
             foodSelector.ResumeDeactivationTween();

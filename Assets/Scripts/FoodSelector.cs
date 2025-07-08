@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening; // Asegúrate de tener la referencia a DOTween
@@ -19,12 +18,10 @@ public class FoodSelector : InteractableBase
     public Sprite foodCallSprite; // Sprite que se muestra inicialmente
     private Sprite selectedFoodSprite; // Sprite de la comida seleccionada
 
-    private int showFoodAndObjectCalls = 0; // Contador de llamadas a ShowFoodAndObject
-
     private Tween deactivateTween; // Referencia al Tween de desactivación
     private float remainingTime; // Tiempo restante para la desactivación
 
-
+    private Transform lastTransform; // Última posición del objeto para evitar actualizaciones innecesarias
     private bool orderTaken = false; // Indica si el objeto ha sido grabado
 
     public bool OrderTaken
@@ -59,12 +56,8 @@ public class FoodSelector : InteractableBase
 
     public bool IsFoodActive => isFoodActive; // Propiedad para acceder al estado de la comida activa
 
-    public int ShowFoodAndObjectCalls => showFoodAndObjectCalls; // Propiedad para acceder al contador
-
     public void ShowFoodAndObject()
     {
-        showFoodAndObjectCalls++; // Incrementar el contador cada vez que se llama
-
         if (foods != null && foods.Count > 0 && targetRenderer != null)
         {
             // Seleccionar un alimento aleatorio
@@ -164,11 +157,13 @@ public class FoodSelector : InteractableBase
                 Debug.Log("Interactuando con " + gameObject.name);
 
                 // Llamar al GameManager para agregar el comando
-                if (GameManager.Instance != null && foods != null && targetRenderer != null)
+                if (GameManager.Instance != null && foods != null && targetRenderer != null && selectedFoodSprite != null)
                 {
-                    Food selectedFood = foods.Find(f => f.foodSprite == targetRenderer.sprite);
+                    // Buscar el alimento correspondiente al sprite seleccionado
+                    Food selectedFood = foods.Find(f => f.foodSprite == selectedFoodSprite);
                     if (selectedFood != null)
                     {
+                        targetRenderer.sprite = selectedFoodSprite;
                         GameManager.Instance.AddCommand(selectedFood.foodName, this);
                     }
                     else
@@ -193,15 +188,42 @@ public class FoodSelector : InteractableBase
         }
     }
 
+    public void ShowFoodAnimation(Vector3 targetPos, Quaternion targetRot)
+    {
+        if (targetRenderer == null || selectedFoodSprite == null)
+        {
+            Debug.LogError("targetRenderer o selectedFoodSprite no están asignados.");
+            return;
+        }
+
+        lastTransform = targetRenderer.transform; // Guardar la última posición del objeto
+
+        targetRenderer.transform.DOMove(targetPos, 0.5f);
+        targetRenderer.transform.DORotateQuaternion(targetRot, 0.5f);
+    }
+
+    public void HideFoodAnimation()
+    {
+        if (targetRenderer == null || selectedFoodSprite == null)
+        {
+            Debug.LogError("targetRenderer o selectedFoodSprite no están asignados.");
+            return;
+        }
+
+        // Volver a la posición original
+        if (lastTransform != null)
+        {
+            targetRenderer.transform.DOMove(lastTransform.position, 0.5f);
+            targetRenderer.transform.DORotateQuaternion(lastTransform.rotation, 0.5f);
+        }
+    }
+
     protected override void ShowInteractionPrompt()
     {
         if (!isFoodActive || targetRenderer == null || selectedFoodSprite == null)
         {
             return; // No mostrar el texto de interacción si la comida no está activa
         }
-
-        // Cambiar el sprite al de la comida seleccionada cuando el jugador esté en rango
-        targetRenderer.sprite = selectedFoodSprite;
 
         base.ShowInteractionPrompt();
     }
