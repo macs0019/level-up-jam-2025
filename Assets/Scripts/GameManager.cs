@@ -105,12 +105,20 @@ public class GameManager : MonoBehaviour
             if (playerController != null)
             {
                 playerController.enabled = false;
+                playerController.StartInteractAnimation(foodSelector);
+
                 foodSelector.PauseDeactivationTween();
             }
 
 
             // Almacenar el último FoodSelector interactuado
             SetLastInteractedFoodSelector(foodSelector);
+
+            // Para cada letra escrita / borrada, hacemos animación del player
+            commandInputField.onValueChanged.AddListener((input) =>
+            {
+                playerController.StartWritingAnimation();
+            });
 
             commandInputField.onEndEdit.RemoveAllListeners(); // Limpiar listeners previos
             commandInputField.onEndEdit.AddListener((input) =>
@@ -140,11 +148,7 @@ public class GameManager : MonoBehaviour
                 commandInputField.gameObject.SetActive(false); // Desactivar el InputField
 
                 // Reactivar el movimiento del jugador
-                if (playerController != null)
-                {
-                    playerController.enabled = true;
-                    foodSelector.ResumeDeactivationTween();
-                }
+                Resume(foodSelector);
             });
 
             // Detectar si se presiona Escape para cerrar el InputField sin guardar
@@ -157,17 +161,26 @@ public class GameManager : MonoBehaviour
                     commandInputField.gameObject.SetActive(false); // Desactivar el InputField
 
                     // Reactivar el movimiento del jugador
-                    if (playerController != null)
-                    {
-                        playerController.enabled = true;
-                        foodSelector.ResumeDeactivationTween();
-                    }
+                    Resume(foodSelector);
                 }
             });
         }
         else
         {
             Debug.LogError("Command Input Field no está asignado en el Inspector.");
+        }
+    }
+
+    private void Resume(FoodSelector foodSelector)
+    {
+        if (playerController != null)
+        {
+            playerController.EndInteractAnimation(() =>
+            {
+                playerController.enabled = true;
+            });
+
+            foodSelector.ResumeDeactivationTween();
         }
     }
 

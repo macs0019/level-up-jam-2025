@@ -7,7 +7,7 @@ public class FoodSelector : InteractableBase
 {
     public List<Food> foods; // Lista de alimentos asignada desde el Inspector
     public SpriteRenderer targetRenderer; // SpriteRenderer donde se mostrará el sprite del alimento seleccionado
-    public GameObject hiddenObject; // Objeto que se volverá visible
+    public GameObject speechBalloon; // Objeto que se volverá visible
     public float activeTime = 5.0f; // Tiempo que el objeto estará activo
     public int sortingOffset = 0;
 
@@ -77,9 +77,13 @@ public class FoodSelector : InteractableBase
             targetRenderer.sprite = foodCallSprite;
 
             // Hacer visible el objeto oculto
-            if (hiddenObject != null)
+            if (speechBalloon != null)
             {
-                hiddenObject.SetActive(true);
+                speechBalloon.SetActive(true);
+                speechBalloon.transform.localScale = Vector3.zero;
+
+                speechBalloon.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack);
+
                 isFoodActive = true; // Activar el indicador de comida activa
                 DeactivateAfterTime(); // Iniciar la coroutine de desactivación
             }
@@ -96,7 +100,7 @@ public class FoodSelector : InteractableBase
 
     private void DeactivateAfterTime()
     {
-        if (hiddenObject != null)
+        if (speechBalloon != null)
         {
             // Detener cualquier Tween existente antes de crear uno nuevo
             if (deactivateTween != null && deactivateTween.IsActive())
@@ -107,7 +111,9 @@ public class FoodSelector : InteractableBase
             remainingTime = activeTime; // Inicializar el tiempo restante
             deactivateTween = DOVirtual.DelayedCall(remainingTime, () =>
             {
-                hiddenObject.SetActive(false);
+                // Tween para esconder el globo
+                DeactivateSpeechBalloon();
+
                 isFoodActive = false;
 
                 if (!orderTaken)
@@ -116,6 +122,14 @@ public class FoodSelector : InteractableBase
                 }
             });
         }
+    }
+
+    public void DeactivateSpeechBalloon()
+    {
+        speechBalloon.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBack).OnComplete(() =>
+        {
+            speechBalloon.SetActive(false);
+        });
     }
 
     public void PauseDeactivationTween()
@@ -129,7 +143,7 @@ public class FoodSelector : InteractableBase
 
     public void ResumeDeactivationTween()
     {
-        if (hiddenObject != null && isFoodActive && deactivateTween != null)
+        if (speechBalloon != null && isFoodActive && deactivateTween != null)
         {
             deactivateTween.Play();
         }

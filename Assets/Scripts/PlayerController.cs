@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
+using static UnityEngine.GraphicsBuffer;
 
 public class PlayerController : MonoBehaviour
 {
@@ -35,6 +36,10 @@ public class PlayerController : MonoBehaviour
     private Vector3 rightArmStartPos;
     private Tween leftBobTween;
     private Tween rightBobTween;
+
+    // Guarda la rotación original de la cámara
+    private Quaternion _originalCamRot;
+    private Quaternion _originalArmsCamRot;
 
     void Start()
     {
@@ -92,56 +97,90 @@ public class PlayerController : MonoBehaviour
     private void StartArmBob()
     {
         if (isMoving) return;
+
         isMoving = true;
 
         // Matar tweens anteriores y resetear
-        if (leftArm != null)
-        {
-            leftArm.DOKill(true);
-            leftArm.localPosition = leftArmStartPos;
-        }
-        if (rightArm != null)
-        {
-            rightArm.DOKill(true);
-            rightArm.localPosition = rightArmStartPos;
-        }
+        leftArm.DOKill(true);
+        leftArm.localPosition = leftArmStartPos;
+ 
+        rightArm.DOKill(true);
+        rightArm.localPosition = rightArmStartPos;
 
         // Iniciar bob en bucle
-        if (leftArm != null)
-            leftBobTween = leftArm
-                .DOLocalMoveY(leftArmStartPos.y - armBobAmplitude, armBobDuration)
-                .SetLoops(-1, LoopType.Yoyo)
-                .SetEase(Ease.InOutSine);
-        if (rightArm != null)
-            rightBobTween = rightArm
-                .DOLocalMoveY(rightArmStartPos.y - armBobAmplitude, armBobDuration)
-                .SetLoops(-1, LoopType.Yoyo)
-                .SetEase(Ease.InOutSine);
+        leftBobTween = leftArm
+            .DOLocalMoveY(leftArmStartPos.y - armBobAmplitude, armBobDuration)
+            .SetLoops(-1, LoopType.Yoyo)
+            .SetEase(Ease.InOutSine);
+        rightBobTween = rightArm
+            .DOLocalMoveY(rightArmStartPos.y - armBobAmplitude, armBobDuration)
+            .SetLoops(-1, LoopType.Yoyo)
+            .SetEase(Ease.InOutSine);
     }
 
     private void StopArmBobAndShake()
     {
         if (!isMoving) return;
+
         isMoving = false;
 
         // Matar bob tweens
         leftBobTween?.Kill();
         rightBobTween?.Kill();
 
-        // Asegurar que no quedan tweens activos
-        if (leftArm != null) leftArm.DOKill(true);
-        if (rightArm != null) rightArm.DOKill(true);
+        leftArm.DOKill(true);
+        rightArm.DOKill(true);
 
         // Volver suavemente a posici�n inicial
-        if (leftArm != null)
-            leftArm.DOLocalMove(leftArmStartPos, armShakeDuration * 0.5f).SetEase(Ease.OutQuad);
-        if (rightArm != null)
-            rightArm.DOLocalMove(rightArmStartPos, armShakeDuration * 0.5f).SetEase(Ease.OutQuad);
+        leftArm.DOLocalMove(leftArmStartPos, armShakeDuration * 0.5f).SetEase(Ease.OutQuad);
+        rightArm.DOLocalMove(rightArmStartPos, armShakeDuration * 0.5f).SetEase(Ease.OutQuad);
 
         // Aplicar shake ligero
-        if (leftArm != null)
-            leftArm.DOPunchPosition(armShakeStrength, armShakeDuration, armShakeVibrato, armShakeElasticity);
-        if (rightArm != null)
-            rightArm.DOPunchPosition(armShakeStrength, armShakeDuration, armShakeVibrato, armShakeElasticity);
+        leftArm.DOPunchPosition(armShakeStrength, armShakeDuration, armShakeVibrato, armShakeElasticity);
+        rightArm.DOPunchPosition(armShakeStrength, armShakeDuration, armShakeVibrato, armShakeElasticity);
+    }
+
+    public void StartInteractAnimation(FoodSelector foodSelector)
+    {
+        // Guardamos la rotación actual
+        _originalCamRot = cameraTransform.rotation;
+        _originalArmsCamRot = armsCamTransform.rotation;
+
+        leftArm.DOKill(true);
+        rightArm.DOKill(true);
+
+        leftArm.DOLocalMoveY(-0.3f, 0.2f);
+        rightArm.DOLocalMoveX(-0.5f, 0.2f);
+
+        // Look at the target balloon
+        Quaternion targetRot = Quaternion.LookRotation(foodSelector.speechBalloon.transform.position - cameraTransform.position, Vector3.up);
+        Vector3 eulerAngles = new Vector3(-targetRot.eulerAngles.x, 0, 0);
+
+        armsCamTransform.DOLocalRotate(eulerAngles, 0.3f);
+        cameraTransform.DORotateQuaternion(targetRot, 0.3f);
+    }
+
+    public void EndInteractAnimation(Action onComplete = null)
+    {
+        leftArm.DOKill(true);
+        rightArm.DOKill(true);
+
+        leftArm.DOLocalMoveY(0f, 0.2f);
+        rightArm.DOLocalMoveX(1.8f, 0.2f);
+
+        armsCamTransform.DORotateQuaternion(_originalArmsCamRot, 0.3f);
+        cameraTransform.DORotateQuaternion(_originalCamRot, 0.3f)
+        .OnComplete(() =>
+        {
+            onComplete?.Invoke();
+        });
+    }
+
+    public void StartWritingAnimation()
+    {
+        // Mata cualquier tween activo en rightArm
+        rightArm.DOKill(complete: true);
+
+        rightArm.DOPunchPosition(armShakeStrength / 2, armShakeDuration / 2, armShakeVibrato / 2, armShakeElasticity).SetAutoKill();
     }
 }

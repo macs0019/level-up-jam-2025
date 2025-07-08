@@ -169,14 +169,14 @@ MonoBehaviour:
   interactionKey: 101
   interactionUIText: {fileID: 0}
   playerTransform: {fileID: 0}
-  interactionDistance: 10
+  interactionDistance: 4
   foods:
   - {fileID: 6871645171283288517, guid: bd965fe393ab6924e85356c8c1d33fde, type: 3}
   - {fileID: 6871645171283288517, guid: 76adf9da8df9726438b0bdd6e5503f70, type: 3}
   - {fileID: 6871645171283288517, guid: 1fe07994a335a8f42b2bfce583cf3384, type: 3}
   - {fileID: 6871645171283288517, guid: 3950ee4f7e5619747803f7583cd7371d, type: 3}
   targetRenderer: {fileID: 814489019394256588}
-  hiddenObject: {fileID: 444470446179084481}
+  speechBalloon: {fileID: 444470446179084481}
   activeTime: 10
   sortingOffset: 0
   renderers:
@@ -445,7 +445,7 @@ MonoBehaviour:
   head: {fileID: 1335678883552825910}
   face: {fileID: 4004907632425726474}
   speechBalloon: {fileID: 444470446179084481}
-  foodSign: {fileID: 2162371653143567642}
+  foodIcon: {fileID: 2162371653143567642}
   playerController: {fileID: 0}
   sortingOffset: 0
 --- !u!1 &4004907632425726474

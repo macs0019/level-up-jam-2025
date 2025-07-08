@@ -29,13 +29,6 @@ public class MunchoMovement : MonoBehaviour
     private void Awake()
     {
         foodSelector = GetComponent<FoodSelector>();
-        StartWalkingAnimation();
-    }
-
-    private void Start()
-    {
-        Debug.Log("Empiezo animación de caminar");
-        StartWalkingAnimation();
     }
 
     public void SetTableAndPath(GameManager.Table table)
@@ -57,6 +50,8 @@ public class MunchoMovement : MonoBehaviour
 
     public void MoveAlongPath(System.Action onComplete)
     {
+        StartWalkingAnimation();
+
         if (path == null || path.Length == 0)
         {
             Debug.LogError("Path is not assigned or empty.");
@@ -115,10 +110,17 @@ public class MunchoMovement : MonoBehaviour
             return;
         }
 
-        foodSelector.hiddenObject.SetActive(false); // Desactivar el objeto oculto al iniciar el movimiento
+        // Deactivate the speechBalloon
+        foodSelector.DeactivateSpeechBalloon();
 
         Sequence sequence = DOTween.Sequence();
         sequence.AppendInterval(Random.Range(minWaitTime, maxWaitTime));
+
+        // Iniciamos la animación tras ponernos a andar
+        sequence.AppendCallback(() =>
+        {
+            StartWalkingAnimation();
+        });
 
         for (int i = path.Length - 1; i >= 0; i--)
         {
@@ -126,6 +128,12 @@ public class MunchoMovement : MonoBehaviour
             float duration = distance / speed; // Calcular la duración basada en la velocidad
             sequence.Append(transform.DOMove(path[i].position, duration).SetEase(Ease.Linear));
         }
+
+        // Reseteamos la animación antes de terminar
+        sequence.AppendCallback(() =>
+        {
+            ResetWalkingAnimation();
+        });
 
         sequence.OnComplete(() => onComplete?.Invoke());
     }
