@@ -1,25 +1,29 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem; // Importar el nuevo Input System
-using DG.Tweening; // Importar DOTween
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; } // Singleton instance
 
+    [Header("UI Elements")]
     public TMP_InputField commandInputField; // InputField para ingresar el comando
     public TMP_Text enteredWordsText; // Texto para mostrar las palabras ingresadas
+
+    public TMP_Text interactionUIText; // Texto de la UI de interacción asignado desde el Inspector
+    public Transform playerTransform; // Transform del jugador asignado desde el Inspector
 
     private PlayerController playerController; // Referencia al PlayerController
     private FoodSelector lastInteractedFoodSelector; // Referencia al último FoodSelector con el que se interactuó
 
     private bool error = false; // Indica si el usuario se ha equivocado al introducir el texto
 
+    [Header("Game Properties")]
     public GameObject[] lives; // Array de objetos que representan las vidas del jugador
     private int currentLives; // Contador de vidas actuales
+
+    public float probabilityToLeave = 1f; // Probabilidad de que el último FoodSelector se vaya
 
     [System.Serializable]
     public class Table
@@ -28,16 +32,20 @@ public class GameManager : MonoBehaviour
         public bool isOccupied = false; // Estado de la mesa
     }
 
+
     public List<Table> tables; // Lista de mesas con sus caminos
-    [SerializeField]
-    public List<Transform[]> paths; // Lista de caminos (cada camino es un array de puntos)
+    [SerializeField] public List<Transform[]> paths; // Lista de caminos (cada camino es un array de puntos)
+
+    [Header("Spawning Munchos Properties")]
 
     public GameObject munchoPrefab; // Prefab del muncho
 
-    public int numberOfTablesToOccupy = 4; // Número de mesas a ocupar asignado desde el Inspector
-
+    public int maxNumOfTables = 4; // Número de mesas a ocupar asignado desde el Inspector
     private int occupiedTablesCount = 0; // Contador de mesas ocupadas
+
+    public float timeToSpawnMuncho = 10f;
     private float spawnTimer = 0f; // Temporizador para el spawn de munchos
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -66,7 +74,7 @@ public class GameManager : MonoBehaviour
         spawnTimer += Time.deltaTime;
 
         // Spawnear munchos cada 10 segundos hasta que se ocupen el número de mesas especificado
-        if (spawnTimer >= 10f && occupiedTablesCount < numberOfTablesToOccupy)
+        if (spawnTimer >= timeToSpawnMuncho && occupiedTablesCount < maxNumOfTables)
         {
             Debug.Log("Spawneando un nuevo muncho...");
             spawnTimer = 0f;
@@ -215,9 +223,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public TMP_Text interactionUIText; // Texto de la UI de interacción asignado desde el Inspector
-    public Transform playerTransform; // Transform del jugador asignado desde el Inspector
-
     public void SendMunchoToTable()
     {
         // Filtrar mesas disponibles
@@ -264,8 +269,6 @@ public class GameManager : MonoBehaviour
         munchoMovement.SetTableAndPath(targetTable);
 
     }
-
-    public float probabilityToLeave = 1f; // Probabilidad de que el último FoodSelector se vaya
 
     public void InteractWithBossController()
     {

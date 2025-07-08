@@ -203,6 +203,7 @@ MonoBehaviour:
   probabilityToLeave: 1
   minWaitTime: 3
   maxWaitTime: 5
+  visualTransform: {fileID: 128753349315368774}
 --- !u!1 &1335678883552825910
 GameObject:
   m_ObjectHideFlags: 0

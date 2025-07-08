@@ -10,7 +10,6 @@ public class FoodSelector : InteractableBase
     public GameObject hiddenObject; // Objeto que se volverá visible
     public float activeTime = 5.0f; // Tiempo que el objeto estará activo
     public int sortingOffset = 0;
-    private SpriteRenderer sr;
 
     public List<SpriteRenderer> renderers; // Lista de SpriteRenderers para ordenar
     private PlayerController playerController; // Referencia al PlayerController
@@ -36,16 +35,17 @@ public class FoodSelector : InteractableBase
             orderTaken = value;
         }
     }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        sr = GetComponent<SpriteRenderer>();
-
         // Buscar al jugador por el tag "Player"
         GameObject player = GameObject.FindGameObjectWithTag("Player");
+
         if (player != null)
         {
             playerController = player.GetComponent<PlayerController>();
+
             if (playerController == null)
             {
                 Debug.LogError("PlayerController no encontrado en el objeto con tag 'Player'.");
@@ -196,17 +196,22 @@ public class FoodSelector : InteractableBase
     {
         if (renderers != null && renderers.Count > 0 && playerController != null)
         {
-            float playerDistance = Vector3.Distance(transform.position, playerController.transform.position);
+            HandleRendererSortingOrder();
+        }
+    }
 
-            for (int i = 0; i < renderers.Count; i++)
+    private void HandleRendererSortingOrder()
+    {
+        float playerDistance = Vector3.Distance(transform.position, playerController.transform.position);
+
+        for (int i = 0; i < renderers.Count; i++)
+        {
+            var renderer = renderers[i];
+            if (renderer != null)
             {
-                var renderer = renderers[i];
-                if (renderer != null)
-                {
-                    // Orden basado en la distancia al jugador: más cerca, mayor z-index
-                    float sortingValue = 1 / (playerDistance + 0.1f); // Evitar división por cero
-                    renderer.sortingOrder = 1000 + (int)(sortingValue * 1000) + sortingOffset + i; // Añadir offset incremental
-                }
+                // Orden basado en la distancia al jugador: más cerca, mayor z-index
+                float sortingValue = 1 / (playerDistance + 0.1f); // Evitar división por cero
+                renderer.sortingOrder = 1000 + (int)(sortingValue * 1000) + sortingOffset + i; // Añadir offset incremental
             }
         }
     }

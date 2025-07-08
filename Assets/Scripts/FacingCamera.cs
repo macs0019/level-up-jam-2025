@@ -1,16 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FacingCamera : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         // Obtener la dirección hacia la cámara
@@ -24,6 +15,5 @@ public class FacingCamera : MonoBehaviour
 
         // Aplicar la rotación solo en el eje Y
         transform.rotation = Quaternion.Euler(0f, targetRotation.eulerAngles.y, 0f);
-
     }
 }

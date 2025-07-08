@@ -9,7 +9,7 @@ public class BossController : InteractableBase
     {
         if (GameManager.Instance.GetLastInteractedFoodSelector() == null)
         {
-            return; // No hacer nada si no hay un FoodSelector interactuado
+            return; // No mostrar el mensaje si no hay un FoodSelector interactuado
         }
 
         Debug.Log("Interacción con el jefe iniciada.");
