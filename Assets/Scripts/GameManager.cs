@@ -1,25 +1,39 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem; // Importar el nuevo Input System
-using DG.Tweening; // Importar DOTween
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; } // Singleton instance
 
+    [Header("UI Elements")]
     public TMP_InputField commandInputField; // InputField para ingresar el comando
     public TMP_Text enteredWordsText; // Texto para mostrar las palabras ingresadas
+
+    public TMP_Text interactionUIText; // Texto de la UI de interacción asignado desde el Inspector
+    public Transform playerTransform; // Transform del jugador asignado desde el Inspector
 
     private PlayerController playerController; // Referencia al PlayerController
     private FoodSelector lastInteractedFoodSelector; // Referencia al último FoodSelector con el que se interactuó
 
+    public FoodSelector LastInteractedFoodSelector
+    {
+        get { return lastInteractedFoodSelector; }
+        set
+        {
+            Debug.Log("Setting LastInteractedFoodSelector to: " + (value != null ? value.name : "null"));
+            lastInteractedFoodSelector = value;
+        }
+    }
+
     private bool error = false; // Indica si el usuario se ha equivocado al introducir el texto
 
+    [Header("Game Properties")]
     public GameObject[] lives; // Array de objetos que representan las vidas del jugador
     private int currentLives; // Contador de vidas actuales
+
+    public float probabilityToLeave = 1f; // Probabilidad de que el último FoodSelector se vaya
 
     [System.Serializable]
     public class Table
@@ -28,16 +42,20 @@ public class GameManager : MonoBehaviour
         public bool isOccupied = false; // Estado de la mesa
     }
 
+
     public List<Table> tables; // Lista de mesas con sus caminos
-    [SerializeField]
-    public List<Transform[]> paths; // Lista de caminos (cada camino es un array de puntos)
+    [SerializeField] public List<Transform[]> paths; // Lista de caminos (cada camino es un array de puntos)
+
+    [Header("Spawning Munchos Properties")]
 
     public GameObject munchoPrefab; // Prefab del muncho
 
-    public int numberOfTablesToOccupy = 4; // Número de mesas a ocupar asignado desde el Inspector
-
+    public int maxNumOfTables = 4; // Número de mesas a ocupar asignado desde el Inspector
     private int occupiedTablesCount = 0; // Contador de mesas ocupadas
+
+    public float timeToSpawnMuncho = 10f;
     private float spawnTimer = 0f; // Temporizador para el spawn de munchos
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -66,7 +84,7 @@ public class GameManager : MonoBehaviour
         spawnTimer += Time.deltaTime;
 
         // Spawnear munchos cada 10 segundos hasta que se ocupen el número de mesas especificado
-        if (spawnTimer >= 10f && occupiedTablesCount < numberOfTablesToOccupy)
+        if (spawnTimer >= timeToSpawnMuncho && occupiedTablesCount < maxNumOfTables)
         {
             Debug.Log("Spawneando un nuevo muncho...");
             spawnTimer = 0f;
@@ -97,18 +115,26 @@ public class GameManager : MonoBehaviour
             if (playerController != null)
             {
                 playerController.enabled = false;
-                foodSelector.PauseDeactivationTween();
+                playerController.StartInteractAnimation(foodSelector);
+
+                foodSelector.PauseDeactivationTimer();
             }
 
-
-            // Almacenar el último FoodSelector interactuado
-            SetLastInteractedFoodSelector(foodSelector);
+            // Para cada letra escrita / borrada, hacemos animación del player
+            commandInputField.onValueChanged.AddListener((input) =>
+            {
+                playerController.StartWritingAnimation();
+            });
 
             commandInputField.onEndEdit.RemoveAllListeners(); // Limpiar listeners previos
             commandInputField.onEndEdit.AddListener((input) =>
             {
+
                 if (!string.IsNullOrEmpty(input)) // Detectar cuando se finaliza la edición
                 {
+                    // Almacenar el último FoodSelector interactuado
+                    LastInteractedFoodSelector = foodSelector;
+
                     foodSelector.OrderTaken = true; // Marcar que el pedido ha sido tomado
                     if (input.Equals(foodName, System.StringComparison.OrdinalIgnoreCase))
                     {
@@ -132,11 +158,7 @@ public class GameManager : MonoBehaviour
                 commandInputField.gameObject.SetActive(false); // Desactivar el InputField
 
                 // Reactivar el movimiento del jugador
-                if (playerController != null)
-                {
-                    playerController.enabled = true;
-                    foodSelector.ResumeDeactivationTween();
-                }
+                Resume(foodSelector, resetLastInteracted: false);
             });
 
             // Detectar si se presiona Escape para cerrar el InputField sin guardar
@@ -149,11 +171,7 @@ public class GameManager : MonoBehaviour
                     commandInputField.gameObject.SetActive(false); // Desactivar el InputField
 
                     // Reactivar el movimiento del jugador
-                    if (playerController != null)
-                    {
-                        playerController.enabled = true;
-                        foodSelector.ResumeDeactivationTween();
-                    }
+                    Resume(foodSelector);
                 }
             });
         }
@@ -163,15 +181,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SetLastInteractedFoodSelector(FoodSelector foodSelector)
+    private void Resume(FoodSelector foodSelector, bool resetLastInteracted = true)
     {
-        lastInteractedFoodSelector = foodSelector;
-        Debug.Log("Último FoodSelector interactuado: " + foodSelector.name);
-    }
+        if (playerController != null)
+        {
+            Debug.Log("Resuming player controller and interaction with FoodSelector: " + foodSelector.name);
 
-    public FoodSelector GetLastInteractedFoodSelector()
-    {
-        return lastInteractedFoodSelector;
+            if (resetLastInteracted)
+            {
+                LastInteractedFoodSelector = null; // Resetear el último FoodSelector interactuado
+            }
+
+            foodSelector.HideFoodAnimation();
+            foodSelector.ResumeDeactivationTimer();
+            playerController.EndInteractAnimation(() =>
+            {
+                playerController.enabled = true;
+            });
+        }
     }
 
     public bool HasError()
@@ -202,7 +229,7 @@ public class GameManager : MonoBehaviour
         }
 
         error = false; // Resetear el estado de error
-        lastInteractedFoodSelector = null; // Eliminar el último FoodSelector interactuado
+        LastInteractedFoodSelector = null; // Eliminar el último FoodSelector interactuado
 
         return hasError;
     }
@@ -214,9 +241,6 @@ public class GameManager : MonoBehaviour
             enteredWordsText.text = string.Empty; // Limpiar el texto ingresado
         }
     }
-
-    public TMP_Text interactionUIText; // Texto de la UI de interacción asignado desde el Inspector
-    public Transform playerTransform; // Transform del jugador asignado desde el Inspector
 
     public void SendMunchoToTable()
     {
@@ -265,13 +289,14 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public float probabilityToLeave = 1f; // Probabilidad de que el último FoodSelector se vaya
-
     public void InteractWithBossController()
     {
         Debug.Log("Interacting with BossController...");
-        Debug.Log("Último FoodSelector interactuado: " + (lastInteractedFoodSelector != null ? lastInteractedFoodSelector.name : "Ninguno"));
-        FoodSelector foodSelectorToLeave = lastInteractedFoodSelector;
+        Debug.Log("Último FoodSelector interactuado: " + (LastInteractedFoodSelector != null ? LastInteractedFoodSelector.name : "Ninguno"));
+        FoodSelector foodSelectorToLeave = LastInteractedFoodSelector;
+
+        lastInteractedFoodSelector = null; // Limpiar la referencia al último FoodSelector interactuado
+
         if (foodSelectorToLeave != null)
         {
             MunchoMovement munchoMovement = foodSelectorToLeave.GetComponent<MunchoMovement>();
@@ -304,7 +329,6 @@ public class GameManager : MonoBehaviour
                 }
 
                 Destroy(foodSelector.gameObject);
-
             });
         }
     }

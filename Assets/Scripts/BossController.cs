@@ -7,9 +7,9 @@ public class BossController : InteractableBase
 
     public override void OnInteract()
     {
-        if (GameManager.Instance.GetLastInteractedFoodSelector() == null)
+        if (GameManager.Instance.LastInteractedFoodSelector == null)
         {
-            return; // No hacer nada si no hay un FoodSelector interactuado
+            return; // No mostrar el mensaje si no hay un FoodSelector interactuado
         }
 
         Debug.Log("Interacción con el jefe iniciada.");
@@ -33,7 +33,7 @@ public class BossController : InteractableBase
 
     protected override void ShowInteractionPrompt()
     {
-        if (GameManager.Instance.GetLastInteractedFoodSelector() == null)
+        if (GameManager.Instance.LastInteractedFoodSelector == null)
         {
             return; // No mostrar el mensaje si no hay un FoodSelector interactuado
         }

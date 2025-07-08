@@ -1,16 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening; // Asegúrate de tener la referencia a DOTween
+using DG.Tweening;
+using System; // Asegúrate de tener la referencia a DOTween
 
 public class FoodSelector : InteractableBase
 {
     public List<Food> foods; // Lista de alimentos asignada desde el Inspector
     public SpriteRenderer targetRenderer; // SpriteRenderer donde se mostrará el sprite del alimento seleccionado
-    public GameObject hiddenObject; // Objeto que se volverá visible
+    public GameObject speechBalloon; // Objeto que se volverá visible
     public float activeTime = 5.0f; // Tiempo que el objeto estará activo
     public int sortingOffset = 0;
-    private SpriteRenderer sr;
 
     public List<SpriteRenderer> renderers; // Lista de SpriteRenderers para ordenar
     private PlayerController playerController; // Referencia al PlayerController
@@ -20,12 +19,11 @@ public class FoodSelector : InteractableBase
     public Sprite foodCallSprite; // Sprite que se muestra inicialmente
     private Sprite selectedFoodSprite; // Sprite de la comida seleccionada
 
-    private int showFoodAndObjectCalls = 0; // Contador de llamadas a ShowFoodAndObject
+    private float remainingTime = 0f;
+    private bool timerRunning = false;
 
-    private Tween deactivateTween; // Referencia al Tween de desactivación
-    private float remainingTime; // Tiempo restante para la desactivación
-
-
+    private Vector3 initialLocalPos;
+    private Quaternion initialLocalRot;
     private bool orderTaken = false; // Indica si el objeto ha sido grabado
 
     public bool OrderTaken
@@ -36,16 +34,19 @@ public class FoodSelector : InteractableBase
             orderTaken = value;
         }
     }
+
+    public bool IsFoodActive => isFoodActive; // Propiedad para acceder al estado de la comida activa
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        sr = GetComponent<SpriteRenderer>();
-
         // Buscar al jugador por el tag "Player"
         GameObject player = GameObject.FindGameObjectWithTag("Player");
+
         if (player != null)
         {
             playerController = player.GetComponent<PlayerController>();
+
             if (playerController == null)
             {
                 Debug.LogError("PlayerController no encontrado en el objeto con tag 'Player'.");
@@ -55,20 +56,39 @@ public class FoodSelector : InteractableBase
         {
             Debug.LogError("No se encontró ningún objeto con el tag 'Player'.");
         }
+
+        initialLocalPos = speechBalloon.transform.localPosition;
+        initialLocalRot = speechBalloon.transform.localRotation;
     }
 
-    public bool IsFoodActive => isFoodActive; // Propiedad para acceder al estado de la comida activa
+    new void Update()
+    {
+        base.Update(); // Llamar al método Update de la clase base InteractableBase
 
-    public int ShowFoodAndObjectCalls => showFoodAndObjectCalls; // Propiedad para acceder al contador
+        // Si está activo el timer, lo descontamos
+        if (timerRunning && isFoodActive)
+        {
+            remainingTime -= Time.deltaTime;
+            if (remainingTime <= 0f)
+            {
+                timerRunning = false;
+                isFoodActive = false;
+
+                // Tu desactivación
+                DeactivateSpeechBalloon();
+
+                if (!orderTaken)
+                    GameManager.Instance.HandleFoodSelectorLeavingWithDelay(this);
+            }
+        }
+    }
 
     public void ShowFoodAndObject()
     {
-        showFoodAndObjectCalls++; // Incrementar el contador cada vez que se llama
-
         if (foods != null && foods.Count > 0 && targetRenderer != null)
         {
             // Seleccionar un alimento aleatorio
-            Food selectedFood = foods[Random.Range(0, foods.Count)];
+            Food selectedFood = foods[UnityEngine.Random.Range(0, foods.Count)];
 
             // Guardar el sprite de la comida seleccionada
             selectedFoodSprite = selectedFood.foodSprite;
@@ -77,11 +97,16 @@ public class FoodSelector : InteractableBase
             targetRenderer.sprite = foodCallSprite;
 
             // Hacer visible el objeto oculto
-            if (hiddenObject != null)
+            if (speechBalloon != null)
             {
-                hiddenObject.SetActive(true);
+                speechBalloon.SetActive(true);
+                speechBalloon.transform.localScale = Vector3.zero;
+
+                speechBalloon.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack);
+
                 isFoodActive = true; // Activar el indicador de comida activa
-                DeactivateAfterTime(); // Iniciar la coroutine de desactivación
+
+                StartDeactivationTimer();
             }
             else
             {
@@ -94,50 +119,50 @@ public class FoodSelector : InteractableBase
         }
     }
 
-    private void DeactivateAfterTime()
+    private void StartDeactivationTimer()
     {
-        if (hiddenObject != null)
+        remainingTime = activeTime;
+        timerRunning = true;
+
+        isFoodActive = true; // Activar el indicador de comida activa
+    }
+
+    public void PauseDeactivationTimer()
+    {
+        if (timerRunning)
         {
-            // Detener cualquier Tween existente antes de crear uno nuevo
-            if (deactivateTween != null && deactivateTween.IsActive())
-            {
-                deactivateTween.Kill(false); // Detener el Tween sin completar la acción
-            }
+            timerRunning = false;
+            
+            isFoodActive = false; // Desactivar el indicador de comida activa
+        }
+    }
 
-            remainingTime = activeTime; // Inicializar el tiempo restante
-            deactivateTween = DOVirtual.DelayedCall(remainingTime, () =>
-            {
-                hiddenObject.SetActive(false);
-                isFoodActive = false;
+    public void ResumeDeactivationTimer()
+    {
+        if (isFoodActive && !timerRunning)
+        {
+            timerRunning = true;
 
-                if (!orderTaken)
-                {
-                    GameManager.Instance.HandleFoodSelectorLeavingWithDelay(this);
-                }
+            isFoodActive = true; // Re-activar el indicador de comida activa
+        }
+    }
+
+    public void DeactivateSpeechBalloon()
+    {
+        isFoodActive = false; // Desactivar el indicador de comida activa
+
+        HideFoodAnimation(() =>
+        {
+            speechBalloon.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBack).OnComplete(() =>
+            {
+                speechBalloon.SetActive(false);
             });
-        }
-    }
-
-    public void PauseDeactivationTween()
-    {
-        if (deactivateTween != null && deactivateTween.IsPlaying())
-        {
-            remainingTime = deactivateTween.Elapsed(false); // Guardar el tiempo restante
-            deactivateTween.Pause(); // Pausar el Tween sin eliminarlo
-        }
-    }
-
-    public void ResumeDeactivationTween()
-    {
-        if (hiddenObject != null && isFoodActive && deactivateTween != null)
-        {
-            deactivateTween.Play();
-        }
+        }); // Ocultar la comida y volver al sprite de foodCall
     }
 
     public override void OnInteract()
     {
-        if (GameManager.Instance != null && GameManager.Instance.GetLastInteractedFoodSelector() != null && GameManager.Instance.GetLastInteractedFoodSelector() != this)
+        if (GameManager.Instance != null && GameManager.Instance.LastInteractedFoodSelector != null)
         {
             Debug.Log("No puedes interactuar con este FoodSelector porque no es el último interactuado.");
             return;
@@ -150,11 +175,13 @@ public class FoodSelector : InteractableBase
                 Debug.Log("Interactuando con " + gameObject.name);
 
                 // Llamar al GameManager para agregar el comando
-                if (GameManager.Instance != null && foods != null && targetRenderer != null)
+                if (GameManager.Instance != null && foods != null && targetRenderer != null && selectedFoodSprite != null)
                 {
-                    Food selectedFood = foods.Find(f => f.foodSprite == targetRenderer.sprite);
+                    // Buscar el alimento correspondiente al sprite seleccionado
+                    Food selectedFood = foods.Find(f => f.foodSprite == selectedFoodSprite);
                     if (selectedFood != null)
                     {
+                        targetRenderer.sprite = selectedFoodSprite;
                         GameManager.Instance.AddCommand(selectedFood.foodName, this);
                     }
                     else
@@ -179,15 +206,53 @@ public class FoodSelector : InteractableBase
         }
     }
 
+    public void ShowFoodAnimation(Vector3 targetPos, Quaternion targetRot)
+    {
+        if (targetRenderer == null || speechBalloon == null)
+        {
+            Debug.LogError("targetRenderer, selectedFoodSprite o speechBalloon no están asignados.");
+            return;
+        }
+
+        //initialLocalPos = speechBalloon.transform.position;
+        //initialLocalRot = speechBalloon.transform.rotation;
+
+        speechBalloon.transform.transform.DOKill(true);
+
+        targetRenderer.sprite = selectedFoodSprite; // Asignar el sprite seleccionado al SpriteRenderer
+
+        speechBalloon.transform.DOMove(targetPos, 0.5f);
+        speechBalloon.transform.DORotateQuaternion(targetRot, 0.5f);
+    }
+
+    public void HideFoodAnimation(Action onComplete = null)
+    {
+        if (targetRenderer == null || selectedFoodSprite == null)
+        {
+            Debug.LogError("targetRenderer o selectedFoodSprite no están asignados.");
+            return;
+        }
+
+        isFoodActive = false; // Desactivar el indicador de comida activa
+
+        speechBalloon.transform.DOKill(true);
+
+        speechBalloon.transform.DOLocalMove(initialLocalPos, 0.5f);
+        speechBalloon.transform.DOLocalRotateQuaternion(initialLocalRot, 0.5f)
+        .OnComplete(() =>
+        {
+            targetRenderer.sprite = foodCallSprite;
+            isFoodActive = true; // Asegurarse de que la comida no esté activa
+            onComplete?.Invoke();
+        });
+    }
+
     protected override void ShowInteractionPrompt()
     {
         if (!isFoodActive || targetRenderer == null || selectedFoodSprite == null)
         {
             return; // No mostrar el texto de interacción si la comida no está activa
         }
-
-        // Cambiar el sprite al de la comida seleccionada cuando el jugador esté en rango
-        targetRenderer.sprite = selectedFoodSprite;
 
         base.ShowInteractionPrompt();
     }
@@ -196,17 +261,22 @@ public class FoodSelector : InteractableBase
     {
         if (renderers != null && renderers.Count > 0 && playerController != null)
         {
-            float playerDistance = Vector3.Distance(transform.position, playerController.transform.position);
+            HandleRendererSortingOrder();
+        }
+    }
 
-            for (int i = 0; i < renderers.Count; i++)
+    private void HandleRendererSortingOrder()
+    {
+        float playerDistance = Vector3.Distance(transform.position, playerController.transform.position);
+
+        for (int i = 0; i < renderers.Count; i++)
+        {
+            var renderer = renderers[i];
+            if (renderer != null)
             {
-                var renderer = renderers[i];
-                if (renderer != null)
-                {
-                    // Orden basado en la distancia al jugador: más cerca, mayor z-index
-                    float sortingValue = 1 / (playerDistance + 0.1f); // Evitar división por cero
-                    renderer.sortingOrder = 1000 + (int)(sortingValue * 1000) + sortingOffset + i; // Añadir offset incremental
-                }
+                // Orden basado en la distancia al jugador: más cerca, mayor z-index
+                float sortingValue = 1 / (playerDistance + 0.1f); // Evitar división por cero
+                renderer.sortingOrder = 1000 + (int)(sortingValue * 1000) + sortingOffset + i; // Añadir offset incremental
             }
         }
     }

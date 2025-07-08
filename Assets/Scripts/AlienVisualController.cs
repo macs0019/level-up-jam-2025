@@ -11,8 +11,8 @@ public class AlienVisualController : MonoBehaviour
     [SerializeField] private GameObject torso;
     [SerializeField] private GameObject head;
     [SerializeField] private GameObject face;
-    [SerializeField] private GameObject speechBalloon; // Globo de diálogo asignado desde el Inspector
-    [SerializeField] private GameObject foodSign; // Señal de comida asignada desde el Inspector
+    [SerializeField] private GameObject speechBalloon;
+    [SerializeField] private GameObject foodIcon;
 
     private SpriteRenderer torsoRenderer;
     private SpriteRenderer headRenderer;
@@ -92,21 +92,21 @@ public class AlienVisualController : MonoBehaviour
                 faceRenderer.sortingOrder = headRenderer.sortingOrder + 1;
             }
 
-            // Ordenar speechBalloon y foodSign
+            // Ordenar speechBalloon y foodIcon
             if (speechBalloon != null)
             {
                 var speechRenderer = speechBalloon.GetComponent<SpriteRenderer>();
                 if (speechRenderer != null)
                 {
-                    speechRenderer.sortingOrder = faceRenderer.sortingOrder + 1;
+                    speechRenderer.sortingOrder = faceRenderer.sortingOrder + 100;
                 }
             }
-            if (foodSign != null)
+            if (foodIcon != null)
             {
-                var foodSignRenderer = foodSign.GetComponent<SpriteRenderer>();
-                if (foodSignRenderer != null)
+                var foodIconRenderer = foodIcon.GetComponent<SpriteRenderer>();
+                if (foodIconRenderer != null)
                 {
-                    foodSignRenderer.sortingOrder = faceRenderer.sortingOrder + 2;
+                    foodIconRenderer.sortingOrder = faceRenderer.sortingOrder + 101;
                 }
             }
         }
