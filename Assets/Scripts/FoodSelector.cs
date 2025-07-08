@@ -18,10 +18,11 @@ public class FoodSelector : InteractableBase
     public Sprite foodCallSprite; // Sprite que se muestra inicialmente
     private Sprite selectedFoodSprite; // Sprite de la comida seleccionada
 
-    private Tween deactivateTween; // Referencia al Tween de desactivación
-    private float remainingTime; // Tiempo restante para la desactivación
+    private float remainingTime = 0f;
+    private bool timerRunning = false;
 
-    private Transform lastTransform; // Última posición del objeto para evitar actualizaciones innecesarias
+    private Vector3 lastFoodPosition;
+    private Vector3 lastFoodRotation;
     private bool orderTaken = false; // Indica si el objeto ha sido grabado
 
     public bool OrderTaken
@@ -32,6 +33,8 @@ public class FoodSelector : InteractableBase
             orderTaken = value;
         }
     }
+
+    public bool IsFoodActive => isFoodActive; // Propiedad para acceder al estado de la comida activa
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -54,7 +57,27 @@ public class FoodSelector : InteractableBase
         }
     }
 
-    public bool IsFoodActive => isFoodActive; // Propiedad para acceder al estado de la comida activa
+    new void Update()
+    {
+        base.Update(); // Llamar al método Update de la clase base InteractableBase
+        
+        // Si está activo el timer, lo descontamos
+        if (timerRunning && isFoodActive)
+        {
+            remainingTime -= Time.deltaTime;
+            if (remainingTime <= 0f)
+            {
+                timerRunning = false;
+                isFoodActive = false;
+
+                // Tu desactivación
+                DeactivateSpeechBalloon();
+
+                if (!orderTaken)
+                    GameManager.Instance.HandleFoodSelectorLeavingWithDelay(this);
+            }
+        }
+    }
 
     public void ShowFoodAndObject()
     {
@@ -78,7 +101,8 @@ public class FoodSelector : InteractableBase
                 speechBalloon.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack);
 
                 isFoodActive = true; // Activar el indicador de comida activa
-                DeactivateAfterTime(); // Iniciar la coroutine de desactivación
+
+                StartDeactivationTimer();
             }
             else
             {
@@ -91,30 +115,22 @@ public class FoodSelector : InteractableBase
         }
     }
 
-    private void DeactivateAfterTime()
+    private void StartDeactivationTimer()
     {
-        if (speechBalloon != null)
-        {
-            // Detener cualquier Tween existente antes de crear uno nuevo
-            if (deactivateTween != null && deactivateTween.IsActive())
-            {
-                deactivateTween.Kill(false); // Detener el Tween sin completar la acción
-            }
+        remainingTime = activeTime;
+        timerRunning  = true;
+    }
 
-            remainingTime = activeTime; // Inicializar el tiempo restante
-            deactivateTween = DOVirtual.DelayedCall(remainingTime, () =>
-            {
-                // Tween para esconder el globo
-                DeactivateSpeechBalloon();
+    public void PauseDeactivationTimer()
+    {
+        if (timerRunning)
+            timerRunning = false;
+    }
 
-                isFoodActive = false;
-
-                if (!orderTaken)
-                {
-                    GameManager.Instance.HandleFoodSelectorLeavingWithDelay(this);
-                }
-            });
-        }
+    public void ResumeDeactivationTimer()
+    {
+        if (isFoodActive && !timerRunning)
+            timerRunning = true;
     }
 
     public void DeactivateSpeechBalloon()
@@ -125,26 +141,9 @@ public class FoodSelector : InteractableBase
         });
     }
 
-    public void PauseDeactivationTween()
-    {
-        if (deactivateTween != null && deactivateTween.IsPlaying())
-        {
-            remainingTime = deactivateTween.Elapsed(false); // Guardar el tiempo restante
-            deactivateTween.Pause(); // Pausar el Tween sin eliminarlo
-        }
-    }
-
-    public void ResumeDeactivationTween()
-    {
-        if (speechBalloon != null && isFoodActive && deactivateTween != null)
-        {
-            deactivateTween.Play();
-        }
-    }
-
     public override void OnInteract()
     {
-        if (GameManager.Instance != null && GameManager.Instance.GetLastInteractedFoodSelector() != null && GameManager.Instance.GetLastInteractedFoodSelector() != this)
+        if (GameManager.Instance != null && GameManager.Instance.LastInteractedFoodSelector != null)
         {
             Debug.Log("No puedes interactuar con este FoodSelector porque no es el último interactuado.");
             return;
@@ -196,7 +195,10 @@ public class FoodSelector : InteractableBase
             return;
         }
 
-        lastTransform = targetRenderer.transform; // Guardar la última posición del objeto
+        lastFoodPosition = targetRenderer.transform.localPosition;
+        lastFoodRotation = targetRenderer.transform.localEulerAngles;
+
+        Debug.Log("Showing food animation position: " + lastFoodPosition + " and rotation: " + lastFoodRotation);
 
         targetRenderer.transform.DOMove(targetPos, 0.5f);
         targetRenderer.transform.DORotateQuaternion(targetRot, 0.5f);
@@ -210,12 +212,11 @@ public class FoodSelector : InteractableBase
             return;
         }
 
-        // Volver a la posición original
-        if (lastTransform != null)
+        targetRenderer.transform.DOLocalMove(lastFoodPosition, 0.5f);
+        targetRenderer.transform.DOLocalRotate(lastFoodRotation, 0.5f, RotateMode.Fast).OnComplete(() =>
         {
-            targetRenderer.transform.DOMove(lastTransform.position, 0.5f);
-            targetRenderer.transform.DORotateQuaternion(lastTransform.rotation, 0.5f);
-        }
+            targetRenderer.sprite = foodCallSprite; // Cambiar el sprite a foodCallSprite
+        });
     }
 
     protected override void ShowInteractionPrompt()

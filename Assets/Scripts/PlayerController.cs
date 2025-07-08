@@ -2,7 +2,6 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
-using static UnityEngine.GraphicsBuffer;
 
 public class PlayerController : MonoBehaviour
 {
@@ -172,7 +171,10 @@ public class PlayerController : MonoBehaviour
         rightArm.DOKill(true);
 
         leftArm.DOLocalMoveY(0f, 0.2f);
-        rightArm.DOLocalMoveX(1.8f, 0.2f);
+        rightArm.DOLocalMoveX(1.8f, 0.2f).OnComplete(() =>
+        {
+            onComplete?.Invoke();
+        });
     }
 
     public void StartWritingAnimation()

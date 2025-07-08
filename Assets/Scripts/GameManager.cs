@@ -17,6 +17,16 @@ public class GameManager : MonoBehaviour
     private PlayerController playerController; // Referencia al PlayerController
     private FoodSelector lastInteractedFoodSelector; // Referencia al último FoodSelector con el que se interactuó
 
+    public FoodSelector LastInteractedFoodSelector
+    {
+        get { return lastInteractedFoodSelector; }
+        set
+        {
+            Debug.Log("Setting LastInteractedFoodSelector to: " + (value != null ? value.name : "null"));
+            lastInteractedFoodSelector = value;
+        }
+    }
+
     private bool error = false; // Indica si el usuario se ha equivocado al introducir el texto
 
     [Header("Game Properties")]
@@ -107,7 +117,7 @@ public class GameManager : MonoBehaviour
                 playerController.enabled = false;
                 playerController.StartInteractAnimation(foodSelector);
 
-                foodSelector.PauseDeactivationTween();
+                foodSelector.PauseDeactivationTimer();
             }
 
             // Para cada letra escrita / borrada, hacemos animación del player
@@ -123,7 +133,7 @@ public class GameManager : MonoBehaviour
                 if (!string.IsNullOrEmpty(input)) // Detectar cuando se finaliza la edición
                 {
                     // Almacenar el último FoodSelector interactuado
-                    SetLastInteractedFoodSelector(foodSelector);
+                    LastInteractedFoodSelector = foodSelector;
 
                     foodSelector.OrderTaken = true; // Marcar que el pedido ha sido tomado
                     if (input.Equals(foodName, System.StringComparison.OrdinalIgnoreCase))
@@ -180,21 +190,9 @@ public class GameManager : MonoBehaviour
             {
                 playerController.enabled = true;
                 foodSelector.HideFoodAnimation();
+                foodSelector.ResumeDeactivationTimer();
             });
-
-            foodSelector.ResumeDeactivationTween();
         }
-    }
-
-    public void SetLastInteractedFoodSelector(FoodSelector foodSelector)
-    {
-        lastInteractedFoodSelector = foodSelector;
-        Debug.Log("Último FoodSelector interactuado: " + foodSelector.name);
-    }
-
-    public FoodSelector GetLastInteractedFoodSelector()
-    {
-        return lastInteractedFoodSelector;
     }
 
     public bool HasError()
@@ -225,7 +223,7 @@ public class GameManager : MonoBehaviour
         }
 
         error = false; // Resetear el estado de error
-        lastInteractedFoodSelector = null; // Eliminar el último FoodSelector interactuado
+        LastInteractedFoodSelector = null; // Eliminar el último FoodSelector interactuado
 
         return hasError;
     }
@@ -288,8 +286,8 @@ public class GameManager : MonoBehaviour
     public void InteractWithBossController()
     {
         Debug.Log("Interacting with BossController...");
-        Debug.Log("Último FoodSelector interactuado: " + (lastInteractedFoodSelector != null ? lastInteractedFoodSelector.name : "Ninguno"));
-        FoodSelector foodSelectorToLeave = lastInteractedFoodSelector;
+        Debug.Log("Último FoodSelector interactuado: " + (LastInteractedFoodSelector != null ? LastInteractedFoodSelector.name : "Ninguno"));
+        FoodSelector foodSelectorToLeave = LastInteractedFoodSelector;
         if (foodSelectorToLeave != null)
         {
             MunchoMovement munchoMovement = foodSelectorToLeave.GetComponent<MunchoMovement>();

@@ -15,7 +15,7 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
 
     protected bool canInteract = false;
 
-    private void Update()
+    protected void Update()
     {
         if (playerTransform == null)
         {
