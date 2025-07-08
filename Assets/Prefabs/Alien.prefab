@@ -203,7 +203,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   path: []
-  speed: 3
+  speed: 5
   probabilityToLeave: 1
   minWaitTime: 3
   maxWaitTime: 5

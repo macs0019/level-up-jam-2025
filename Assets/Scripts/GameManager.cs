@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour
             commandInputField.gameObject.SetActive(true); // Activar el InputField
             commandInputField.ActivateInputField(); // Darle focus para escribir
 
-
+            foodSelector.HideInteractionPrompt(); // Ocultar el mensaje de interacción 
             // Desactivar el movimiento del jugador
             if (playerController != null)
             {
@@ -132,6 +132,7 @@ public class GameManager : MonoBehaviour
 
                 if (!string.IsNullOrEmpty(input)) // Detectar cuando se finaliza la edición
                 {
+
                     // Almacenar el último FoodSelector interactuado
                     LastInteractedFoodSelector = foodSelector;
 
@@ -152,27 +153,22 @@ public class GameManager : MonoBehaviour
                     {
                         enteredWordsText.text += input + "\n";
                     }
+
+                    // Reactivar el movimiento del jugador
+                    Resume(foodSelector, resetLastInteracted: false);
+                }
+                else
+                {
+
+                    Debug.Log("Escape presionado, cerrando InputField sin guardar.");
+                    foodSelector.ShowInteractionPrompt(); // Ocultar el mensaje de interacción
+                                                              // Reactivar el movimiento del jugador
+                    Resume(foodSelector);
                 }
 
                 commandInputField.text = string.Empty; // Limpiar el texto
                 commandInputField.gameObject.SetActive(false); // Desactivar el InputField
 
-                // Reactivar el movimiento del jugador
-                Resume(foodSelector, resetLastInteracted: false);
-            });
-
-            // Detectar si se presiona Escape para cerrar el InputField sin guardar
-            commandInputField.onSubmit.RemoveAllListeners();
-            commandInputField.onSubmit.AddListener((input) =>
-            {
-                if (Keyboard.current.escapeKey.wasPressedThisFrame) // Usar el nuevo Input System
-                {
-                    commandInputField.text = string.Empty; // Limpiar el texto
-                    commandInputField.gameObject.SetActive(false); // Desactivar el InputField
-
-                    // Reactivar el movimiento del jugador
-                    Resume(foodSelector);
-                }
             });
         }
         else
@@ -183,17 +179,27 @@ public class GameManager : MonoBehaviour
 
     private void Resume(FoodSelector foodSelector, bool resetLastInteracted = true)
     {
+
         if (playerController != null)
         {
-            Debug.Log("Resuming player controller and interaction with FoodSelector: " + foodSelector.name);
-
+            Debug.Log("Reactivando el movimiento del jugador y finalizando la interacción con " + foodSelector.name);
             if (resetLastInteracted)
             {
                 LastInteractedFoodSelector = null; // Resetear el último FoodSelector interactuado
             }
 
-            foodSelector.HideFoodAnimation();
-            foodSelector.ResumeDeactivationTimer();
+            if (resetLastInteracted == false)
+            {
+                foodSelector.DeactivateSpeechBalloon();
+            }
+            else
+            {
+                foodSelector.HideFoodAnimation(() =>
+                {
+                    foodSelector.ResumeDeactivationTimer();
+                }, true);
+
+            }
             playerController.EndInteractAnimation(() =>
             {
                 playerController.enabled = true;

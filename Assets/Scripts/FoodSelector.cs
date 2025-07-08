@@ -132,7 +132,7 @@ public class FoodSelector : InteractableBase
         if (timerRunning)
         {
             timerRunning = false;
-            
+
             isFoodActive = false; // Desactivar el indicador de comida activa
         }
     }
@@ -151,18 +151,21 @@ public class FoodSelector : InteractableBase
     {
         isFoodActive = false; // Desactivar el indicador de comida activa
 
+        Debug.Log("Desactivando el SpeechBalloon y ocultando la comida.");
+
         HideFoodAnimation(() =>
         {
             speechBalloon.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBack).OnComplete(() =>
             {
                 speechBalloon.SetActive(false);
+
             });
         }); // Ocultar la comida y volver al sprite de foodCall
     }
 
     public override void OnInteract()
     {
-        if (GameManager.Instance != null && GameManager.Instance.LastInteractedFoodSelector != null)
+        if (GameManager.Instance != null && GameManager.Instance.LastInteractedFoodSelector != null && GameManager.Instance.LastInteractedFoodSelector != this)
         {
             Debug.Log("No puedes interactuar con este FoodSelector porque no es el último interactuado.");
             return;
@@ -225,13 +228,15 @@ public class FoodSelector : InteractableBase
         speechBalloon.transform.DORotateQuaternion(targetRot, 0.5f);
     }
 
-    public void HideFoodAnimation(Action onComplete = null)
+    public void HideFoodAnimation(Action onComplete = null, bool alreadyFinished = false)
     {
         if (targetRenderer == null || selectedFoodSprite == null)
         {
             Debug.LogError("targetRenderer o selectedFoodSprite no están asignados.");
             return;
         }
+
+        Debug.Log($"HideFoodAnimation called with onComplete: {onComplete}, resetCallSprite: {alreadyFinished}");
 
         isFoodActive = false; // Desactivar el indicador de comida activa
 
@@ -241,15 +246,21 @@ public class FoodSelector : InteractableBase
         speechBalloon.transform.DOLocalRotateQuaternion(initialLocalRot, 0.5f)
         .OnComplete(() =>
         {
-            targetRenderer.sprite = foodCallSprite;
-            isFoodActive = true; // Asegurarse de que la comida no esté activa
+            if (alreadyFinished)
+            {
+                targetRenderer.sprite = foodCallSprite;
+                isFoodActive = true; // Asegurarse de que la comida esté activa después de ocultarla
+            }
+
             onComplete?.Invoke();
         });
     }
 
-    protected override void ShowInteractionPrompt()
+    public override void ShowInteractionPrompt()
     {
-        if (!isFoodActive || targetRenderer == null || selectedFoodSprite == null)
+
+        Debug.Log("ShowInteractionPrompt called for FoodSelector: " + gameObject.name + ", isFoodActive: " + isFoodActive);
+        if (!isFoodActive)
         {
             return; // No mostrar el texto de interacción si la comida no está activa
         }

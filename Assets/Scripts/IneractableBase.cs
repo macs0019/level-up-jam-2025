@@ -52,7 +52,6 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
             {
                 canInteract = true;
                 ShowInteractionPrompt();
-                Debug.Log("Player in range and looking at: " + interactionMessage);
             }
 
             // Input System: tecla E
@@ -70,7 +69,7 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
 
     public abstract void OnInteract();
 
-    protected virtual void ShowInteractionPrompt()
+    public virtual void ShowInteractionPrompt()
     {
         if (interactionUIText != null)
         {
@@ -83,7 +82,7 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
         }
     }
 
-    protected virtual void HideInteractionPrompt()
+    public virtual void HideInteractionPrompt()
     {
         if (interactionUIText != null)
         {

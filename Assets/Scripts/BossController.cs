@@ -12,7 +12,6 @@ public class BossController : InteractableBase
             return; // No mostrar el mensaje si no hay un FoodSelector interactuado
         }
 
-        Debug.Log("Interacción con el jefe iniciada.");
         GameManager.Instance.InteractWithBossController();
         bool error = GameManager.Instance.HandleError(); // Llamar a la función que comprueba si hay que restar vidas
         GameManager.Instance.ClearEnteredWords(); // Limpiar las palabras ingresadas
@@ -31,8 +30,10 @@ public class BossController : InteractableBase
         }
     }
 
-    protected override void ShowInteractionPrompt()
+    public override void ShowInteractionPrompt()
     {
+
+        Debug.Log("ShowInteractionPrompt called for BossController: " + gameObject.name);
         if (GameManager.Instance.LastInteractedFoodSelector == null)
         {
             return; // No mostrar el mensaje si no hay un FoodSelector interactuado

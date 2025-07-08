@@ -3758,8 +3758,8 @@ MonoBehaviour:
     - {fileID: 181089826}
     isOccupied: 0
   munchoPrefab: {fileID: 895062331559756760, guid: a8d2370bf99680c40a5e1f8ae49d97ce, type: 3}
-  maxNumOfTables: 4
-  timeToSpawnMuncho: 1
+  maxNumOfTables: 1
+  timeToSpawnMuncho: 3
 --- !u!4 &1396885024
 Transform:
   m_ObjectHideFlags: 0
