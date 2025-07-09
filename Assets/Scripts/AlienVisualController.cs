@@ -92,13 +92,13 @@ public class AlienVisualController : MonoBehaviour
                 faceRenderer.sortingOrder = headRenderer.sortingOrder + 1;
             }
 
-            // Ordenar speechBalloon y foodIcon
+            // Ordenar speechBalloon y foodIcon con un offset adicional de 1000
             if (speechBalloon != null)
             {
                 var speechRenderer = speechBalloon.GetComponent<SpriteRenderer>();
                 if (speechRenderer != null)
                 {
-                    speechRenderer.sortingOrder = faceRenderer.sortingOrder + 100;
+                    speechRenderer.sortingOrder = faceRenderer.sortingOrder + 100 + 1000; // Offset adicional
                 }
             }
             if (foodIcon != null)
@@ -106,7 +106,7 @@ public class AlienVisualController : MonoBehaviour
                 var foodIconRenderer = foodIcon.GetComponent<SpriteRenderer>();
                 if (foodIconRenderer != null)
                 {
-                    foodIconRenderer.sortingOrder = faceRenderer.sortingOrder + 101;
+                    foodIconRenderer.sortingOrder = faceRenderer.sortingOrder + 101 + 1000; // Offset adicional
                 }
             }
         }

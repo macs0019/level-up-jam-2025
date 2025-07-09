@@ -166,6 +166,7 @@ public class FoodSelector : InteractableBase
             speechBalloon.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBack).OnComplete(() =>
             {
                 speechBalloon.SetActive(false);
+                HideInteractionPrompt();
 
             });
         }); // Ocultar la comida y volver al sprite de foodCall
