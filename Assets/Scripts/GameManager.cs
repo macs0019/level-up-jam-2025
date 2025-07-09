@@ -135,8 +135,8 @@ public class GameManager : MonoBehaviour
 
                     // Almacenar el último FoodSelector interactuado
                     LastInteractedFoodSelector = foodSelector;
-
                     foodSelector.OrderTaken = true; // Marcar que el pedido ha sido tomado
+
                     if (input.Equals(foodName, System.StringComparison.OrdinalIgnoreCase))
                     {
                         Debug.Log("Correct");

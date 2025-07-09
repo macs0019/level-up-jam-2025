@@ -179,7 +179,7 @@ MonoBehaviour:
   - {fileID: 6871645171283288517, guid: 76adf9da8df9726438b0bdd6e5503f70, type: 3}
   - {fileID: 6871645171283288517, guid: 1fe07994a335a8f42b2bfce583cf3384, type: 3}
   - {fileID: 6871645171283288517, guid: 3950ee4f7e5619747803f7583cd7371d, type: 3}
-  targetRenderer: {fileID: 814489019394256588}
+  targetRenderer: {fileID: 9171018376902377050}
   speechBalloon: {fileID: 444470446179084481}
   activeTime: 10
   sortingOffset: 0
@@ -189,7 +189,12 @@ MonoBehaviour:
   - {fileID: 1170181988840509054}
   - {fileID: 7959662727839311355}
   - {fileID: 814489019394256588}
-  foodCallSprite: {fileID: 21300000, guid: 484bd307d0165af4fb90f197dd572048, type: 3}
+  foodCallSprites:
+  - {fileID: 21300000, guid: 09bdf5512ca319b43b2feb7754225ca3, type: 3}
+  - {fileID: 21300000, guid: d9ea9251214e97c4d95b76de5c739b4e, type: 3}
+  foodAngryCallSprites:
+  - {fileID: 21300000, guid: b98c695a012f2854eb6efefdb1293375, type: 3}
+  - {fileID: 21300000, guid: 688beca4d8b9716478216119780459cc, type: 3}
 --- !u!114 &2594711226097629495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -341,6 +346,7 @@ GameObject:
   m_Component:
   - component: {fileID: 895247613279853117}
   - component: {fileID: 814489019394256588}
+  - component: {fileID: 9171018376902377050}
   m_Layer: 0
   m_Name: Food
   m_TagString: Untagged
@@ -407,17 +413,33 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 484bd307d0165af4fb90f197dd572048, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 09bdf5512ca319b43b2feb7754225ca3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.424, y: 0.88}
+  m_Size: {x: 0.53, y: 1.1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &9171018376902377050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2162371653143567642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e3ef84ff09f8e24da89d80e7144de8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: 21300000, guid: 09bdf5512ca319b43b2feb7754225ca3, type: 3}
+  - {fileID: 21300000, guid: d9ea9251214e97c4d95b76de5c739b4e, type: 3}
+  redrawInterval: 0.2
 --- !u!1 &2857959744884506251
 GameObject:
   m_ObjectHideFlags: 0

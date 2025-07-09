@@ -2,11 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System; // Asegúrate de tener la referencia a DOTween
+using Redraw;
 
 public class FoodSelector : InteractableBase
 {
     public List<Food> foods; // Lista de alimentos asignada desde el Inspector
-    public SpriteRenderer targetRenderer; // SpriteRenderer donde se mostrará el sprite del alimento seleccionado
+    public SingleAnimation targetRenderer; // SpriteRenderer donde se mostrará el sprite del alimento seleccionado
     public GameObject speechBalloon; // Objeto que se volverá visible
     public float activeTime = 5.0f; // Tiempo que el objeto estará activo
     public int sortingOffset = 0;
@@ -16,7 +17,9 @@ public class FoodSelector : InteractableBase
 
     private bool isFoodActive = false; // Indica si la comida está activa
 
-    public Sprite foodCallSprite; // Sprite que se muestra inicialmente
+    public List<Sprite> foodCallSprites; // Sprite que se muestra inicialmente
+    public List<Sprite> foodAngryCallSprites;
+
     private Sprite selectedFoodSprite; // Sprite de la comida seleccionada
 
     private float remainingTime = 0f;
@@ -24,7 +27,9 @@ public class FoodSelector : InteractableBase
 
     private Vector3 initialLocalPos;
     private Quaternion initialLocalRot;
+
     private bool orderTaken = false; // Indica si el objeto ha sido grabado
+    private bool isAngry = false;
 
     public bool OrderTaken
     {
@@ -69,6 +74,9 @@ public class FoodSelector : InteractableBase
         if (timerRunning && isFoodActive)
         {
             remainingTime -= Time.deltaTime;
+
+            SetFoodCallingSprites(); // Actualizamos los sprites para que cambie a enfadado cuando toque
+
             if (remainingTime <= 0f)
             {
                 timerRunning = false;
@@ -94,7 +102,7 @@ public class FoodSelector : InteractableBase
             selectedFoodSprite = selectedFood.foodSprite;
 
             // Mostrar el sprite de "foodCall" inicialmente
-            targetRenderer.sprite = foodCallSprite;
+            targetRenderer.Sprites = foodCallSprites;
 
             // Hacer visible el objeto oculto
             if (speechBalloon != null)
@@ -184,7 +192,7 @@ public class FoodSelector : InteractableBase
                     Food selectedFood = foods.Find(f => f.foodSprite == selectedFoodSprite);
                     if (selectedFood != null)
                     {
-                        targetRenderer.sprite = selectedFoodSprite;
+                        SetFoodSprites(selectedFoodSprite);
                         GameManager.Instance.AddCommand(selectedFood.foodName, this);
                     }
                     else
@@ -222,7 +230,7 @@ public class FoodSelector : InteractableBase
 
         speechBalloon.transform.transform.DOKill(true);
 
-        targetRenderer.sprite = selectedFoodSprite; // Asignar el sprite seleccionado al SpriteRenderer
+        SetFoodSprites(selectedFoodSprite); // Asignar el sprite seleccionado al SpriteRenderer
 
         speechBalloon.transform.DOMove(targetPos, 0.5f);
         speechBalloon.transform.DORotateQuaternion(targetRot, 0.5f);
@@ -248,7 +256,7 @@ public class FoodSelector : InteractableBase
         {
             if (alreadyFinished)
             {
-                targetRenderer.sprite = foodCallSprite;
+                SetFoodCallingSprites();
                 isFoodActive = true; // Asegurarse de que la comida esté activa después de ocultarla
             }
 
@@ -290,5 +298,30 @@ public class FoodSelector : InteractableBase
                 renderer.sortingOrder = 1000 + (int)(sortingValue * 1000) + sortingOffset + i; // Añadir offset incremental
             }
         }
+    }
+
+    private void SetFoodCallingSprites()
+    {
+        // Si queda menos del 20% de la duración activa, usa el sprite "enfadado"
+        if (remainingTime < activeTime * 0.2f)
+        {
+            targetRenderer.Sprites = foodAngryCallSprites;
+
+            if (!isAngry && isFoodActive)
+            {
+                isAngry = true;
+                targetRenderer.transform.DOPunchScale(Vector3.one / 4f, 0.5f);
+            }
+        }
+        else
+        {
+            targetRenderer.Sprites = foodCallSprites;
+        }
+    }
+
+    private void SetFoodSprites(Sprite currentFood)
+    {
+        targetRenderer.Sprites = new List<Sprite> { currentFood };
+        targetRenderer.GetComponent<SpriteRenderer>().sprite = currentFood;
     }
 }

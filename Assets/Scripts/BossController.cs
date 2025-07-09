@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using static UnityEngine.UI.Image;
 
 public class BossController : InteractableBase
 {
@@ -27,6 +28,12 @@ public class BossController : InteractableBase
                 snapping: false,
                 fadeOut: true
             );
+        }
+        else
+        {
+            bossTransform.DOScale(1.3f, 0.3f)
+              .SetLoops(4, LoopType.Yoyo)
+              .SetEase(Ease.InOutSine);
         }
     }
 
