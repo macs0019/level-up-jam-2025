@@ -6,7 +6,7 @@ using Redraw;
 
 public class FoodSelector : InteractableBase
 {
-    public List<Food> foods; // Lista de alimentos asignada desde el Inspector
+    public List<FoodPOJO> foods;
     public SingleAnimation targetRenderer; // SpriteRenderer donde se mostrará el sprite del alimento seleccionado
     public GameObject speechBalloon; // Objeto que se volverá visible
     public float activeTime = 5.0f; // Tiempo que el objeto estará activo
@@ -64,6 +64,16 @@ public class FoodSelector : InteractableBase
 
         initialLocalPos = speechBalloon.transform.localPosition;
         initialLocalRot = speechBalloon.transform.localRotation;
+
+        // Asignar foods desde el ScriptableObject
+        if (characterSpriteSO != null)
+        {
+            foods = characterSpriteSO.GetNamedFoods();
+        }
+        else
+        {
+            Debug.LogError("El ScriptableObject CharacterSpriteSO no está asignado en el Inspector.");
+        }
     }
 
     new void Update()
@@ -96,10 +106,10 @@ public class FoodSelector : InteractableBase
         if (foods != null && foods.Count > 0 && targetRenderer != null)
         {
             // Seleccionar un alimento aleatorio
-            Food selectedFood = foods[UnityEngine.Random.Range(0, foods.Count)];
+            FoodPOJO selectedFood = foods[UnityEngine.Random.Range(0, foods.Count)];
 
             // Guardar el sprite de la comida seleccionada
-            selectedFoodSprite = selectedFood.foodSprite;
+            selectedFoodSprite = selectedFood.Icon;
 
             // Mostrar el sprite de "foodCall" inicialmente
             targetRenderer.Sprites = foodCallSprites;
@@ -190,11 +200,11 @@ public class FoodSelector : InteractableBase
                 if (GameManager.Instance != null && foods != null && targetRenderer != null && selectedFoodSprite != null)
                 {
                     // Buscar el alimento correspondiente al sprite seleccionado
-                    Food selectedFood = foods.Find(f => f.foodSprite == selectedFoodSprite);
+                    FoodPOJO selectedFood = foods.Find(f => f.Icon == selectedFoodSprite);
                     if (selectedFood != null)
                     {
                         SetFoodSprites(selectedFoodSprite);
-                        GameManager.Instance.AddCommand(selectedFood.foodName, this);
+                        GameManager.Instance.AddCommand(selectedFood.Name, this);
                     }
                     else
                     {
@@ -325,4 +335,6 @@ public class FoodSelector : InteractableBase
         targetRenderer.Sprites = new List<Sprite> { currentFood };
         targetRenderer.GetComponent<SpriteRenderer>().sprite = currentFood;
     }
+
+    public CharacterSpriteSO characterSpriteSO; // Referencia al ScriptableObject para asignar desde el Inspector
 }

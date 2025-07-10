@@ -60,19 +60,43 @@ MonoBehaviour:
   - sprites:
     - {fileID: 21300000, guid: 10f50dce81fd6ee4db0ecc33370a6e2e, type: 3}
     - {fileID: 21300000, guid: 81b979ad4e5eb4c47a8a7eba9574c175, type: 3}
-  foodSprites:
-  - {fileID: 722235802, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
-  - {fileID: 2015910258, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
-  - {fileID: -852785875, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
-  - {fileID: 185028169, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
-  - {fileID: -389598425, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
-  - {fileID: -572716809, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
-  - {fileID: -403546076, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
-  - {fileID: -872335308, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
-  - {fileID: -1421750414, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
-  - {fileID: 1105578380, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
-  - {fileID: -1610079725, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
-  - {fileID: 2018318441, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
+  foods:
+  - Id: 0
+    Name: guvo
+    Icon: {fileID: 722235802, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
+  - Id: 1
+    Name: coza
+    Icon: {fileID: 2015910258, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
+  - Id: 2
+    Name: xob
+    Icon: {fileID: -852785875, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
+  - Id: 3
+    Name: 
+    Icon: {fileID: 185028169, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
+  - Id: 4
+    Name: 
+    Icon: {fileID: -389598425, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
+  - Id: 5
+    Name: 
+    Icon: {fileID: -572716809, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
+  - Id: 6
+    Name: 
+    Icon: {fileID: -403546076, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
+  - Id: 7
+    Name: 
+    Icon: {fileID: -872335308, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
+  - Id: 8
+    Name: 
+    Icon: {fileID: -872335308, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
+  - Id: 6
+    Name: 
+    Icon: {fileID: -1421750414, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
+  - Id: 6
+    Name: 
+    Icon: {fileID: 1105578380, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
+  - Id: 6
+    Name: 
+    Icon: {fileID: -1610079725, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
   colorVariants:
   - {r: 0.52156866, g: 0.7176471, b: 0.6156863, a: 1}
   - {r: 0.8, g: 0.3529412, b: 0.44313726, a: 1}

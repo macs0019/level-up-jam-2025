@@ -16,11 +16,14 @@ public class CharacterSpriteSO : ScriptableObject
     public List<SpriteGroup> headSprites = new List<SpriteGroup>();
     public List<SpriteGroup> faceSprites = new List<SpriteGroup>();
 
-    [Header("Food Sprites")]
-    public List<Sprite> foodSprites = new List<Sprite>();
+    [Header("Foods")]
+    public List<FoodPOJO> foods = new List<FoodPOJO>();
 
     [Header("Color Variants")]
     public List<Color> colorVariants = new List<Color>();
+
+    [Header("Food Sprites")]
+    private List<Sprite> foodSprites = new List<Sprite>();
 
     /// <summary>
     /// Devuelve un sprite de torso aleatorio.
@@ -65,17 +68,39 @@ public class CharacterSpriteSO : ScriptableObject
     }
 
     /// <summary>
-    /// Devuelve un sprite de comida aleatorio.
+    /// Devuelve un objeto FoodPOJO aleatorio.
     /// </summary>
-    public Sprite GetRandomFood()
+    public FoodPOJO GetRandomFood()
     {
-        if (foodSprites == null || foodSprites.Count == 0)
+        if (foods == null || foods.Count == 0)
         {
-            Debug.LogWarning("No hay sprites de comida asignados.");
+            Debug.LogWarning("No hay objetos de comida asignados.");
             return null;
         }
-        int index = UnityEngine.Random.Range(0, foodSprites.Count);
-        return foodSprites[index];
+        int index = UnityEngine.Random.Range(0, foods.Count);
+        return foods[index];
+    }
+
+    /// <summary>
+    /// Actualiza el nombre de un objeto FoodPOJO dado su ID.
+    /// </summary>
+    public void SetFoodName(int id, string newName)
+    {
+        if (foods == null || foods.Count == 0)
+        {
+            Debug.LogWarning("No hay objetos de comida asignados.");
+            return;
+        }
+
+        FoodPOJO food = foods.Find(f => f.Id == id);
+        if (food != null)
+        {
+            food.Name = newName;
+        }
+        else
+        {
+            Debug.LogWarning($"No se encontró ningún objeto FoodPOJO con el ID {id}.");
+        }
     }
 
     /// <summary>
@@ -90,5 +115,43 @@ public class CharacterSpriteSO : ScriptableObject
         }
         int index = UnityEngine.Random.Range(0, colorVariants.Count);
         return colorVariants[index];
+    }
+
+    /// <summary>
+    /// Devuelve una lista de objetos FoodPOJO cuyo nombre no es vacío ni nulo.
+    /// </summary>
+    public List<FoodPOJO> GetNamedFoods()
+    {
+        if (foods == null || foods.Count == 0)
+        {
+            Debug.LogWarning("No hay objetos de comida asignados.");
+            return new List<FoodPOJO>();
+        }
+
+        return foods.FindAll(food => !string.IsNullOrEmpty(food.Name));
+    }
+
+    /// <summary>
+    /// Devuelve una lista de objetos FoodPOJO cuyo nombre es vacío o nulo.
+    /// Si el número solicitado excede la cantidad disponible, devuelve todas las unamed foods.
+    /// </summary>
+    /// <param name="count">Número de unamed foods a devolver.</param>
+    /// <returns>Lista de objetos FoodPOJO unamed.</returns>
+    public List<FoodPOJO> GetUnamedFoods(int count)
+    {
+        if (foods == null || foods.Count == 0)
+        {
+            Debug.LogWarning("No hay objetos de comida asignados.");
+            return new List<FoodPOJO>();
+        }
+
+        List<FoodPOJO> unamedFoods = foods.FindAll(food => string.IsNullOrEmpty(food.Name));
+
+        if (unamedFoods.Count <= count)
+        {
+            return unamedFoods;
+        }
+
+        return unamedFoods.GetRange(0, count);
     }
 }

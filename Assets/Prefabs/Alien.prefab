@@ -174,11 +174,7 @@ MonoBehaviour:
   interactionLayerMask:
     serializedVersion: 2
     m_Bits: 128
-  foods:
-  - {fileID: 6871645171283288517, guid: bd965fe393ab6924e85356c8c1d33fde, type: 3}
-  - {fileID: 6871645171283288517, guid: 76adf9da8df9726438b0bdd6e5503f70, type: 3}
-  - {fileID: 6871645171283288517, guid: 1fe07994a335a8f42b2bfce583cf3384, type: 3}
-  - {fileID: 6871645171283288517, guid: 3950ee4f7e5619747803f7583cd7371d, type: 3}
+  characterSpriteSO: {fileID: 11400000, guid: da5f316c0b5266643b2d51cadd9fcbff, type: 2}
   targetRenderer: {fileID: 9171018376902377050}
   speechBalloon: {fileID: 444470446179084481}
   activeTime: 10
