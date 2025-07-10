@@ -62,39 +62,36 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 81b979ad4e5eb4c47a8a7eba9574c175, type: 3}
   foods:
   - Id: 0
-    Name: guvo
+    Name: caka
     Icon: {fileID: 722235802, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
   - Id: 1
-    Name: coza
+    Name: wofo
     Icon: {fileID: 2015910258, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
   - Id: 2
-    Name: xob
+    Name: pama
     Icon: {fileID: -852785875, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
-  - Id: 3
-    Name: 
-    Icon: {fileID: 185028169, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
   - Id: 4
-    Name: 
+    Name: nusi
     Icon: {fileID: -389598425, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
   - Id: 5
-    Name: 
+    Name: xove
     Icon: {fileID: -572716809, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
   - Id: 6
-    Name: 
+    Name: craadu
     Icon: {fileID: -403546076, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
   - Id: 7
-    Name: 
+    Name: rajun
     Icon: {fileID: -872335308, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
   - Id: 8
     Name: 
     Icon: {fileID: -872335308, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
-  - Id: 6
+  - Id: 9
     Name: 
     Icon: {fileID: -1421750414, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
-  - Id: 6
+  - Id: 10
     Name: 
     Icon: {fileID: 1105578380, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
-  - Id: 6
+  - Id: 11
     Name: 
     Icon: {fileID: -1610079725, guid: d18ee500c3e9afc49b727b72c5b02e8c, type: 3}
   colorVariants:

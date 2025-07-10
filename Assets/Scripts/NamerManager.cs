@@ -37,10 +37,18 @@ public class NamerManager : MonoBehaviour
     private int currentInputIndex = 0;
     private List<FoodPOJO> unamedFoods;
     private int currentFoodIndex = 0; // Índice de la comida actual
-    private List<Sprite> foodIcons = new List<Sprite>(); // Lista para almacenar los íconos de las comidas sin nombre
+    private List<Sprite> foodIcons;// Lista para almacenar los íconos de las comidas sin nombre
 
-    void Start()
+    void OnEnable()
     {
+        foodIcons = new List<Sprite>();
+        unamedFoods = new List<FoodPOJO>();
+        currentInputIndex = 0;
+        currentFoodIndex = 0;
+        letterCounts.Clear();
+
+        Debug.Log("NamerManager activado. Preparando UI y letras...");
+
         Time.timeScale = 0;
         if (startUI != null)
             startUI.SetActive(true);
@@ -61,6 +69,7 @@ public class NamerManager : MonoBehaviour
             {
                 foreach (var food in unamedFoods)
                 {
+                    Debug.Log($"Agregando ícono de comida: {food.Name}");
                     foodIcons.Add(food.Icon);
                 }
                 foodImage.sprite = foodIcons[0]; // Mostrar el primer ícono
@@ -81,6 +90,9 @@ public class NamerManager : MonoBehaviour
 
     private void SubscribeToInput(TMP_InputField input)
     {
+        input.onSubmit.RemoveAllListeners(); // Asegurarse de que no haya listeners duplicados
+        input.onValueChanged.RemoveAllListeners();
+
         input.onSubmit.AddListener(HandleSubmit);
         input.onValueChanged.AddListener(ValidateInput);
     }
@@ -134,7 +146,10 @@ public class NamerManager : MonoBehaviour
         if (currentInputIndex < unamedFoods.Count)
         {
             unamedFoods[currentInputIndex].Name = inputText;
+            foodNameInput.text = string.Empty;
         }
+
+
 
         currentInputIndex++;
 
@@ -175,6 +190,10 @@ public class NamerManager : MonoBehaviour
         Time.timeScale = 1;
         if (startUI != null)
             startUI.SetActive(false);
+
+        // Limpiar el input y la imagen
+        foodNameInput.text = string.Empty;
+        foodImage.sprite = null;
 
         // Desactivar el objeto NamerManager
         gameObject.SetActive(false);

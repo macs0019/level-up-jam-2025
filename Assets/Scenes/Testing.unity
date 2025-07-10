@@ -795,7 +795,7 @@ MonoBehaviour:
   characterSpriteSO: {fileID: 11400000, guid: da5f316c0b5266643b2d51cadd9fcbff, type: 2}
   foodImages:
   - {fileID: 958508885}
-  numberOfUnamedFoods: 3
+  numberOfUnamedFoods: 2
   foodNameInput: {fileID: 828211243}
   foodImage: {fileID: 958508885}
   startUI: {fileID: 190786652}
@@ -11956,6 +11956,8 @@ MonoBehaviour:
   munchoPrefab: {fileID: 895062331559756760, guid: a8d2370bf99680c40a5e1f8ae49d97ce, type: 3}
   maxNumOfTables: 1
   timeToSpawnMuncho: 3
+  namerManager: {fileID: 158551909}
+  levelMuchosNumber: 1
 --- !u!4 &1396885024
 Transform:
   m_ObjectHideFlags: 0

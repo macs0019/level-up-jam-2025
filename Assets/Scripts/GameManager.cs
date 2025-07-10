@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -55,6 +56,14 @@ public class GameManager : MonoBehaviour
 
     public float timeToSpawnMuncho = 10f;
     private float spawnTimer = 0f; // Temporizador para el spawn de munchos
+
+    public NamerManager namerManager; // Referencia al NamerManager
+
+    public int levelMuchosNumber = 5; // Número de munchos que deben spawnear en esta ronda
+
+    private int exitedMunchosCount = 0; // Contador de munchos que han salido
+
+    private int NumberMunchosLeft = 0;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -162,7 +171,7 @@ public class GameManager : MonoBehaviour
 
                     Debug.Log("Escape presionado, cerrando InputField sin guardar.");
                     foodSelector.ShowInteractionPrompt(); // Ocultar el mensaje de interacción
-                                                              // Reactivar el movimiento del jugador
+                                                          // Reactivar el movimiento del jugador
                     Resume(foodSelector);
                 }
 
@@ -250,6 +259,12 @@ public class GameManager : MonoBehaviour
 
     public void SendMunchoToTable()
     {
+        // Comprobar si ya se ha alcanzado el límite de munchos
+        if (exitedMunchosCount >= levelMuchosNumber)
+        {
+            return;
+        }
+
         // Filtrar mesas disponibles
         List<Table> availableTables = tables.FindAll(table => !table.isOccupied);
         if (availableTables.Count == 0)
@@ -335,7 +350,60 @@ public class GameManager : MonoBehaviour
                 }
 
                 Destroy(foodSelector.gameObject);
+
+                // Incrementar el contador de munchos que han salido
+                exitedMunchosCount++;
+
+                // Comprobar si todos los munchos han salido
+                if (exitedMunchosCount >= levelMuchosNumber && occupiedTablesCount == 0)
+                {
+                    StartCoroutine(WaitAndStartNextLevel());
+                }
             });
+        }
+    }
+
+    private IEnumerator WaitAndStartNextLevel()
+    {
+        yield return new WaitForSeconds(3f); // Esperar 3 segundos
+        StartNextLevel();
+    }
+
+    public void ActivateNamerManager()
+    {
+        if (namerManager != null)
+        {
+            namerManager.gameObject.SetActive(true);
+        }
+        else
+        {
+            Debug.LogError("NamerManager no está asignado en el Inspector.");
+        }
+    }
+
+    public void StartNextLevel()
+    {
+        levelMuchosNumber += 2; // Incrementar la cantidad de munchos a spawnear
+        maxNumOfTables += 1; // Incrementar la cantidad de mesas máximas
+
+        occupiedTablesCount = 0; // Reiniciar el contador de mesas ocupadas
+
+        Debug.Log("Iniciando el siguiente nivel...");
+
+        // Reiniciar el temporizador de spawn
+        spawnTimer = 0f;
+
+        // Comenzar el nivel de forma normal
+        foreach (var table in tables)
+        {
+            table.isOccupied = false; // Liberar todas las mesas
+        }
+
+        // Reactivar el NamerManager para el nuevo nivel
+        if (namerManager != null)
+        {
+            namerManager.gameObject.SetActive(false); // Desactivarlo primero
+            namerManager.gameObject.SetActive(true); // Activarlo como nuevo
         }
     }
 }
