@@ -13,7 +13,6 @@ public class FoodSelector : InteractableBase
     public int sortingOffset = 0;
 
     public List<SpriteRenderer> renderers; // Lista de SpriteRenderers para ordenar
-    private PlayerController playerController; // Referencia al PlayerController
 
     private bool isFoodActive = false; // Indica si la comida está activa
 
