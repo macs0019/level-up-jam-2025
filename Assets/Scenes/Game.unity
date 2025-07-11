@@ -2455,6 +2455,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d749e852fb4cf747bf276e619dc95e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPersistent: 0
   tutorialFrames:
   - textList:
     - AAHH, you condemned newbie, this is your first day as a waiter here.
@@ -2463,15 +2464,18 @@ MonoBehaviour:
       want
     - But only using the available letters above... Each day you'll name 2 new items.
     - 'YOU HAVE TO REMEMBER THEM WELL. '
+    isTimeBased: 1
   - textList:
-    - Your only next task is to attend the clients.
-    - You approach them, press E, and then write down what they've asked.
-    - Then come to me and give me the command, if you misspell the word, you'll lose
-      a life point.
+    - Your only next task is to attend the clients. Approach a client and interact.
+    - Write down what they've asked.
+    - Then come to me and give me the command, if you misspell the word 3 times,
+      you'll be fired.
     - NOW WORK FOR ME YOU FARTKNOCKER!!
+    isTimeBased: 0
   tutorialText: {fileID: 129552506}
   timeBeforeStartTutorial: 1
   timeBetweenTransition: 1
+  timeBasedTransition: 4
   savePlayerPrefs: 0
   playerPrefsKey: Tutorial
   startPosition: {x: -500, y: 0}
@@ -13084,7 +13088,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8972186180943132970, guid: d96580a949aa1ae45aceac8b38832047, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

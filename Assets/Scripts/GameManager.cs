@@ -1,9 +1,8 @@
-using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Aviss;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem; // Importar el nuevo Input System
 
 public class GameManager : MonoBehaviour
 {
@@ -167,6 +166,12 @@ public class GameManager : MonoBehaviour
                     if (enteredWordsText != null)
                     {
                         enteredWordsText.text += input + "\n";
+                    }
+
+                    // TUTORIALES DE MIERDA
+                    if (TutorialController.Instance.gameObject.activeSelf)
+                    {
+                        TutorialController.Instance.Continue();
                     }
 
                     // Reactivar el movimiento del jugador

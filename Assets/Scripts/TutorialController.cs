@@ -5,23 +5,27 @@ using TMPro;
 
 namespace Aviss
 {
-    public class TutorialController : MonoBehaviour
+    public class TutorialController : PersistentSingleton<TutorialController>
     {
         [System.Serializable]
         public struct Tutorial
         {
             [TextArea(3, 10)]
             public List<string> textList;
+
+            public bool isTimeBased;
         }
 
         [SerializeField] private List<Tutorial> tutorialFrames;
         [SerializeField] private TextMeshProUGUI tutorialText;
         [SerializeField, Range(0.0f, 5.0f)] private float timeBeforeStartTutorial = 1.0f;
         [SerializeField, Range(0.5f, 2.0f)] private float timeBetweenTransition = 1.0f;
+        [SerializeField, Range(0.5f, 5f)] private float timeBasedTransition = 2f;
 
         [Header("Player Prefs")]
         [SerializeField] public bool savePlayerPrefs = true;
         [SerializeField] private string playerPrefsKey = "SampleTutorial";
+        
 
         [Header("Position")]
         [SerializeField] private Vector2 startPosition;
@@ -40,8 +44,10 @@ namespace Aviss
         private int currentFrameText;
         private bool canContinue;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             tutorialRect = GetComponent<RectTransform>();
             tutorialRect.anchoredPosition = startPosition;
 
@@ -70,11 +76,18 @@ namespace Aviss
 
             DOTween.Sequence()
                 .AppendInterval(timeBeforeStartTutorial)
-                .AppendCallback(StartCurrentFrame);
+                .AppendCallback(StartCurrentFrame)
+                .SetUpdate(true);
         }
 
         public void Continue()
         {
+            if (tutorialFrames[currentFrame].isTimeBased)
+            {
+                ChangeFrame();
+                return;    
+            }
+
             if (canContinue)
             {
                 NextTutorial();
@@ -89,7 +102,7 @@ namespace Aviss
         {
             if (currentFrame < tutorialFrames.Count)
             {
-                tutorialRect.DOAnchorPos(endPosition, timeBetweenTransition).SetEase(Ease.InOutSine).OnComplete(() => WriteText());
+                tutorialRect.DOAnchorPos(endPosition, timeBetweenTransition).SetUpdate(true).SetEase(Ease.InOutSine).OnComplete(() => WriteText());
             }
             else
             {
@@ -125,12 +138,28 @@ namespace Aviss
             float totalTime = currentText.Length * waitTimePerCharacter;
 
             DOTween.To(() => tutorialText.text, x => tutorialText.text = x, currentText, totalTime)
+                .SetUpdate(true)
                 .OnComplete(() =>
                 {
                     waitTimePerCharacter = timePerCharacter;
                     currentFrameText++;
 
-                    canContinue = true;
+                    if (tutorialFrames[currentFrame].isTimeBased)
+                    {
+                        canContinue = false;
+                        DOTween.Sequence()
+                            .AppendInterval(timeBasedTransition)
+                            .OnComplete(() => 
+                            {
+                                if (currentFrameText < tutorialFrames[currentFrame].textList.Count)
+                                {
+                                    WriteText();
+                                }
+                            })
+                            .SetUpdate(true);
+                    }
+                    else
+                        canContinue = true;
                 });
         }
 
@@ -139,6 +168,7 @@ namespace Aviss
             canContinue = false;
 
             tutorialRect.DOAnchorPos(startPosition, timeBetweenTransition).SetEase(Ease.InOutSine)
+                .SetUpdate(true)
                 .OnComplete(() =>
                 {
                     // Reset the text when the slide is out of the screen

@@ -3,6 +3,7 @@ using UnityEngine;
 using DG.Tweening;
 using System; // Asegúrate de tener la referencia a DOTween
 using Redraw;
+using Aviss;
 
 public class FoodSelector : InteractableBase
 {
@@ -194,6 +195,12 @@ public class FoodSelector : InteractableBase
             if (playerController != null)
             {
                 Debug.Log("Interactuando con " + gameObject.name);
+
+                // TUTORIALES DE MIERDA
+                if (TutorialController.Instance.gameObject.activeSelf)
+                {
+                    TutorialController.Instance.Continue();
+                }
 
                 // Llamar al GameManager para agregar el comando
                 if (GameManager.Instance != null && foods != null && targetRenderer != null && selectedFoodSprite != null)

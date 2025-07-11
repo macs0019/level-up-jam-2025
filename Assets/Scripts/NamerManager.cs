@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using DG.Tweening;
+using Aviss;
 
 public class NamerManager : MonoBehaviour
 {
@@ -210,6 +211,12 @@ public class NamerManager : MonoBehaviour
             GameManager.Instance.IsNamingFood = false;
 
         });
+
+        // Tutoriales de mierda 
+        if (TutorialController.Instance.gameObject.activeSelf)
+        {
+            TutorialController.Instance.Continue();
+        }
 
         if (startUI != null)
             startUI.SetActive(false);
