@@ -208,6 +208,7 @@ public class NamerManager : MonoBehaviour
         playerController.EndNamingAnimation(() =>
         {
             GameManager.Instance.IsNamingFood = false;
+
         });
 
         if (startUI != null)
@@ -264,7 +265,7 @@ public class NamerManager : MonoBehaviour
     private void Update()
     {
         // Forzar el foco en el campo de texto si se pierde
-        if (EventSystem.current.currentSelectedGameObject != foodNameInput.gameObject)
+        if (EventSystem.current.currentSelectedGameObject != foodNameInput.gameObject && GameManager.Instance.IsNamingFood)
         {
             EventSystem.current.SetSelectedGameObject(foodNameInput.gameObject);
             foodNameInput.ActivateInputField();
