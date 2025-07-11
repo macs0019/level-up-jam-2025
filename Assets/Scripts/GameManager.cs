@@ -68,6 +68,21 @@ public class GameManager : MonoBehaviour
 
     public bool IsNamingFood { get => isNamingFood; set => isNamingFood = value; }
 
+    private void OnEnable()
+    {
+        TutorialController.Instance.OnTutorialEnd += HandleEndTutorial;
+    }
+
+    private void OnDestroy()
+    {
+        TutorialController.Instance.OnTutorialEnd -= HandleEndTutorial;
+    }
+
+    private void HandleEndTutorial()
+    {
+        TutorialController.Instance.Continue();
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
