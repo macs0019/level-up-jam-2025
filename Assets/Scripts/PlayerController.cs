@@ -225,9 +225,12 @@ public class PlayerController : MonoBehaviour
     {
         leftArm.DOKill(true);
         rightArm.DOKill(true);
+        cameraTransform.DOKill(true);
 
         leftArm.DOLocalMove(leftArmStartPos, 0.2f);
-        rightArm.DOLocalMove(rightArmStartPos, 0.2f).OnComplete(() =>
+        rightArm.DOLocalMove(rightArmStartPos, 0.2f);
+
+        cameraTransform.DORotateQuaternion(Quaternion.identity, 0.5f).OnComplete(() =>
         {
             onComplete?.Invoke();
         });
