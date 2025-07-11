@@ -2457,14 +2457,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorialFrames:
   - textList:
-    - Tutorial Frame 1
-    - Tutorial Frame 1.2
+    - AAHH, you condemned newbie, this is your first day as a waiter here.
+    - Your first labour is to name a few things...
+    - The item over my head is from the menu, you have to write whatever name you
+      want
+    - But only using the available letters above... Each day you'll name 2 new items.
+    - 'YOU HAVE TO REMEMBER THEM WELL. '
   - textList:
-    - Tutorial Frame 2
-  - textList:
-    - Tutorial Frame 3
-  - textList:
-    - Tutorial Frame 4
+    - Your only next task is to attend the clients.
+    - You approach them, press E, and then write down what they've asked.
+    - Then come to me and give me the command, if you misspell the word, you'll lose
+      a life point.
+    - NOW WORK FOR ME YOU FARTKNOCKER!!
   tutorialText: {fileID: 129552506}
   timeBeforeStartTutorial: 1
   timeBetweenTransition: 1
