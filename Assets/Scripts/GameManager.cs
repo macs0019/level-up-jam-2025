@@ -141,7 +141,7 @@ public class GameManager : MonoBehaviour
                 playerController.StartWritingAnimation();
             });
 
-            commandInputField.onEndEdit.RemoveAllListeners(); // Limpiar listeners previos
+            commandInputField.onEndEdit.RemoveAllListeners();
             commandInputField.onEndEdit.AddListener((input) =>
             {
 
@@ -174,7 +174,6 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-
                     Debug.Log("Escape presionado, cerrando InputField sin guardar.");
                     foodSelector.ShowInteractionPrompt(); // Ocultar el mensaje de interacción
                                                           // Reactivar el movimiento del jugador
