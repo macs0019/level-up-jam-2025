@@ -1,9 +1,8 @@
-using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Aviss;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem; // Importar el nuevo Input System
 
 public class GameManager : MonoBehaviour
 {
@@ -67,6 +66,20 @@ public class GameManager : MonoBehaviour
     public LevelSO levelSO; // Referencia al ScriptableObject LevelSO
 
     private int currentLevel = 0; // Nivel actual, comienza en 0
+    private void OnEnable()
+    {
+        TutorialController.Instance.OnTutorialEnd += HandleEndTutorial;
+    }
+
+    private void OnDestroy()
+    {
+        TutorialController.Instance.OnTutorialEnd -= HandleEndTutorial;
+    }
+
+    private void HandleEndTutorial()
+    {
+        TutorialController.Instance.Continue();
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -166,6 +179,12 @@ public class GameManager : MonoBehaviour
                     if (enteredWordsText != null)
                     {
                         enteredWordsText.text += input + "\n";
+                    }
+
+                    // TUTORIALES DE MIERDA
+                    if (TutorialController.Instance.gameObject.activeSelf)
+                    {
+                        TutorialController.Instance.Continue();
                     }
 
                     // Reactivar el movimiento del jugador

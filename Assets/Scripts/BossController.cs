@@ -1,6 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 using static UnityEngine.UI.Image;
+using Aviss;
 
 public class BossController : InteractableBase
 {
@@ -11,6 +12,12 @@ public class BossController : InteractableBase
         if (GameManager.Instance.LastInteractedFoodSelector == null)
         {
             return; // No mostrar el mensaje si no hay un FoodSelector interactuado
+        }
+
+        // TUTORIALES DE MIERDA
+        if (TutorialController.Instance.gameObject.activeSelf)
+        {
+            TutorialController.Instance.Continue();
         }
 
         GameManager.Instance.InteractWithBossController();

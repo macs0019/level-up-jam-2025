@@ -169,7 +169,7 @@ MonoBehaviour:
   interactionMessage: Press E to interact
   interactionKey: 101
   interactionUIText: {fileID: 0}
-  playerTransform: {fileID: 0}
+  playerController: {fileID: 0}
   interactionDistance: 4
   interactionLayerMask:
     serializedVersion: 2
@@ -177,7 +177,7 @@ MonoBehaviour:
   foods: []
   targetRenderer: {fileID: 9171018376902377050}
   speechBalloon: {fileID: 444470446179084481}
-  activeTime: 10
+  activeTime: 25
   sortingOffset: 0
   renderers:
   - {fileID: 4120216461595650030}
