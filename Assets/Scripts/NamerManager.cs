@@ -42,7 +42,12 @@ public class NamerManager : MonoBehaviour
     private List<FoodPOJO> unamedFoods;
     private List<Sprite> foodIcons;// Lista para almacenar los íconos de las comidas sin nombre
 
-    void OnEnable()
+    private void Start()
+    {
+        StartNamingAction();
+    }
+
+    public void StartNamingAction()
     {
         foodIcons = new List<Sprite>();
         unamedFoods = new List<FoodPOJO>();
@@ -217,9 +222,6 @@ public class NamerManager : MonoBehaviour
             foodRenderer.sprite = null;
             foodBalloonTransform.gameObject.SetActive(false);
         }).SetUpdate(true);
-
-        // Desactivar el objeto NamerManager
-        gameObject.SetActive(false);
     }
 
     private void AssignRandomLetters()

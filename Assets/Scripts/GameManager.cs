@@ -378,18 +378,6 @@ public class GameManager : MonoBehaviour
         StartNextLevel();
     }
 
-    public void ActivateNamerManager()
-    {
-        if (namerManager != null)
-        {
-            namerManager.gameObject.SetActive(true);
-        }
-        else
-        {
-            Debug.LogError("NamerManager no está asignado en el Inspector.");
-        }
-    }
-
     public void StartNextLevel()
     {
         levelMuchosNumber += 2; // Incrementar la cantidad de munchos a spawnear
@@ -411,8 +399,7 @@ public class GameManager : MonoBehaviour
         // Reactivar el NamerManager para el nuevo nivel
         if (namerManager != null)
         {
-            namerManager.gameObject.SetActive(false); // Desactivarlo primero
-            namerManager.gameObject.SetActive(true); // Activarlo como nuevo
+            namerManager.StartNamingAction();
         }
     }
 }
