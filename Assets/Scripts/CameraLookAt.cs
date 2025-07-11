@@ -12,9 +12,6 @@ public class CameraLookAt : MonoBehaviour
     private float maxFieldOfView = 90.0f; // Maximum field of view when close
 
     [SerializeField]
-    private float fieldOfViewSensitivity = 10.0f; // Sensitivity for field of view adjustment
-
-    [SerializeField]
     private float minDistance = 5.0f; // Distance at which the field of view is minimum
 
     [SerializeField]

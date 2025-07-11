@@ -10,7 +10,6 @@ namespace Aviss
         [System.Serializable]
         public struct Tutorial
         {
-            public string name;
             public List<string> textList;
         }
 
