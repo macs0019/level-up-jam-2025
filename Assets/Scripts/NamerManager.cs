@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class NamerManager : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class NamerManager : MonoBehaviour
     public CharacterSpriteSO characterSpriteSO;
 
     [Header("Imágenes")]
-    public Image[] foodImages;
+    public Image[] foodRenderers;
 
     [Header("Configuración de Foods")]
     public int numberOfUnamedFoods = 3;
@@ -25,9 +26,12 @@ public class NamerManager : MonoBehaviour
     public TMP_InputField foodNameInput; // Input único para ingresar el nombre de la comida
 
     [Header("Imagen de comida")]
-    public Image foodImage; // Imagen única para mostrar el ícono de la comida
+    public Transform foodBalloonTransform;
+    public SpriteRenderer foodRenderer; // Imagen única para mostrar el ícono de la comida
 
     public GameObject startUI;
+
+    public PlayerController playerController;
 
     // Estado interno
     private Dictionary<char, int> letterCounts = new Dictionary<char, int>();
@@ -36,7 +40,6 @@ public class NamerManager : MonoBehaviour
     private char[] assignedLetters;
     private int currentInputIndex = 0;
     private List<FoodPOJO> unamedFoods;
-    private int currentFoodIndex = 0; // Índice de la comida actual
     private List<Sprite> foodIcons;// Lista para almacenar los íconos de las comidas sin nombre
 
     void OnEnable()
@@ -44,12 +47,13 @@ public class NamerManager : MonoBehaviour
         foodIcons = new List<Sprite>();
         unamedFoods = new List<FoodPOJO>();
         currentInputIndex = 0;
-        currentFoodIndex = 0;
         letterCounts.Clear();
+
+        playerController.LookAtBossAnimation();
+        foodBalloonTransform.gameObject.SetActive(false);
 
         Debug.Log("NamerManager activado. Preparando UI y letras...");
 
-        Time.timeScale = 0;
         if (startUI != null)
             startUI.SetActive(true);
 
@@ -58,7 +62,7 @@ public class NamerManager : MonoBehaviour
         AssignRandomLetters();
 
         // Obtén y almacena los íconos de las comidas
-        if (characterSpriteSO != null && foodImage != null)
+        if (characterSpriteSO != null && foodRenderer != null)
         {
             unamedFoods = characterSpriteSO.GetUnamedFoods(numberOfUnamedFoods);
             if (unamedFoods.Count < numberOfUnamedFoods)
@@ -72,7 +76,13 @@ public class NamerManager : MonoBehaviour
                     Debug.Log($"Agregando ícono de comida: {food.Name}");
                     foodIcons.Add(food.Icon);
                 }
-                foodImage.sprite = foodIcons[0]; // Mostrar el primer ícono
+
+                foodRenderer.sprite = foodIcons[0]; // Mostrar el primer ícono
+
+                foodBalloonTransform.DOKill(true);
+                foodBalloonTransform.gameObject.SetActive(true);
+                foodBalloonTransform.localScale = Vector3.zero;
+                foodBalloonTransform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack).SetUpdate(true);
             }
         }
         else
@@ -132,6 +142,8 @@ public class NamerManager : MonoBehaviour
                         }
                     }
                 }
+
+                playerController.StartWritingAnimation();
             }
         }
 
@@ -149,14 +161,15 @@ public class NamerManager : MonoBehaviour
             foodNameInput.text = string.Empty;
         }
 
-
-
         currentInputIndex++;
 
         if (currentInputIndex < foodIcons.Count)
         {
             // Cambia la imagen y limpia el input
-            foodImage.sprite = foodIcons[currentInputIndex];
+            foodRenderer.transform.DOKill(true);
+            foodRenderer.transform.DOPunchScale(Vector3.one / 3f, 0.3f);
+
+            foodRenderer.sprite = foodIcons[currentInputIndex];
             foodNameInput.text = string.Empty;
             AssignRandomLetters(); // Randomizar letras nuevamente
             StartCoroutine(FocusInputDelayed());
@@ -187,13 +200,23 @@ public class NamerManager : MonoBehaviour
 
     private void OnAllInputsFilled()
     {
-        Time.timeScale = 1;
+        playerController.EndNamingAnimation(() =>
+        {
+            GameManager.Instance.IsNamingFood = false;
+        });
+
         if (startUI != null)
             startUI.SetActive(false);
 
         // Limpiar el input y la imagen
         foodNameInput.text = string.Empty;
-        foodImage.sprite = null;
+
+        // Ocultamos el globo
+        foodBalloonTransform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBack).OnComplete(() =>
+        {
+            foodRenderer.sprite = null;
+            foodBalloonTransform.gameObject.SetActive(false);
+        }).SetUpdate(true);
 
         // Desactivar el objeto NamerManager
         gameObject.SetActive(false);

@@ -9,7 +9,7 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
     public KeyCode interactionKey = KeyCode.E;
     public TextMeshProUGUI interactionUIText; // TextMeshProUGUI element to display the interaction message
 
-    public Transform playerTransform; // Transform del jugador asignado desde el Inspector
+    public PlayerController playerController; // Transform del jugador asignado desde el Inspector
     public float interactionDistance = 3.0f; // Distancia máxima para interactuar
     public LayerMask interactionLayerMask; // Capa para filtrar objetos interactuables
 
@@ -17,14 +17,14 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
 
     protected void Update()
     {
-        if (playerTransform == null)
+        if (playerController == null)
         {
             Debug.LogWarning("Player Transform is not assigned. Please assign it in the Inspector.");
             return;
         }
 
         // 1) Comprobamos distancia
-        float distance = Vector3.Distance(transform.position, playerTransform.position);
+        float distance = Vector3.Distance(transform.position, playerController.transform.position);
         if (distance > interactionDistance)
         {
             if (canInteract)
@@ -36,8 +36,8 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
         }
 
         // 2) Raycast desde el jugador hacia adelante
-        Vector3 rayOrigin = playerTransform.position + playerTransform.up * 0.5f; // Ajusta la altura del rayo para que salga desde la cabeza del jugador
-        Vector3 rayDir = playerTransform.forward;
+        Vector3 rayOrigin = playerController.transform.position + playerController.transform.up * 0.5f; // Ajusta la altura del rayo para que salga desde la cabeza del jugador
+        Vector3 rayDir = playerController.GetForwardVector();
 
         RaycastHit hit;
         bool didHit = Physics.Raycast(rayOrigin, rayDir, out hit, interactionDistance, interactionLayerMask);

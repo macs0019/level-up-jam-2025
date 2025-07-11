@@ -30,7 +30,7 @@ namespace Redraw
         {
             if (sprites.Count > 1)
             {
-                timer += Time.deltaTime;
+                timer += Time.unscaledDeltaTime;
                 if (timer >= redrawInterval)
                 {
                     timer -= redrawInterval;

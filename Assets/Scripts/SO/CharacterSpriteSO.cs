@@ -25,6 +25,14 @@ public class CharacterSpriteSO : ScriptableObject
     [Header("Food Sprites")]
     private List<Sprite> foodSprites = new List<Sprite>();
 
+
+    // Cada vez que Unity entra en Play Mode y recarga dominios,
+    // OnEnable se dispara, así que:
+    void OnValidate()
+    {
+        foods.ForEach(f => f.Name = "");
+    }
+
     /// <summary>
     /// Devuelve un sprite de torso aleatorio.
     /// </summary>

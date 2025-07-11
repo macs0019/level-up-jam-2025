@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
     public int armShakeVibrato = 10;
     public float armShakeElasticity = 0.5f;
 
-    private float rotationX = 0f;
+    private float rotationX, rotationY = 0f;
     private Vector2 moveInput;
     private Vector2 lookInput;
     private Rigidbody rb;
@@ -36,10 +36,6 @@ public class PlayerController : MonoBehaviour
     private Vector3 rightArmStartPos;
     private Tween leftBobTween;
     private Tween rightBobTween;
-
-    // Guarda la rotación original de la cámara
-    private Quaternion _originalCamRot;
-    private Quaternion _originalArmsCamRot;
 
     void Start()
     {
@@ -66,19 +62,24 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // Rotaci�n horizontal
-        float mouseX = lookInput.x * mouseSensitivity * Time.deltaTime;
-        transform.Rotate(Vector3.up * mouseX);
+        if (GameManager.Instance.IsNamingFood) return;
 
-        // Rotaci�n vertical
+        float mouseX = lookInput.x * mouseSensitivity * Time.deltaTime;
         float mouseY = lookInput.y * mouseSensitivity * Time.deltaTime;
+
+        // Vertical
         rotationX -= mouseY;
         rotationX = Mathf.Clamp(rotationX, -90f, 90f);
 
+        // Horizontal
+        rotationY += mouseX;
+
+        // Aplica solo a la cámara y las armas
         if (cameraTransform != null)
-            cameraTransform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
+            cameraTransform.localRotation = Quaternion.Euler(rotationX, rotationY, 0f);
+
         if (armsCamTransform != null)
-            armsCamTransform.localRotation = Quaternion.Euler(-rotationX, 0f, 0f);
+            // armsCamTransform.localRotation = Quaternion.Euler(-rotationX, rotationY, 0f);
 
         // Gestionar bob vs shake
         if (moveInput.sqrMagnitude > 0.01f)
@@ -89,13 +90,28 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Movimiento del cuerpo
-        Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
+        if (GameManager.Instance.IsNamingFood) return;
+
+        // Obtén los ejes de la cámara en horizontal
+        Vector3 camForward = cameraTransform.forward;
+        camForward.y = 0;
+        camForward.Normalize();
+        Vector3 camRight = cameraTransform.right;
+        camRight.y = 0;
+        camRight.Normalize();
+
+        // Movimiento relativo a la cámara
+        Vector3 move = camRight * moveInput.x + camForward * moveInput.y;
         rb.MovePosition(rb.position + move * speed * Time.fixedDeltaTime);
 
-        // Anular fuerzas externas
+        // Anular fuerzas externas (si realmente quieres 'locked' físico)
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+    }
+
+    public Vector3 GetForwardVector()
+    {
+        return cameraTransform.forward;
     }
 
     private void StartArmBob()
@@ -146,10 +162,6 @@ public class PlayerController : MonoBehaviour
 
     public void StartInteractAnimation(FoodSelector foodSelector)
     {
-        // Guardamos la rotación actual
-        _originalCamRot = cameraTransform.rotation;
-        _originalArmsCamRot = armsCamTransform.rotation;
-
         leftArm.DOKill(true);
         rightArm.DOKill(true);
         blackScreenOverlay.DOKill(true);
@@ -188,5 +200,36 @@ public class PlayerController : MonoBehaviour
         rightArm.DOKill(complete: true);
 
         rightArm.DOPunchPosition(armShakeStrength / 2, armShakeDuration / 2, armShakeVibrato / 2, armShakeElasticity).SetAutoKill();
+    }
+
+    public void LookAtBossAnimation(Action onComplete = null)
+    {
+        leftArm.DOKill(true);
+        rightArm.DOKill(true);
+        cameraTransform.DOKill(true);
+
+        Sequence restartSeq = DOTween.Sequence();
+
+        restartSeq
+            .Join(this.transform.DOMove(new Vector3(0.4f, -1.3f, 0.3f), 1f))
+            .Join(cameraTransform.DORotateQuaternion(new Quaternion(-0.0225575808f, -0.962250173f, -0.084186025f, 0.257834226f), 1f))
+            .Join(leftArm.DOLocalMove(new Vector3(1, -0.3f, 2.4f), 0.4f))
+            .Join(rightArm.DOLocalMove(new Vector3(2.4f, -0.1f, 2.4f), 0.4f))
+            .OnComplete(() =>
+            {
+                onComplete?.Invoke();
+            });
+    }
+
+    public void EndNamingAnimation(Action onComplete = null)
+    {
+        leftArm.DOKill(true);
+        rightArm.DOKill(true);
+
+        leftArm.DOLocalMove(leftArmStartPos, 0.2f);
+        rightArm.DOLocalMove(rightArmStartPos, 0.2f).OnComplete(() =>
+        {
+            onComplete?.Invoke();
+        });
     }
 }

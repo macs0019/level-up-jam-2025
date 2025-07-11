@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -13,7 +14,6 @@ public class GameManager : MonoBehaviour
     public TMP_Text enteredWordsText; // Texto para mostrar las palabras ingresadas
 
     public TMP_Text interactionUIText; // Texto de la UI de interacción asignado desde el Inspector
-    public Transform playerTransform; // Transform del jugador asignado desde el Inspector
 
     private PlayerController playerController; // Referencia al PlayerController
     private FoodSelector lastInteractedFoodSelector; // Referencia al último FoodSelector con el que se interactuó
@@ -65,6 +65,9 @@ public class GameManager : MonoBehaviour
 
     private int NumberMunchosLeft = 0;
 
+    private bool isNamingFood = true;
+
+    public bool IsNamingFood { get => isNamingFood; set => isNamingFood = value; }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -90,14 +93,17 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        spawnTimer += Time.deltaTime;
-
-        // Spawnear munchos cada 10 segundos hasta que se ocupen el número de mesas especificado
-        if (spawnTimer >= timeToSpawnMuncho && occupiedTablesCount < maxNumOfTables)
+        if (!isNamingFood)
         {
-            Debug.Log("Spawneando un nuevo muncho...");
-            spawnTimer = 0f;
-            SendMunchoToTable();
+            spawnTimer += Time.deltaTime;
+
+            // Spawnear munchos cada 10 segundos hasta que se ocupen el número de mesas especificado
+            if (spawnTimer >= timeToSpawnMuncho && occupiedTablesCount < maxNumOfTables)
+            {
+                Debug.Log("Spawneando un nuevo muncho...");
+                spawnTimer = 0f;
+                SendMunchoToTable();
+            }
         }
     }
 
@@ -293,7 +299,7 @@ public class GameManager : MonoBehaviour
 
             // Asignar propiedades desde el Inspector
             foodSelector.interactionUIText = interactionUIText as TextMeshProUGUI;
-            foodSelector.playerTransform = playerTransform;
+            foodSelector.playerController = playerController;
         }
         else
         {
@@ -358,6 +364,7 @@ public class GameManager : MonoBehaviour
                 if (exitedMunchosCount >= levelMuchosNumber && occupiedTablesCount == 0)
                 {
                     StartCoroutine(WaitAndStartNextLevel());
+                    WaitAndStartNextLevel();
                 }
             });
         }
@@ -365,7 +372,9 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator WaitAndStartNextLevel()
     {
-        yield return new WaitForSeconds(3f); // Esperar 3 segundos
+        yield return new WaitForSeconds(2f);
+
+        isNamingFood = true;
         StartNextLevel();
     }
 
