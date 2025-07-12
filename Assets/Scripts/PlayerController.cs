@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
+using Aviss;
 
 public class PlayerController : MonoBehaviour
 {
@@ -36,6 +37,10 @@ public class PlayerController : MonoBehaviour
     private Vector3 rightArmStartPos;
     private Tween leftBobTween;
     private Tween rightBobTween;
+
+    private bool stopped = true;
+    private float stepCooldown = 0f; // Temporizador para controlar el intervalo entre pasos
+    private const float stepInterval = 0.5f; // Intervalo de tiempo entre pasos
 
     void Start()
     {
@@ -81,16 +86,19 @@ public class PlayerController : MonoBehaviour
         if (armsCamTransform != null)
             // armsCamTransform.localRotation = Quaternion.Euler(-rotationX, rotationY, 0f);
 
-        // Gestionar bob vs shake
-        if (moveInput.sqrMagnitude > 0.01f)
-            StartArmBob();
-        else
-            StopArmBobAndShake();
+            // Gestionar bob vs shake
+            if (moveInput.sqrMagnitude > 0.01f)
+                StartArmBob();
+            else
+                StopArmBobAndShake();
     }
 
     void FixedUpdate()
     {
         if (GameManager.Instance.IsNamingFood) return;
+
+        // Actualizar el temporizador
+        stepCooldown += Time.fixedDeltaTime;
 
         // Obtén los ejes de la cámara en horizontal
         Vector3 camForward = cameraTransform.forward;
@@ -102,6 +110,18 @@ public class PlayerController : MonoBehaviour
 
         // Movimiento relativo a la cámara
         Vector3 move = camRight * moveInput.x + camForward * moveInput.y;
+        bool isMunchoMoving = moveInput.sqrMagnitude > 0.01f;
+
+        if (isMunchoMoving && stepCooldown >= stepInterval)
+        {
+            AudioController.Instance.Play("Muncho Walk");
+            stepCooldown = 0f; // Reiniciar el temporizador
+        }
+        else if (!isMunchoMoving)
+        {
+            AudioController.Instance.Stop("Muncho Walk");
+        }
+
         rb.MovePosition(rb.position + move * speed * Time.fixedDeltaTime);
 
         // Anular fuerzas externas (si realmente quieres 'locked' físico)
@@ -123,7 +143,7 @@ public class PlayerController : MonoBehaviour
         // Matar tweens anteriores y resetear
         leftArm.DOKill(true);
         leftArm.localPosition = leftArmStartPos;
- 
+
         rightArm.DOKill(true);
         rightArm.localPosition = rightArmStartPos;
 
@@ -165,13 +185,13 @@ public class PlayerController : MonoBehaviour
         leftArm.DOKill(true);
         rightArm.DOKill(true);
         blackScreenOverlay.DOKill(true);
-        
+
         leftArm.DOLocalMoveY(-0.3f, 0.2f);
         rightArm.DOLocalMoveX(-0.5f, 0.2f);
         blackScreenOverlay.DOFade(0.8f, 0.2f).SetAutoKill();
 
         // Look at the target balloon
-        Vector3 targetPos = cameraTransform.position 
+        Vector3 targetPos = cameraTransform.position
                           + cameraTransform.forward * 3f;
 
         Quaternion targetRot = Quaternion.LookRotation(cameraTransform.forward);
@@ -199,7 +219,14 @@ public class PlayerController : MonoBehaviour
         // Mata cualquier tween activo en rightArm
         rightArm.DOKill(complete: true);
 
-        rightArm.DOPunchPosition(armShakeStrength / 2, armShakeDuration / 2, armShakeVibrato / 2, armShakeElasticity).SetAutoKill();
+
+        AudioController.Instance.UnPause("Writting");
+
+
+        rightArm.DOPunchPosition(armShakeStrength / 2, armShakeDuration / 2, armShakeVibrato / 2, armShakeElasticity).SetAutoKill().OnComplete(() =>
+        {
+            AudioController.Instance.Pause("Writting");
+        });
     }
 
     public void LookAtBossAnimation(Action onComplete = null)
@@ -212,7 +239,7 @@ public class PlayerController : MonoBehaviour
 
         restartSeq
             .Join(this.transform.DOMove(new Vector3(0.4f, -1.3f, 0.3f), 1f))
-            .Join(cameraTransform.DORotateQuaternion(new Quaternion(-0.0203461256f,-0.968669772f,-0.0847476646f,0.232557163f), 1f))
+            .Join(cameraTransform.DORotateQuaternion(new Quaternion(-0.0203461256f, -0.968669772f, -0.0847476646f, 0.232557163f), 1f))
             .Join(leftArm.DOLocalMove(new Vector3(1, -0.3f, 2.4f), 0.4f))
             .Join(rightArm.DOLocalMove(new Vector3(2.4f, -0.1f, 2.4f), 0.4f))
             .OnComplete(() =>

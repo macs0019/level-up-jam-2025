@@ -25,7 +25,7 @@ namespace Aviss
         [Header("Player Prefs")]
         [SerializeField] public bool savePlayerPrefs = true;
         [SerializeField] private string playerPrefsKey = "SampleTutorial";
-        
+
 
         [Header("Position")]
         [SerializeField] private Vector2 startPosition;
@@ -84,7 +84,7 @@ namespace Aviss
 
         private void Update()
         {
-            if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame) 
+            if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
             {
                 if (tutorialFrames[currentFrame].skipWithSpace && currentFrameText < tutorialFrames[currentFrame].textList.Count)
                 {
@@ -162,10 +162,12 @@ namespace Aviss
             string currentText = tutorialFrames[currentFrame].textList[currentFrameText];
             float totalTime = currentText.Length * waitTimePerCharacter;
 
+            AudioController.Instance.Play("Boss talk");
             DOTween.To(() => tutorialText.text, x => tutorialText.text = x, currentText, totalTime)
                 .SetUpdate(true)
                 .OnComplete(() =>
                 {
+                    AudioController.Instance.Stop("Boss talk");
                     waitTimePerCharacter = timePerCharacter;
                     currentFrameText++;
 

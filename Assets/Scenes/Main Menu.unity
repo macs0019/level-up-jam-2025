@@ -15448,6 +15448,145 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1948620744
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1948620746}
+  - component: {fileID: 1948620745}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1948620745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1948620744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08434813b82688048b336d0e1e49df38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPersistent: 1
+  singleSounds:
+  - name: Boss angry
+    loop: 0
+    volume: 0.5
+    pitch: 0.1
+    clip: {fileID: 8300000, guid: eca6fd0fc4e2c0b4a9912350872d1a51, type: 3}
+  - name: Boss happy
+    loop: 0
+    volume: 0.5
+    pitch: 0.1
+    clip: {fileID: 8300000, guid: 3490d8fb01079cf4c9ea432822d0db7b, type: 3}
+  - name: Music
+    loop: 1
+    volume: 0.05
+    pitch: 0.1
+    clip: {fileID: 8300000, guid: 991241b3ff0bca64f82793da2d880f48, type: 3}
+  - name: Writting
+    loop: 1
+    volume: 1
+    pitch: 1
+    clip: {fileID: 8300000, guid: 8a855a4dddaef6244b19cb7664dbe568, type: 3}
+  - name: Boss talk
+    loop: 0
+    volume: 0.25
+    pitch: 0.4
+    clip: {fileID: 8300000, guid: 70822b694794c3c4296ef966a4d3ab51, type: 3}
+  - name: Door
+    loop: 0
+    volume: 0.25
+    pitch: 0.4
+    clip: {fileID: 8300000, guid: 955e3930425374948b8a611c9d196858, type: 3}
+  multipleSounds:
+  - name: Bubble
+    loop: 0
+    volume: 0.25
+    pitch: 0
+    clips:
+    - {fileID: 8300000, guid: 4eb3b87ece7f78e4f9350b41f197e5d7, type: 3}
+    - {fileID: 8300000, guid: 182f25a1d9b052446846a9edfbd80364, type: 3}
+    - {fileID: 8300000, guid: e856f5c7b15905e489a02328d8406a45, type: 3}
+    - {fileID: 8300000, guid: 7121be38df055b143899bae9fbd7e47d, type: 3}
+  - name: Muncho Talk
+    loop: 0
+    volume: 0.25
+    pitch: 2.24
+    clips:
+    - {fileID: 8300000, guid: 584d514a4a1608d4fae819ca5693e16d, type: 3}
+    - {fileID: 8300000, guid: d2d5371fb0ea1a7488046bf926b7b12b, type: 3}
+    - {fileID: 8300000, guid: fca155dc9494cda4290a494cad7724e1, type: 3}
+    - {fileID: 8300000, guid: 150fdc2588fec164b8c1251913695b95, type: 3}
+    - {fileID: 8300000, guid: 225b6eb82e26440458bfab5f14b8774f, type: 3}
+    - {fileID: 8300000, guid: daa588534a7502a42ba077cdd8a5c57b, type: 3}
+    - {fileID: 8300000, guid: c977045e711b5a1419021a65f795ee47, type: 3}
+    - {fileID: 8300000, guid: 826e435cb7ae06242befec5e9ef2b690, type: 3}
+    - {fileID: 8300000, guid: 7e8a6aa921bc9824491bc82c1f06d36f, type: 3}
+    - {fileID: 8300000, guid: 9b33e6cbe503bd54c83a95f9abd34a28, type: 3}
+    - {fileID: 8300000, guid: a32c3cda913129d4390a44cc8ef6fb2a, type: 3}
+    - {fileID: 8300000, guid: bd0f267043fb4ec49a0c590bdb975b51, type: 3}
+    - {fileID: 8300000, guid: f98259801c1430b45b2a2ada04003fc6, type: 3}
+    - {fileID: 8300000, guid: 164d3b88a825db74a82a3108726b9f45, type: 3}
+    - {fileID: 8300000, guid: 25c32147dc1916b449bc9a486c7c59c5, type: 3}
+    - {fileID: 8300000, guid: c842c4a3140be7a499d596e9153f68eb, type: 3}
+    - {fileID: 8300000, guid: 7d06763da27c7864396a4c9ff86ef016, type: 3}
+    - {fileID: 8300000, guid: f67982ba896fb3c47bea5c72d1e9571a, type: 3}
+    - {fileID: 8300000, guid: 29c31222c80167240ae677a4df941407, type: 3}
+    - {fileID: 8300000, guid: dc7b504d5d8206f42a223a88a8482fb7, type: 3}
+    - {fileID: 8300000, guid: 1892c681a950c104cbd32a1715b4c319, type: 3}
+    - {fileID: 8300000, guid: 8c99ad17d1b6eef45bb3eda9ef8748ee, type: 3}
+  - name: Muncho Walk
+    loop: 0
+    volume: 0.15
+    pitch: 2.24
+    clips:
+    - {fileID: 8300000, guid: b154dc877f837684f8ae0dd958ac97cd, type: 3}
+    - {fileID: 8300000, guid: 3bdeb5303a040a84aa4b821c53465f6e, type: 3}
+    - {fileID: 8300000, guid: ccf2471e98311b248ae376acbb65a3c3, type: 3}
+    - {fileID: 8300000, guid: 032ab92aaddd5c94bb42c8e1ed27edfa, type: 3}
+    - {fileID: 8300000, guid: c9fd0a8286564ec4f9f0f77ea76c2985, type: 3}
+    - {fileID: 8300000, guid: ba39416259e85174bbfa1694eb415ade, type: 3}
+    - {fileID: 8300000, guid: 4060c2a668a02ee44949a8d929888016, type: 3}
+    - {fileID: 8300000, guid: 60e13d0ce1b654941a5d33de3945b6e0, type: 3}
+    - {fileID: 8300000, guid: 0d86efd3cd407bc42b42393a4cc34fff, type: 3}
+    - {fileID: 8300000, guid: 0ce258597bbc52f4a8f5b6c693ed45fe, type: 3}
+    - {fileID: 8300000, guid: 10e1b1b550fe6af43bf65cdaad420352, type: 3}
+    - {fileID: 8300000, guid: bd090baea2277dc4d9f65eafbed8a61e, type: 3}
+    - {fileID: 8300000, guid: 7a5203e9cbd176e44bd244081fdf4755, type: 3}
+    - {fileID: 8300000, guid: 840d47c1073d34c43b146ae9f38ed2b2, type: 3}
+    - {fileID: 8300000, guid: 79491158fe70c654c8f4ede68c679a51, type: 3}
+    - {fileID: 8300000, guid: 5d085edbffb1f424f824ef347b56cb68, type: 3}
+    - {fileID: 8300000, guid: c3476be37f2b55a47895cc9018c6ab9d, type: 3}
+    - {fileID: 8300000, guid: 80d629b6fd4758a449a90b1755ab450c, type: 3}
+    - {fileID: 8300000, guid: 1dbc7c5978766cc4dad1197278a7d17a, type: 3}
+    - {fileID: 8300000, guid: 960ec3cee5f8ca249a0bc1ad7cb3d6fa, type: 3}
+    - {fileID: 8300000, guid: 04ef834513cae4f4390c261ccb7e4a61, type: 3}
+--- !u!4 &1948620746
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1948620744}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 526.57434, y: 0, z: 2987.8003}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1950161056
 GameObject:
   m_ObjectHideFlags: 0
@@ -16381,3 +16520,4 @@ SceneRoots:
   - {fileID: 1450593715}
   - {fileID: 1761123482}
   - {fileID: 395835834}
+  - {fileID: 1948620746}
