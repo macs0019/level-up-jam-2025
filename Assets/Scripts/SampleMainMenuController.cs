@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 using Aviss;
 
 public class SampleMainMenuController : MonoBehaviour
@@ -25,13 +26,23 @@ public class SampleMainMenuController : MonoBehaviour
 
     public void Help()
     {
-        mainMenuScreen.SetActive(false);
         helpMenuScreen.SetActive(true);
+
+        mainMenuScreen.GetComponent<RectTransform>().DOAnchorPosX(800, 0.4f).OnComplete(() =>
+        {
+            mainMenuScreen.SetActive(false);
+            helpMenuScreen.GetComponent<RectTransform>().DOAnchorPosX(0, 0.4f);
+        });
     }
 
     public void Back()
     {
-        helpMenuScreen.SetActive(false);
         mainMenuScreen.SetActive(true);
+
+        helpMenuScreen.GetComponent<RectTransform>().DOAnchorPosX(800, 0.4f).OnComplete(() =>
+        {
+            helpMenuScreen.SetActive(false);
+            mainMenuScreen.GetComponent<RectTransform>().DOAnchorPosX(0, 0.4f);
+        });
     }
 }
