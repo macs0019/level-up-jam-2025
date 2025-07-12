@@ -115,7 +115,6 @@ namespace Aviss
         {
             if (inTransitionDirections.Count == 0)
             {
-                Debug.Log("No directions?");
                 return; // No directions selected, so return early.
             }
 
@@ -157,7 +156,6 @@ namespace Aviss
         {
             if (outTransitionDirections.Count == 0)
             {
-                Debug.Log("No directions?");
                 return; // No directions selected, so return early.
             }
 

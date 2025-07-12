@@ -20,11 +20,7 @@ public class GameManager : MonoBehaviour
     public FoodSelector LastInteractedFoodSelector
     {
         get { return lastInteractedFoodSelector; }
-        set
-        {
-            Debug.Log("Setting LastInteractedFoodSelector to: " + (value != null ? value.name : "null"));
-            lastInteractedFoodSelector = value;
-        }
+        set { lastInteractedFoodSelector = value; }
     }
 
     private bool error = false; // Indica si el usuario se ha equivocado al introducir el texto
@@ -66,20 +62,6 @@ public class GameManager : MonoBehaviour
     public LevelSO levelSO; // Referencia al ScriptableObject LevelSO
 
     private int currentLevel = 0; // Nivel actual, comienza en 0
-    private void OnEnable()
-    {
-        TutorialController.Instance.OnTutorialEnd += HandleEndTutorial;
-    }
-
-    private void OnDestroy()
-    {
-        TutorialController.Instance.OnTutorialEnd -= HandleEndTutorial;
-    }
-
-    private void HandleEndTutorial()
-    {
-        TutorialController.Instance.Continue();
-    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -112,7 +94,6 @@ public class GameManager : MonoBehaviour
             // Spawnear munchos cada 10 segundos hasta que se ocupen el número de mesas especificado
             if (spawnTimer >= levelSO.Levels[currentLevel].MunchoEntryDelay && occupiedTablesCount < levelSO.Levels[currentLevel].NumberOfOccupiedTables)
             {
-                Debug.Log("Spawneando un nuevo muncho...");
                 spawnTimer = 0f;
                 SendMunchoToTable();
             }
@@ -164,16 +145,7 @@ public class GameManager : MonoBehaviour
                     LastInteractedFoodSelector = foodSelector;
                     foodSelector.OrderTaken = true; // Marcar que el pedido ha sido tomado
 
-                    if (input.Equals(foodName, System.StringComparison.OrdinalIgnoreCase))
-                    {
-                        Debug.Log("Correct");
-                        error = false;
-                    }
-                    else
-                    {
-                        Debug.Log("Incorrect");
-                        error = true;
-                    }
+                    error = input.Equals(foodName, System.StringComparison.OrdinalIgnoreCase); // Comparar el texto ingresado con el nombre de la comida
 
                     // Agregar la palabra ingresada al texto
                     if (enteredWordsText != null)
@@ -184,6 +156,7 @@ public class GameManager : MonoBehaviour
                     // TUTORIALES DE MIERDA
                     if (TutorialController.Instance.gameObject.activeSelf)
                     {
+                        Debug.Log("GameManager Continue");
                         TutorialController.Instance.Continue();
                     }
 
@@ -192,7 +165,6 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Escape presionado, cerrando InputField sin guardar.");
                     foodSelector.ShowInteractionPrompt(); // Ocultar el mensaje de interacción
                                                           // Reactivar el movimiento del jugador
                     Resume(foodSelector);
@@ -214,7 +186,6 @@ public class GameManager : MonoBehaviour
 
         if (playerController != null)
         {
-            Debug.Log("Reactivando el movimiento del jugador y finalizando la interacción con " + foodSelector.name);
             if (resetLastInteracted)
             {
                 LastInteractedFoodSelector = null; // Resetear el último FoodSelector interactuado
@@ -335,8 +306,6 @@ public class GameManager : MonoBehaviour
 
     public void InteractWithBossController()
     {
-        Debug.Log("Interacting with BossController...");
-        Debug.Log("Último FoodSelector interactuado: " + (LastInteractedFoodSelector != null ? LastInteractedFoodSelector.name : "Ninguno"));
         FoodSelector foodSelectorToLeave = LastInteractedFoodSelector;
 
         lastInteractedFoodSelector = null; // Limpiar la referencia al último FoodSelector interactuado
@@ -346,8 +315,6 @@ public class GameManager : MonoBehaviour
             MunchoMovement munchoMovement = foodSelectorToLeave.GetComponent<MunchoMovement>();
             if (munchoMovement != null && munchoMovement.ShouldLeave())
             {
-                Debug.Log("El último FoodSelector se irá inmediatamente.");
-
                 // Manejar la salida usando DOTween
                 HandleFoodSelectorLeavingWithDelay(foodSelectorToLeave);
             }
@@ -398,9 +365,7 @@ public class GameManager : MonoBehaviour
     public void StartNextLevel()
     {
         occupiedTablesCount = 0; // Reiniciar el contador de mesas ocupadas
-
-        Debug.Log("Iniciando el siguiente nivel...");
-
+        
         // Reiniciar el temporizador de spawn
         spawnTimer = 0f;
 

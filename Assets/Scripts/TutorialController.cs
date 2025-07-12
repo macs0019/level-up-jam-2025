@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
+using UnityEngine.InputSystem;
 
 namespace Aviss
 {
@@ -10,17 +11,16 @@ namespace Aviss
         [System.Serializable]
         public struct Tutorial
         {
+            public bool skipWithSpace;
+
             [TextArea(3, 10)]
             public List<string> textList;
-
-            public bool isTimeBased;
         }
 
         [SerializeField] private List<Tutorial> tutorialFrames;
         [SerializeField] private TextMeshProUGUI tutorialText;
         [SerializeField, Range(0.0f, 5.0f)] private float timeBeforeStartTutorial = 1.0f;
         [SerializeField, Range(0.5f, 2.0f)] private float timeBetweenTransition = 1.0f;
-        [SerializeField, Range(0.5f, 5f)] private float timeBasedTransition = 2f;
 
         [Header("Player Prefs")]
         [SerializeField] public bool savePlayerPrefs = true;
@@ -36,6 +36,8 @@ namespace Aviss
         [SerializeField, Range(0.03f, 0.1f)] private float timePerCharacter = 0.05f;
         [SerializeField, Range(2.0f, 4.0f)] private float timePerCharacterMultiplier = 3.0f;
         private float waitTimePerCharacter;
+
+        [SerializeField] private Transform spaceBarTransform;
 
         public delegate void TutorialEndEventHandler();
         public event TutorialEndEventHandler OnTutorialEnd;
@@ -80,22 +82,40 @@ namespace Aviss
                 .SetUpdate(true);
         }
 
+        private void Update()
+        {
+            if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame) 
+            {
+                if (tutorialFrames[currentFrame].skipWithSpace && currentFrameText < tutorialFrames[currentFrame].textList.Count)
+                {
+                    spaceBarTransform.DOKill(true);
+                    spaceBarTransform.DOPunchScale(Vector3.one / 10f, 0.2f);
+                    Continue();
+                }
+            }
+        }
+
         public void Continue()
         {
-            if (tutorialFrames[currentFrame].isTimeBased)
-            {
-                ChangeFrame();
-                return;    
-            }
-
             if (canContinue)
             {
+                Debug.Log(currentFrameText);
                 NextTutorial();
             }
             else
             {
                 waitTimePerCharacter = timePerCharacter / timePerCharacterMultiplier;
             }
+        }
+
+        public void SkipFrame()
+        {
+            spaceBarTransform.DOScale(0f, 0.4f).OnComplete(() =>
+            {
+                spaceBarTransform.gameObject.SetActive(false);
+            });
+
+            ChangeFrame();
         }
 
         private void StartCurrentFrame()
@@ -137,6 +157,8 @@ namespace Aviss
             canContinue = false;
             tutorialText.text = "";
 
+            Debug.Log("WriteText: " + currentFrameText);
+
             string currentText = tutorialFrames[currentFrame].textList[currentFrameText];
             float totalTime = currentText.Length * waitTimePerCharacter;
 
@@ -147,22 +169,7 @@ namespace Aviss
                     waitTimePerCharacter = timePerCharacter;
                     currentFrameText++;
 
-                    if (tutorialFrames[currentFrame].isTimeBased)
-                    {
-                        canContinue = false;
-                        DOTween.Sequence()
-                            .AppendInterval(timeBasedTransition)
-                            .OnComplete(() => 
-                            {
-                                if (currentFrameText < tutorialFrames[currentFrame].textList.Count)
-                                {
-                                    WriteText();
-                                }
-                            })
-                            .SetUpdate(true);
-                    }
-                    else
-                        canContinue = true;
+                    canContinue = true;
                 });
         }
 

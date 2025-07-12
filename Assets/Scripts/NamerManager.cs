@@ -64,8 +64,6 @@ public class NamerManager : MonoBehaviour
         playerController.LookAtBossAnimation();
         foodBalloonTransform.gameObject.SetActive(false);
 
-        Debug.Log("NamerManager activado. Preparando UI y letras...");
-
         if (startUI != null)
             startUI.SetActive(true);
 
@@ -99,7 +97,6 @@ public class NamerManager : MonoBehaviour
             {
                 foreach (var food in unamedFoods)
                 {
-                    Debug.Log($"Agregando ícono de comida: {food.Name}");
                     foodIcons.Add(food.Icon);
                 }
 
@@ -189,8 +186,6 @@ public class NamerManager : MonoBehaviour
             return;
         }
 
-        Debug.Log($"Input recibido: {inputText}");
-
         // Validar la longitud de la palabra
         int requiredLength = currentInputIndex == 0 ? levelSO.Levels[currentLevel].FirstWordLength : levelSO.Levels[currentLevel].FirstWordLength; // Primera palabra 3 letras, segunda palabra 4 letras
         if (inputText.Length != requiredLength)
@@ -255,10 +250,11 @@ public class NamerManager : MonoBehaviour
 
         });
 
-        // Tutoriales de mierda 
+        // Esto pasa de tutorial frame 1 a 2
         if (TutorialController.Instance.gameObject.activeSelf)
         {
-            TutorialController.Instance.Continue();
+            Debug.Log("NamerManager SkipFrame");
+            TutorialController.Instance.SkipFrame();
         }
 
         if (startUI != null)

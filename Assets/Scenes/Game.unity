@@ -2439,6 +2439,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 129552505}
+  - {fileID: 998845784}
   m_Father: {fileID: 888360129}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
@@ -2460,31 +2461,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPersistent: 0
   tutorialFrames:
-  - textList:
+  - skipWithSpace: 1
+    textList:
     - AAHH, you condemned newbie, this is your first day as a waiter here.
     - Your first labour is to name a few things...
     - The item over my head is from the menu, you have to write whatever name you
       want
     - But only using the available letters above... Each day you'll name 2 new items.
     - 'YOU HAVE TO REMEMBER THEM WELL. '
-    isTimeBased: 1
-  - textList:
-    - Your only next task is to attend the clients. Approach a client and interact.
+  - skipWithSpace: 0
+    textList:
+    - Your only next task is to attend the clients. Wait for the "!" and interact
+      with E.
     - Write down what they've asked.
-    - Then come to me and give me the command, if you misspell the word 3 times,
-      you'll be fired.
+    - Come to me and give me the order, if you misspell the word 3 times, you'll
+      be fired.
     - NOW WORK FOR ME YOU FARTKNOCKER!!
-    isTimeBased: 0
   tutorialText: {fileID: 129552506}
   timeBeforeStartTutorial: 1
   timeBetweenTransition: 1
-  timeBasedTransition: 4
   savePlayerPrefs: 0
   playerPrefsKey: Tutorial
   startPosition: {x: -500, y: 0}
   endPosition: {x: 50, y: 0}
   timePerCharacter: 0.05
   timePerCharacterMultiplier: 3
+  spaceBarTransform: {fileID: 998845784}
 --- !u!114 &314292900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8960,6 +8962,98 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4979662886004102043, guid: ec80148c2cf89f7438301f24c7f67483, type: 3}
   m_PrefabInstance: {fileID: 377297738}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &998845783
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 998845784}
+  - component: {fileID: 998845787}
+  - component: {fileID: 998845786}
+  - component: {fileID: 998845785}
+  m_Layer: 5
+  m_Name: Space Icon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &998845784
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998845783}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 314292898}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: -30}
+  m_SizeDelta: {x: 324.5, y: 68}
+  m_Pivot: {x: 0.5, y: 0}
+--- !u!114 &998845785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998845783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95855bf6a4cc30545a3a6d2ab7e31c3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: 21300000, guid: 0341f9ccb926e424ab5094353924a20c, type: 3}
+  - {fileID: 21300000, guid: 8f0f1d3be7414a44ab4cf23716926a88, type: 3}
+  redrawInterval: 0.2
+--- !u!114 &998845786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998845783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 0341f9ccb926e424ab5094353924a20c, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &998845787
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998845783}
+  m_CullTransparentMesh: 1
 --- !u!1 &1001645782
 GameObject:
   m_ObjectHideFlags: 0

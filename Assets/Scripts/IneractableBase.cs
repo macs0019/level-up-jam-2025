@@ -76,10 +76,6 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
             interactionUIText.text = interactionMessage;
             interactionUIText.gameObject.SetActive(true);
         }
-        else
-        {
-            Debug.Log(interactionMessage);
-        }
     }
 
     public virtual void HideInteractionPrompt()
@@ -87,10 +83,6 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
         if (interactionUIText != null)
         {
             interactionUIText.gameObject.SetActive(false);
-        }
-        else
-        {
-            Debug.Log("Out of range");
         }
     }
 }

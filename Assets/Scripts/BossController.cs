@@ -17,6 +17,7 @@ public class BossController : InteractableBase
         // TUTORIALES DE MIERDA
         if (TutorialController.Instance.gameObject.activeSelf)
         {
+            Debug.Log("BossController Continue");
             TutorialController.Instance.Continue();
         }
 
@@ -46,8 +47,6 @@ public class BossController : InteractableBase
 
     public override void ShowInteractionPrompt()
     {
-
-        Debug.Log("ShowInteractionPrompt called for BossController: " + gameObject.name);
         if (GameManager.Instance.LastInteractedFoodSelector == null)
         {
             return; // No mostrar el mensaje si no hay un FoodSelector interactuado
