@@ -85,7 +85,7 @@ public class NamerManager : MonoBehaviour
             return;
         }
 
-        lengthText.text = " Word length must be " + levelSO.Levels[currentLevel].FirstWordLength;
+        lengthText.text = levelSO.Levels[currentLevel].FirstWordLength + " letters";
 
         // Obtén y almacena los íconos de las comidas
         if (characterSpriteSO != null && foodRenderer != null)
@@ -183,6 +183,9 @@ public class NamerManager : MonoBehaviour
         if (string.IsNullOrEmpty(inputText))
         {
             Debug.LogError("El input no puede estar vacío.");
+
+            playerController.StartShakeAnimation();
+
             return;
         }
 
@@ -194,6 +197,9 @@ public class NamerManager : MonoBehaviour
         {
             Debug.LogError($"La palabra debe tener exactamente {requiredLength} letras.");
             StartCoroutine(FocusInputDelayed());
+
+            playerController.StartShakeAnimation();
+
             return;
         }
 
@@ -211,7 +217,7 @@ public class NamerManager : MonoBehaviour
             // Cambia la imagen y limpia el input
             foodRenderer.transform.DOKill(true);
             foodRenderer.transform.DOPunchScale(Vector3.one / 3f, 0.3f);
-            lengthText.text = " Word length must be " + levelSO.Levels[currentLevel].SecondWordLength;
+            lengthText.text = requiredLength + " letters";
             foodRenderer.sprite = foodIcons[currentInputIndex];
             foodNameInput.text = string.Empty;
             AssignRandomLetters(); // Randomizar letras nuevamente

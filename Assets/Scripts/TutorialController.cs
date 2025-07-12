@@ -106,11 +106,14 @@ namespace Aviss
             }
             else
             {
-                // Event called when the tutorial ends!
-                if (OnTutorialEnd != null)
+                tutorialRect.DOAnchorPos(startPosition, timeBetweenTransition).SetUpdate(true).SetEase(Ease.InOutSine).OnComplete(() =>
                 {
-                    OnTutorialEnd();
-                }
+                    // Event called when the tutorial ends!
+                    if (OnTutorialEnd != null)
+                    {
+                        OnTutorialEnd();
+                    }
+                });
             }
         }
 
