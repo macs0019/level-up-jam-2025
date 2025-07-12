@@ -247,7 +247,7 @@ public class NamerManager : MonoBehaviour
                 rememberImages[i].sprite = unamedFoods[i].Icon;
                 rememberText[i].text = unamedFoods[i].Name;
 
-                rememberImages[i].SetNativeSize();
+                //rememberImages[i].SetNativeSize();
             }
 
             rememberImages[i].gameObject.SetActive(i < unamedFoods.Count);
