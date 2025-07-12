@@ -283,6 +283,7 @@ public class GameManager : MonoBehaviour
 
         // Instanciar el muncho
         GameObject muncho = Instantiate(munchoPrefab, path[0].position, Quaternion.identity);
+        AudioController.Instance.Play("Door");
 
         // Configurar propiedades adicionales del muncho
         FoodSelector foodSelector = muncho.GetComponent<FoodSelector>();

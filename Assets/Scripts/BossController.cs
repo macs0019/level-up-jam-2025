@@ -28,6 +28,7 @@ public class BossController : InteractableBase
         // Lógica adicional para la interacción con el jefe
         if (error)
         {
+            AudioController.Instance.Play("Boss angry");
             bossTransform.DOShakePosition(
                 duration: 0.8f,
                 strength: new Vector3(1.5f, 1.5f, 0f),
@@ -39,6 +40,7 @@ public class BossController : InteractableBase
         }
         else
         {
+            AudioController.Instance.Play("Boss happy");
             bossTransform.DOScale(1.3f, 0.3f)
               .SetLoops(4, LoopType.Yoyo)
               .SetEase(Ease.InOutSine);

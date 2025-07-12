@@ -238,6 +238,8 @@ public class NamerManager : MonoBehaviour
 
     private void EnableRememberContainer()
     {
+
+        unamedFoods = characterSpriteSO.GetNamedFoods();
         for (int i = 0; i < rememberImages.Length; i++)
         {
             if (i < unamedFoods.Count)
@@ -351,6 +353,7 @@ public class NamerManager : MonoBehaviour
 
         if (Keyboard.current != null && Keyboard.current.enterKey.wasPressedThisFrame && canSkipRememberingView)
         {
+            rememberContainer.SetActive(false);  
             rememberContainer.GetComponent<RectTransform>().DOAnchorPosX(800f, 0.5f);
             canSkipRememberingView = false; // Resetear la variable para evitar saltar la vista de recuerdos múltiples veces
             OnAllInputsFilled(); // Llamar a la lógica de finalizar después de desactivar el contenedor

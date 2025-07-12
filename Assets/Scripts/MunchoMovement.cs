@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using Aviss;
 
 public class MunchoMovement : MonoBehaviour
 {
@@ -132,6 +133,7 @@ public class MunchoMovement : MonoBehaviour
         // Reseteamos la animación antes de terminar
         sequence.AppendCallback(() =>
         {
+            AudioController.Instance.Play("Door");
             ResetWalkingAnimation();
         });
 

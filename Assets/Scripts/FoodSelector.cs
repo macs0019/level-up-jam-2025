@@ -117,6 +117,7 @@ public class FoodSelector : InteractableBase
             // Hacer visible el objeto oculto
             if (speechBalloon != null)
             {
+                AudioController.Instance.Play("Bubble");
                 speechBalloon.SetActive(true);
                 speechBalloon.transform.localScale = Vector3.zero;
 
@@ -198,6 +199,7 @@ public class FoodSelector : InteractableBase
                     TutorialController.Instance.Continue();
                 }
 
+
                 // Llamar al GameManager para agregar el comando
                 if (GameManager.Instance != null && foods != null && targetRenderer != null && selectedFoodSprite != null)
                 {
@@ -206,6 +208,7 @@ public class FoodSelector : InteractableBase
                     if (selectedFood != null)
                     {
                         SetFoodSprites(selectedFoodSprite);
+                        AudioController.Instance.Play("Muncho Talk");
                         GameManager.Instance.AddCommand(selectedFood.Name, this);
                     }
                     else

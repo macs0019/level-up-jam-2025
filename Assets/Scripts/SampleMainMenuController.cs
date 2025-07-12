@@ -12,6 +12,12 @@ public class SampleMainMenuController : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         mainMenuScreen.SetActive(true);
         helpMenuScreen.SetActive(false);
+
+    }
+
+    public void Start()
+    {
+        AudioController.Instance.Play("Music");
     }
 
     public void Play()
