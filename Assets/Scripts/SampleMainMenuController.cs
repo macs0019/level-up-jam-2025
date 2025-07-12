@@ -22,6 +22,7 @@ public class SampleMainMenuController : MonoBehaviour
 
     public void Play()
     {
+        AudioController.Instance.Play("Menu Button");
         SceneController.Instance.LoadScene(1);
     }
 
@@ -32,6 +33,7 @@ public class SampleMainMenuController : MonoBehaviour
 
     public void Help()
     {
+        AudioController.Instance.Play("Menu Button");
         helpMenuScreen.SetActive(true);
 
         mainMenuScreen.GetComponent<RectTransform>().DOAnchorPosX(800, 0.4f).OnComplete(() =>
@@ -43,6 +45,7 @@ public class SampleMainMenuController : MonoBehaviour
 
     public void Back()
     {
+        AudioController.Instance.Play("Menu Button");
         mainMenuScreen.SetActive(true);
 
         helpMenuScreen.GetComponent<RectTransform>().DOAnchorPosX(800, 0.4f).OnComplete(() =>

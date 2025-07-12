@@ -219,6 +219,8 @@ public class NamerManager : MonoBehaviour
 
         currentInputIndex++;
 
+        AudioController.Instance.Play("Writting Next");
+        
         if (currentInputIndex < foodIcons.Count)
         {
             // Cambia la imagen y limpia el input
@@ -232,6 +234,7 @@ public class NamerManager : MonoBehaviour
         }
         else
         {
+
             EnableRememberContainer();
         }
     }
@@ -355,6 +358,7 @@ public class NamerManager : MonoBehaviour
         {
             //rememberContainer.SetActive(false);  
             rememberContainer.GetComponent<RectTransform>().DOAnchorPosX(800f, 0.5f);
+            AudioController.Instance.Play("Writting Next");
             canSkipRememberingView = false; // Resetear la variable para evitar saltar la vista de recuerdos múltiples veces
             OnAllInputsFilled(); // Llamar a la lógica de finalizar después de desactivar el contenedor
         }
