@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Aviss;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -145,7 +146,7 @@ public class GameManager : MonoBehaviour
                     LastInteractedFoodSelector = foodSelector;
                     foodSelector.OrderTaken = true; // Marcar que el pedido ha sido tomado
 
-                    error = input.Equals(foodName, System.StringComparison.OrdinalIgnoreCase); // Comparar el texto ingresado con el nombre de la comida
+                    error = !input.Equals(foodName, System.StringComparison.OrdinalIgnoreCase); // Comparar el texto ingresado con el nombre de la comida
 
                     // Agregar la palabra ingresada al texto
                     if (enteredWordsText != null)
@@ -221,7 +222,10 @@ public class GameManager : MonoBehaviour
         {
             if (lives[i].activeSelf)
             {
-                lives[i].SetActive(false); // Deshabilitar la vida más a la derecha
+                lives[i].GetComponent<RectTransform>().DOShakeAnchorPos(0.5f).OnComplete(() =>
+                {
+                    lives[i].SetActive(false); // Deshabilitar la vida más a la derecha
+                });
                 currentLives--; // Restar una vida del contador
                 break;
             }
@@ -316,12 +320,12 @@ public class GameManager : MonoBehaviour
             if (munchoMovement != null && munchoMovement.ShouldLeave())
             {
                 // Manejar la salida usando DOTween
-                HandleFoodSelectorLeavingWithDelay(foodSelectorToLeave);
+                HandleFoodSelectorLeavingWithDelay(foodSelectorToLeave, false);
             }
         }
     }
 
-    public void HandleFoodSelectorLeavingWithDelay(FoodSelector foodSelector)
+    public void HandleFoodSelectorLeavingWithDelay(FoodSelector foodSelector, bool subtractLife = true)
     {
         foodSelector.enabled = false;
 
@@ -337,6 +341,12 @@ public class GameManager : MonoBehaviour
                 {
                     targetTable.isOccupied = false;
                     occupiedTablesCount--;
+                }
+
+                // Si se debe restar una vida, hacerlo
+                if (subtractLife)
+                {
+                    SubtractLife();
                 }
 
                 Destroy(foodSelector.gameObject);
