@@ -212,7 +212,7 @@ public class PlayerController : MonoBehaviour
 
         restartSeq
             .Join(this.transform.DOMove(new Vector3(0.4f, -1.3f, 0.3f), 1f))
-            .Join(cameraTransform.DORotateQuaternion(new Quaternion(-0.0225575808f, -0.962250173f, -0.084186025f, 0.257834226f), 1f))
+            .Join(cameraTransform.DORotateQuaternion(new Quaternion(-0.0203461256f,-0.968669772f,-0.0847476646f,0.232557163f), 1f))
             .Join(leftArm.DOLocalMove(new Vector3(1, -0.3f, 2.4f), 0.4f))
             .Join(rightArm.DOLocalMove(new Vector3(2.4f, -0.1f, 2.4f), 0.4f))
             .OnComplete(() =>
@@ -234,5 +234,19 @@ public class PlayerController : MonoBehaviour
         {
             onComplete?.Invoke();
         });
+    }
+
+    public void StartShakeAnimation()
+    {
+        transform.DOKill(true);
+
+        transform.DOShakePosition(
+            duration: 0.8f,
+            strength: new Vector3(1.5f, 1.5f, 0f),
+            vibrato: 15,
+            randomness: 90f,
+            snapping: false,
+            fadeOut: true
+        );
     }
 }

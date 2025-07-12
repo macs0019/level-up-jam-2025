@@ -43,6 +43,12 @@ public class NamerManager : MonoBehaviour
     private List<FoodPOJO> unamedFoods;
     private List<Sprite> foodIcons;// Lista para almacenar los íconos de las comidas sin nombre
 
+    public LevelSO levelSO; // Referencia al ScriptableObject de niveles
+
+    public TextMeshProUGUI lengthText; // Input único para ingresar el nombre de la comida
+
+    private int currentLevel = 0;
+
     private void Start()
     {
         StartNamingAction();
@@ -58,14 +64,26 @@ public class NamerManager : MonoBehaviour
         playerController.LookAtBossAnimation();
         foodBalloonTransform.gameObject.SetActive(false);
 
-        Debug.Log("NamerManager activado. Preparando UI y letras...");
-
         if (startUI != null)
             startUI.SetActive(true);
 
         // Prepara las letras
         assignedLetters = new char[texts.Count];
         AssignRandomLetters();
+
+        if (levelSO == null || levelSO.Levels == null || levelSO.Levels.Count == 0)
+        {
+            Debug.LogError("levelSO o Levels no están correctamente inicializados.");
+            return;
+        }
+
+        if (currentLevel >= levelSO.Levels.Count)
+        {
+            Debug.LogError("currentLevel está fuera de rango.");
+            return;
+        }
+
+        lengthText.text = levelSO.Levels[currentLevel].FirstWordLength + " letters";
 
         // Obtén y almacena los íconos de las comidas
         if (characterSpriteSO != null && foodRenderer != null)
@@ -79,7 +97,6 @@ public class NamerManager : MonoBehaviour
             {
                 foreach (var food in unamedFoods)
                 {
-                    Debug.Log($"Agregando ícono de comida: {food.Name}");
                     foodIcons.Add(food.Icon);
                 }
 
@@ -123,6 +140,7 @@ public class NamerManager : MonoBehaviour
         {
             text.color = Color.black;
         }
+        
 
         foreach (char c in inputText)
         {
@@ -158,7 +176,27 @@ public class NamerManager : MonoBehaviour
 
     public void HandleSubmit(string inputText)
     {
-        Debug.Log($"Input recibido: {inputText}");
+
+        if (string.IsNullOrEmpty(inputText))
+        {
+            Debug.LogError("El input no puede estar vacío.");
+
+            playerController.StartShakeAnimation();
+
+            return;
+        }
+
+        // Validar la longitud de la palabra
+        int requiredLength = currentInputIndex == 0 ? levelSO.Levels[currentLevel].FirstWordLength : levelSO.Levels[currentLevel].FirstWordLength; // Primera palabra 3 letras, segunda palabra 4 letras
+        if (inputText.Length != requiredLength)
+        {
+            Debug.LogError($"La palabra debe tener exactamente {requiredLength} letras.");
+            StartCoroutine(FocusInputDelayed());
+
+            playerController.StartShakeAnimation();
+
+            return;
+        }
 
         // Guarda el nombre en la lista
         if (currentInputIndex < unamedFoods.Count)
@@ -174,7 +212,7 @@ public class NamerManager : MonoBehaviour
             // Cambia la imagen y limpia el input
             foodRenderer.transform.DOKill(true);
             foodRenderer.transform.DOPunchScale(Vector3.one / 3f, 0.3f);
-
+            lengthText.text = requiredLength + " letters";
             foodRenderer.sprite = foodIcons[currentInputIndex];
             foodNameInput.text = string.Empty;
             AssignRandomLetters(); // Randomizar letras nuevamente
@@ -212,10 +250,11 @@ public class NamerManager : MonoBehaviour
 
         });
 
-        // Tutoriales de mierda 
+        // Esto pasa de tutorial frame 1 a 2
         if (TutorialController.Instance.gameObject.activeSelf)
         {
-            TutorialController.Instance.Continue();
+            Debug.Log("NamerManager SkipFrame");
+            TutorialController.Instance.SkipFrame();
         }
 
         if (startUI != null)
@@ -229,6 +268,7 @@ public class NamerManager : MonoBehaviour
         {
             foodRenderer.sprite = null;
             foodBalloonTransform.gameObject.SetActive(false);
+            currentLevel++;
         }).SetUpdate(true);
     }
 

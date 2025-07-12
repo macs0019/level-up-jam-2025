@@ -169,8 +169,6 @@ public class FoodSelector : InteractableBase
     {
         isFoodActive = false; // Desactivar el indicador de comida activa
 
-        Debug.Log("Desactivando el SpeechBalloon y ocultando la comida.");
-
         HideFoodAnimation(() =>
         {
             speechBalloon.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBack).OnComplete(() =>
@@ -186,7 +184,6 @@ public class FoodSelector : InteractableBase
     {
         if (GameManager.Instance != null && GameManager.Instance.LastInteractedFoodSelector != null && GameManager.Instance.LastInteractedFoodSelector != this)
         {
-            Debug.Log("No puedes interactuar con este FoodSelector porque no es el último interactuado.");
             return;
         }
 
@@ -194,11 +191,10 @@ public class FoodSelector : InteractableBase
         {
             if (playerController != null)
             {
-                Debug.Log("Interactuando con " + gameObject.name);
-
                 // TUTORIALES DE MIERDA
                 if (TutorialController.Instance.gameObject.activeSelf)
                 {
+                    Debug.Log("FoodSelector Continue");
                     TutorialController.Instance.Continue();
                 }
 
@@ -227,10 +223,6 @@ public class FoodSelector : InteractableBase
             {
                 Debug.LogError("PlayerController no está asignado.");
             }
-        }
-        else
-        {
-            Debug.Log("No hay comida activa para interactuar.");
         }
     }
 
@@ -261,8 +253,6 @@ public class FoodSelector : InteractableBase
             return;
         }
 
-        Debug.Log($"HideFoodAnimation called with onComplete: {onComplete}, resetCallSprite: {alreadyFinished}");
-
         isFoodActive = false; // Desactivar el indicador de comida activa
 
         speechBalloon.transform.DOKill(true);
@@ -283,8 +273,6 @@ public class FoodSelector : InteractableBase
 
     public override void ShowInteractionPrompt()
     {
-
-        Debug.Log("ShowInteractionPrompt called for FoodSelector: " + gameObject.name + ", isFoodActive: " + isFoodActive);
         if (!isFoodActive)
         {
             return; // No mostrar el texto de interacción si la comida no está activa
