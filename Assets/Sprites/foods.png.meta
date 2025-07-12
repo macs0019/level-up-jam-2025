@@ -100,10 +100,10 @@ TextureImporter:
       name: foods_0
       rect:
         serializedVersion: 2
-        x: 57
-        y: 888
-        width: 280
-        height: 216
+        x: 0
+        y: 800
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -122,10 +122,10 @@ TextureImporter:
       name: foods_1
       rect:
         serializedVersion: 2
-        x: 482
-        y: 826
-        width: 234
-        height: 347
+        x: 400
+        y: 800
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -144,10 +144,10 @@ TextureImporter:
       name: foods_2
       rect:
         serializedVersion: 2
-        x: 835
-        y: 862
-        width: 319
-        height: 275
+        x: 800
+        y: 800
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,10 +166,10 @@ TextureImporter:
       name: foods_3
       rect:
         serializedVersion: 2
-        x: 1284
-        y: 823
-        width: 232
-        height: 360
+        x: 1200
+        y: 800
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -188,10 +188,10 @@ TextureImporter:
       name: foods_4
       rect:
         serializedVersion: 2
-        x: 1646
-        y: 890
-        width: 308
-        height: 230
+        x: 1600
+        y: 800
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -210,10 +210,10 @@ TextureImporter:
       name: foods_5
       rect:
         serializedVersion: 2
-        x: 2040
-        y: 887
-        width: 292
-        height: 246
+        x: 2000
+        y: 800
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -232,10 +232,10 @@ TextureImporter:
       name: foods_6
       rect:
         serializedVersion: 2
-        x: 2445
-        y: 901
-        width: 300
-        height: 189
+        x: 2400
+        y: 800
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -254,10 +254,10 @@ TextureImporter:
       name: foods_7
       rect:
         serializedVersion: 2
-        x: 2870
-        y: 851
-        width: 225
-        height: 275
+        x: 2800
+        y: 800
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -276,10 +276,10 @@ TextureImporter:
       name: foods_8
       rect:
         serializedVersion: 2
-        x: 38
-        y: 504
-        width: 296
-        height: 211
+        x: 0
+        y: 400
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -298,10 +298,10 @@ TextureImporter:
       name: foods_9
       rect:
         serializedVersion: 2
-        x: 479
-        y: 427
-        width: 255
-        height: 321
+        x: 400
+        y: 400
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -320,10 +320,10 @@ TextureImporter:
       name: foods_10
       rect:
         serializedVersion: 2
-        x: 835
-        y: 523
-        width: 317
-        height: 192
+        x: 800
+        y: 400
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -342,10 +342,10 @@ TextureImporter:
       name: foods_11
       rect:
         serializedVersion: 2
-        x: 1257
-        y: 470
-        width: 297
-        height: 279
+        x: 1200
+        y: 400
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -364,10 +364,10 @@ TextureImporter:
       name: foods_12
       rect:
         serializedVersion: 2
-        x: 1681
-        y: 471
-        width: 260
-        height: 284
+        x: 1600
+        y: 400
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -386,10 +386,10 @@ TextureImporter:
       name: foods_13
       rect:
         serializedVersion: 2
-        x: 2054
-        y: 485
-        width: 306
-        height: 255
+        x: 2000
+        y: 400
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -408,10 +408,10 @@ TextureImporter:
       name: foods_14
       rect:
         serializedVersion: 2
-        x: 2473
-        y: 471
-        width: 261
-        height: 269
+        x: 2400
+        y: 400
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -430,10 +430,10 @@ TextureImporter:
       name: foods_15
       rect:
         serializedVersion: 2
-        x: 2868
-        y: 490
-        width: 275
-        height: 253
+        x: 2800
+        y: 400
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -452,10 +452,10 @@ TextureImporter:
       name: foods_16
       rect:
         serializedVersion: 2
-        x: 96
-        y: 23
-        width: 161
-        height: 334
+        x: 0
+        y: 0
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -474,10 +474,10 @@ TextureImporter:
       name: foods_17
       rect:
         serializedVersion: 2
-        x: 463
-        y: 52
-        width: 250
-        height: 288
+        x: 400
+        y: 0
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -496,10 +496,10 @@ TextureImporter:
       name: foods_18
       rect:
         serializedVersion: 2
-        x: 885
-        y: 52
-        width: 219
-        height: 294
+        x: 800
+        y: 0
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -518,10 +518,10 @@ TextureImporter:
       name: foods_19
       rect:
         serializedVersion: 2
-        x: 1274
-        y: 54
-        width: 259
-        height: 292
+        x: 1200
+        y: 0
+        width: 400
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -550,7 +550,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":400.0,"y":400.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       foods_0: 1185371030
       foods_1: -364339629

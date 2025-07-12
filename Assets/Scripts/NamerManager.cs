@@ -232,32 +232,33 @@ public class NamerManager : MonoBehaviour
         }
         else
         {
-            enableRememberingView();
-            //OnAllInputsFilled();
+            EnableRememberContainer();
         }
     }
 
-    private void enableRememberingView()
+    private void EnableRememberContainer()
     {
         for (int i = 0; i < rememberImages.Length; i++)
         {
             if (i < unamedFoods.Count)
             {
-                rememberImages[i].gameObject.SetActive(true);
-                rememberText[i].gameObject.SetActive(true);
                 rememberImages[i].sprite = unamedFoods[i].Icon;
                 rememberText[i].text = unamedFoods[i].Name;
 
+                rememberImages[i].SetNativeSize();
             }
+
+            rememberImages[i].gameObject.SetActive(i < unamedFoods.Count);
+            rememberText[i].gameObject.SetActive(i < unamedFoods.Count);
         }
         if (startUI != null)
             startUI.SetActive(false);
 
-        // Activa una variable tras 1 segundo usando DOTween
-
-        DOVirtual.DelayedCall(1, () => { canSkipRememberingView = true; });
-        rememberContainer.SetActive(true);
-
+        // Activa una variable tras .5 segundos usando DOTween
+        rememberContainer.GetComponent<RectTransform>().DOAnchorPosX(-60f, 0.5f).OnComplete(() =>
+        {
+            canSkipRememberingView = true;
+        });
     }
 
     private IEnumerator FocusInputDelayed()
@@ -348,9 +349,9 @@ public class NamerManager : MonoBehaviour
     private void Update()
     {
 
-        if (rememberContainer.activeSelf && Keyboard.current != null && Keyboard.current.enterKey.wasPressedThisFrame && canSkipRememberingView)
+        if (Keyboard.current != null && Keyboard.current.enterKey.wasPressedThisFrame && canSkipRememberingView)
         {
-            rememberContainer.SetActive(false);
+            rememberContainer.GetComponent<RectTransform>().DOAnchorPosX(800f, 0.5f);
             canSkipRememberingView = false; // Resetear la variable para evitar saltar la vista de recuerdos múltiples veces
             OnAllInputsFilled(); // Llamar a la lógica de finalizar después de desactivar el contenedor
         }
