@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 using Aviss;
+using UnityEngine.InputSystem;
 
 public class NamerManager : MonoBehaviour
 {
@@ -48,6 +49,14 @@ public class NamerManager : MonoBehaviour
     public TextMeshProUGUI lengthText; // Input único para ingresar el nombre de la comida
 
     private int currentLevel = 0;
+
+    [Header("Recuerdos de UI")]
+    public Image[] rememberImages; // Array de imágenes de UI
+    public TextMeshProUGUI[] rememberText; // Array de textos de UI
+
+    public GameObject rememberContainer;
+
+    private bool canSkipRememberingView = false;
 
     private void Start()
     {
@@ -140,7 +149,7 @@ public class NamerManager : MonoBehaviour
         {
             text.color = Color.black;
         }
-        
+
 
         foreach (char c in inputText)
         {
@@ -187,7 +196,10 @@ public class NamerManager : MonoBehaviour
         }
 
         // Validar la longitud de la palabra
-        int requiredLength = currentInputIndex == 0 ? levelSO.Levels[currentLevel].FirstWordLength : levelSO.Levels[currentLevel].FirstWordLength; // Primera palabra 3 letras, segunda palabra 4 letras
+        int requiredLength = currentInputIndex == 0 ? levelSO.Levels[currentLevel].FirstWordLength : levelSO.Levels[currentLevel].SecondWordLength;
+
+        Debug.Log($"[DEBUG] currentInputIndex: {currentInputIndex}, currentLevel: {currentLevel}");
+
         if (inputText.Length != requiredLength)
         {
             Debug.LogError($"La palabra debe tener exactamente {requiredLength} letras.");
@@ -212,7 +224,7 @@ public class NamerManager : MonoBehaviour
             // Cambia la imagen y limpia el input
             foodRenderer.transform.DOKill(true);
             foodRenderer.transform.DOPunchScale(Vector3.one / 3f, 0.3f);
-            lengthText.text = requiredLength + " letters";
+            lengthText.text = levelSO.Levels[currentLevel].SecondWordLength + " letters";
             foodRenderer.sprite = foodIcons[currentInputIndex];
             foodNameInput.text = string.Empty;
             AssignRandomLetters(); // Randomizar letras nuevamente
@@ -220,8 +232,32 @@ public class NamerManager : MonoBehaviour
         }
         else
         {
-            OnAllInputsFilled();
+            enableRememberingView();
+            //OnAllInputsFilled();
         }
+    }
+
+    private void enableRememberingView()
+    {
+        for (int i = 0; i < rememberImages.Length; i++)
+        {
+            if (i < unamedFoods.Count)
+            {
+                rememberImages[i].gameObject.SetActive(true);
+                rememberText[i].gameObject.SetActive(true);
+                rememberImages[i].sprite = unamedFoods[i].Icon;
+                rememberText[i].text = unamedFoods[i].Name;
+
+            }
+        }
+        if (startUI != null)
+            startUI.SetActive(false);
+
+        // Activa una variable tras 1 segundo usando DOTween
+
+        DOVirtual.DelayedCall(1, () => { canSkipRememberingView = true; });
+        rememberContainer.SetActive(true);
+
     }
 
     private IEnumerator FocusInputDelayed()
@@ -311,6 +347,14 @@ public class NamerManager : MonoBehaviour
 
     private void Update()
     {
+
+        if (rememberContainer.activeSelf && Keyboard.current != null && Keyboard.current.enterKey.wasPressedThisFrame && canSkipRememberingView)
+        {
+            rememberContainer.SetActive(false);
+            canSkipRememberingView = false; // Resetear la variable para evitar saltar la vista de recuerdos múltiples veces
+            OnAllInputsFilled(); // Llamar a la lógica de finalizar después de desactivar el contenedor
+        }
+
         // Forzar el foco en el campo de texto si se pierde
         if (EventSystem.current.currentSelectedGameObject != foodNameInput.gameObject && GameManager.Instance.IsNamingFood)
         {
