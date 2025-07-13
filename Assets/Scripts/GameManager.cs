@@ -305,6 +305,9 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Spawning muncho at {path[0].position} on table with path length {path.Length}");
         GameObject muncho = Instantiate(munchoPrefab, path[0].position, Quaternion.identity);
 
+        // Incrementar el contador de munchos que han salido
+        exitedMunchosCount++;
+
         // Asignar el tiempo de espera al componente FoodSelector
         FoodSelector munchoFoodSelector = muncho.GetComponent<FoodSelector>();
         if (munchoFoodSelector != null)
@@ -378,9 +381,6 @@ public class GameManager : MonoBehaviour
                 }
 
                 Destroy(foodSelector.gameObject);
-
-                // Incrementar el contador de munchos que han salido
-                exitedMunchosCount++;
 
                 // Comprobar si todos los munchos han salido
                 if (exitedMunchosCount >= levelSO.Levels[currentLevel].MaxMunchos && occupiedTablesCount == 0)
