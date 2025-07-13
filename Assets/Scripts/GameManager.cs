@@ -59,8 +59,6 @@ public class GameManager : MonoBehaviour
 
     private int exitedMunchosCount = 0; // Contador de munchos que han salido
 
-    private int NumberMunchosLeft = 0;
-
     private bool isNamingFood = true;
 
     public bool IsNamingFood { get => isNamingFood; set => isNamingFood = value; }
@@ -165,7 +163,7 @@ public class GameManager : MonoBehaviour
                     if (TutorialController.Instance.gameObject.activeSelf)
                     {
                         Debug.Log("GameManager Continue");
-                        TutorialController.Instance.Continue();
+                        TutorialController.Instance.NextText();
                     }
 
                     // Reactivar el movimiento del jugador

@@ -58,6 +58,11 @@ public class NamerManager : MonoBehaviour
 
     private bool canSkipRememberingView = false;
 
+    private void Awake()
+    {
+        characterSpriteSO.ResetFoodNames();
+    }
+
     private void Start()
     {
         StartNamingAction();

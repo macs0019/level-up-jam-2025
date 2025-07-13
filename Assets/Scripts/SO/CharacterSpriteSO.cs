@@ -30,6 +30,11 @@ public class CharacterSpriteSO : ScriptableObject
     // OnEnable se dispara, así que:
     void OnValidate()
     {
+        ResetFoodNames();
+    }
+
+    public void ResetFoodNames()
+    {
         foods.ForEach(f => f.Name = "");
     }
 

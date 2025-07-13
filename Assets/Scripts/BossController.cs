@@ -18,7 +18,12 @@ public class BossController : InteractableBase
         if (TutorialController.Instance.gameObject.activeSelf)
         {
             Debug.Log("BossController Continue");
-            TutorialController.Instance.Continue();
+            TutorialController.Instance.NextText();
+
+            DOVirtual.DelayedCall(2f, () =>
+            {
+                TutorialController.Instance.NextText();
+            });
         }
 
         GameManager.Instance.InteractWithBossController();
