@@ -8,9 +8,7 @@ public class LevelPOJO
     public int NumberOfOccupiedTables;
     public int MaxMunchos;
     public float MunchoEntryDelay;
-    public int FirstWordLength;
-    public int SecondWordLength;
+    public int WordLength;
     public float waitingTime;
-    public int numberOfFoods;
 
 }

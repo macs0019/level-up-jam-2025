@@ -97,7 +97,7 @@ public class NamerManager : MonoBehaviour
             return;
         }
 
-        lengthText.text = levelSO.Levels[currentLevel].FirstWordLength + " letters";
+        lengthText.text = levelSO.Levels[currentLevel].WordLength + " letters";
 
         // Obtén y almacena los íconos de las comidas
         if (characterSpriteSO != null && foodRenderer != null)
@@ -201,7 +201,7 @@ public class NamerManager : MonoBehaviour
         }
 
         // Validar la longitud de la palabra
-        int requiredLength = currentInputIndex == 0 ? levelSO.Levels[currentLevel].FirstWordLength : levelSO.Levels[currentLevel].SecondWordLength;
+        int requiredLength = levelSO.Levels[currentLevel].WordLength; 
 
         Debug.Log($"[DEBUG] currentInputIndex: {currentInputIndex}, currentLevel: {currentLevel}");
 
@@ -231,7 +231,6 @@ public class NamerManager : MonoBehaviour
             // Cambia la imagen y limpia el input
             foodRenderer.transform.DOKill(true);
             foodRenderer.transform.DOPunchScale(Vector3.one / 3f, 0.3f);
-            lengthText.text = levelSO.Levels[currentLevel].SecondWordLength + " letters";
             foodRenderer.sprite = foodIcons[currentInputIndex];
             foodNameInput.text = string.Empty;
             AssignRandomLetters(); // Randomizar letras nuevamente
