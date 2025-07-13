@@ -3700,15 +3700,15 @@ MonoBehaviour:
     - Your first labour is to name a few things...
     - The item over my head is from the menu, you have to write whatever name you
       want
-    - But only using the available letters above... Each day you'll name 2 new items.
-    - YOU HAVE TO REMEMBER THEM WELL. (Press Enter for submit)
+    - But only using the available letters above... Each day you'll name new items.
+    - YOU HAVE TO REMEMBER THEM WELL. (Press Enter when the name is ready)
   - skipWithSpace: 0
     textList:
     - Your only next task is to attend the clients. Wait for the "!" and interact
       with E.
     - Write down what they've asked. You can press Esc to quit interacting, and Enter
       for submit.
-    - Come to me and give me the order, if you misspell the word 10 times, you'll
+    - Come to me and give me the order, if you misspell the word 5 times, you'll
       be fired.
     - NOW WORK FOR ME YOU FARTKNOCKER!!
   tutorialText: {fileID: 129552506}

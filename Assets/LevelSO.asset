@@ -25,47 +25,54 @@ MonoBehaviour:
     MunchoEntryDelay: 3
     FirstWordLength: 4
     SecondWordLength: 0
-    waitingTime: 20
+    waitingTime: 15
     numberOfNamings: 1
   - NumberOfOccupiedTables: 2
-    MaxMunchos: 6
+    MaxMunchos: 4
     MunchoEntryDelay: 4
     FirstWordLength: 5
     SecondWordLength: 0
-    waitingTime: 25
+    waitingTime: 15
     numberOfNamings: 1
   - NumberOfOccupiedTables: 3
     MaxMunchos: 6
     MunchoEntryDelay: 4
     FirstWordLength: 6
     SecondWordLength: 0
-    waitingTime: 30
+    waitingTime: 15
     numberOfNamings: 1
   - NumberOfOccupiedTables: 3
     MaxMunchos: 8
     MunchoEntryDelay: 4
     FirstWordLength: 7
     SecondWordLength: 0
-    waitingTime: 25
+    waitingTime: 20
     numberOfNamings: 1
-  - NumberOfOccupiedTables: 3
-    MaxMunchos: 10
-    MunchoEntryDelay: 5
-    FirstWordLength: 3
-    SecondWordLength: 4
-    waitingTime: 25
-    numberOfNamings: 2
   - NumberOfOccupiedTables: 4
     MaxMunchos: 8
     MunchoEntryDelay: 5
+    FirstWordLength: 3
+    SecondWordLength: 4
+    waitingTime: 20
+    numberOfNamings: 2
+  - NumberOfOccupiedTables: 5
+    MaxMunchos: 7
+    MunchoEntryDelay: 5
     FirstWordLength: 4
     SecondWordLength: 5
-    waitingTime: 30
+    waitingTime: 20
     numberOfNamings: 2
   - NumberOfOccupiedTables: 4
     MaxMunchos: 10
     MunchoEntryDelay: 5
     FirstWordLength: 5
     SecondWordLength: 6
-    waitingTime: 30
+    waitingTime: 20
     numberOfNamings: 2
+  - NumberOfOccupiedTables: 5
+    MaxMunchos: 10
+    MunchoEntryDelay: 5
+    FirstWordLength: 10
+    SecondWordLength: 0
+    waitingTime: 20
+    numberOfNamings: 1
