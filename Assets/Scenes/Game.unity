@@ -1377,7 +1377,7 @@ MonoBehaviour:
   maxLetterRepetitions: 2
   characterSpriteSO: {fileID: 11400000, guid: da5f316c0b5266643b2d51cadd9fcbff, type: 2}
   foodRenderers: []
-  numberOfUnamedFoods: 2
+  numberOfUnamedFoods: 1
   foodNameInput: {fileID: 828211243}
   foodBalloonTransform: {fileID: 3896983649601502946}
   foodRenderer: {fileID: 178826376645453198}
