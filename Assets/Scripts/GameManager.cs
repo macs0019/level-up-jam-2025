@@ -53,8 +53,6 @@ public class GameManager : MonoBehaviour
 
     private int exitedMunchosCount = 0; // Contador de munchos que han salido
 
-    private int NumberMunchosLeft = 0;
-
     private bool isNamingFood = true;
 
     public bool IsNamingFood { get => isNamingFood; set => isNamingFood = value; }
