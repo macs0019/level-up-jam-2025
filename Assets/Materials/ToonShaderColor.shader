@@ -1,62 +1,74 @@
-Shader "Unlit/ToonShader_2Tint"
+Shader"Custom/URPToon2Tint"
 {
     Properties
     {
-        _Albedo    ("Light Color", Color) = (1,1,1,1)
-        _InkColor  ("Dark Color",  Color) = (0,0,0,1)
-        _Shades    ("Shades",       Range(1,20)) = 3
-        _InkSize   ("Ink Size",     float) = 1.0
+        _LightColor   ("Light Color", Color) = (1,1,1,1)
+        _DarkColor    ("Dark Color",  Color) = (0,0,0,1)
+        _Shades       ("Shades",       Range(1,20)) = 3
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
-        LOD 100
+        Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="Opaque" }
+LOD 100
 
         Pass
         {
-            CGPROGRAM
+Name"UniversalForward"
+            Tags
+{"LightMode"="UniversalForward"
+}
+
+Blend Off
+
+Cull Back
+
+ZWrite On
+
+            HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
-            #include "UnityCG.cginc"
+struct Attributes
+{
+    float3 positionOS : POSITION;
+    float3 normalOS : NORMAL;
+};
 
-            struct appdata
-            {
-                float4 vertex : POSITION;
-                float3 normal : NORMAL;
-            };
+struct Varyings
+{
+    float4 positionCS : SV_POSITION;
+    float3 normalWS : TEXCOORD0;
+};
 
-            struct v2f
-            {
-                float4 pos         : SV_POSITION;
-                float3 worldNormal : TEXCOORD0;
-            };
+float4 _LightColor;
+float4 _DarkColor;
+float _Shades;
 
-            float4 _Albedo;
-            float4 _InkColor;
-            float  _Shades;
+Varyings vert(Attributes IN)
+{
+    Varyings OUT;
+                // posición
+    OUT.positionCS = TransformObjectToHClip(IN.positionOS);
+                // normal en mundo
+    OUT.normalWS = TransformObjectToWorldNormal(IN.normalOS);
+    return OUT;
+}
 
-            v2f vert(appdata v)
-            {
-                v2f o;
-                o.pos = UnityObjectToClipPos(v.vertex);
-                o.worldNormal = UnityObjectToWorldNormal(v.normal);
-                return o;
-            }
+half4 frag(Varyings IN) : SV_Target
+{
+                // iluminación principal
+    float3 L = _MainLightPosition.xyz; // viene de Core.hlsl
+    float NdotL = dot(normalize(IN.normalWS), normalize(L));
+    NdotL = saturate(NdotL);
 
-            fixed4 frag(v2f i) : SV_Target
-            {
-                // cálculo del ángulo luz-superficie
-                float NdotL = dot(normalize(i.worldNormal), normalize(_WorldSpaceLightPos0.xyz));
-                NdotL = saturate(NdotL);
+                // toon-step
+    float level = floor(NdotL * _Shades) / (_Shades - 1);
 
-                // cuantización toon
-                float level = floor(NdotL * _Shades) / (_Shades - 1);
-
-                // interpolación entre color oscuro y claro
-                return lerp(_InkColor, _Albedo, level);
-            }
-            ENDCG
+                // mezcla de dos colores
+    return lerp(_DarkColor, _LightColor, level);
+}
+            ENDHLSL
         }
     }
 }
