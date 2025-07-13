@@ -62,11 +62,13 @@ public class GameManager : MonoBehaviour
     private bool isNamingFood = true;
 
     public bool IsNamingFood { get => isNamingFood; set => isNamingFood = value; }
+    public bool IsPaused { get => isPaused; set => isPaused = value; }
 
     [Header("Level Configuration")]
     public LevelSO levelSO; // Referencia al ScriptableObject LevelSO
 
     private int currentLevel = 0; // Nivel actual, comienza en 0
+    private bool isPaused = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -93,7 +95,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isNamingFood)
+        if (!isNamingFood && !isPaused)
         {
             spawnTimer += Time.deltaTime;
 
@@ -233,14 +235,18 @@ public class GameManager : MonoBehaviour
                 });
                 currentLives--; // Restar una vida del contador
 
-                /*if (currentLives == 0)
+                if (currentLives == 0)
                 {
-                    endScreen.SetActive(true); // Mostrar pantalla de fin de juego
-                    Time.timeScale = 0f; // Pausar el juego
+                    endScreen.GetComponent<RectTransform>().DOAnchorPosY(0, 0.8f).SetEase(Ease.OutBack).OnComplete(() =>
+                    {
+                        isPaused = true;
+                        Cursor.lockState = CursorLockMode.None;
+                    });
+
                     youLoseTitle.SetActive(true); // Mostrar título de derrota
-                    isNamingFood = false; // Desactivar el modo de nombrar comida
+                    isNamingFood = true; // Desactivar el modo de nombrar comida
                     AudioController.Instance.Play("GameOver");
-                }*/
+                }
                 break;
             }
         }
@@ -312,7 +318,6 @@ public class GameManager : MonoBehaviour
         FoodSelector foodSelector = muncho.GetComponent<FoodSelector>();
         if (foodSelector != null)
         {
-
             // Asignar propiedades desde el Inspector
             foodSelector.interactionUIText = interactionUIText as TextMeshProUGUI;
             foodSelector.playerController = playerController;
@@ -413,13 +418,20 @@ public class GameManager : MonoBehaviour
         if (namerManager != null)
         {
             currentLevel++;
+
             if (currentLevel >= levelSO.Levels.Count)
             {
-                Time.timeScale = 0f; // Pausar el juego
-                endScreen.SetActive(true); // Mostrar pantalla de fin de juego
+                isPaused = true; // Pausar el juego si se ha alcanzado el último nivel
+                Cursor.lockState = CursorLockMode.None;
+
+                endScreen.GetComponent<RectTransform>().DOAnchorPosY(0, 0.8f).SetEase(Ease.OutBack);
+
                 youWinTitle.SetActive(true); // Mostrar título de victoria
             }
-            namerManager.StartNamingAction();
+            else
+            {
+                namerManager.StartNamingAction();
+            }
         }
     }
 
