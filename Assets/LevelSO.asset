@@ -24,7 +24,7 @@ MonoBehaviour:
     WordLength: 3
     waitingTime: 20
   - NumberOfOccupiedTables: 2
-    MaxMunchos: 5
+    MaxMunchos: 3
     MunchoEntryDelay: 4
     WordLength: 4
     waitingTime: 25
@@ -34,28 +34,78 @@ MonoBehaviour:
     WordLength: 5
     waitingTime: 30
   - NumberOfOccupiedTables: 3
-    MaxMunchos: 7
+    MaxMunchos: 5
+    MunchoEntryDelay: 5
+    WordLength: 4
+    waitingTime: 25
+  - NumberOfOccupiedTables: 3
+    MaxMunchos: 5
+    MunchoEntryDelay: 5
+    WordLength: 3
+    waitingTime: 30
+  - NumberOfOccupiedTables: 3
+    MaxMunchos: 5
     MunchoEntryDelay: 5
     WordLength: 4
     waitingTime: 30
   - NumberOfOccupiedTables: 3
     MaxMunchos: 7
     MunchoEntryDelay: 5
-    WordLength: 4
+    WordLength: 5
+    waitingTime: 25
+  - NumberOfOccupiedTables: 3
+    MaxMunchos: 7
+    MunchoEntryDelay: 5
+    WordLength: 6
     waitingTime: 30
   - NumberOfOccupiedTables: 3
-    MaxMunchos: 11
+    MaxMunchos: 7
     MunchoEntryDelay: 5
-    WordLength: 3
+    WordLength: 4
     waitingTime: 30
-  - NumberOfOccupiedTables: 4
-    MaxMunchos: 11
-    MunchoEntryDelay: 5
-    WordLength: 3
-    waitingTime: 30
-  - NumberOfOccupiedTables: 4
+  - NumberOfOccupiedTables: 5
     MaxMunchos: 13
     MunchoEntryDelay: 4
+    WordLength: 1
+    waitingTime: 30
+  - NumberOfOccupiedTables: 4
+    MaxMunchos: 7
+    MunchoEntryDelay: 6
+    WordLength: 5
+    waitingTime: 30
+  - NumberOfOccupiedTables: 5
+    MaxMunchos: 13
+    MunchoEntryDelay: 4
+    WordLength: 1
+    waitingTime: 30
+  - NumberOfOccupiedTables: 5
+    MaxMunchos: 13
+    MunchoEntryDelay: 4
+    WordLength: 1
+    waitingTime: 30
+  - NumberOfOccupiedTables: 5
+    MaxMunchos: 13
+    MunchoEntryDelay: 4
+    WordLength: 1
+    waitingTime: 30
+  - NumberOfOccupiedTables: 4
+    MaxMunchos: 9
+    MunchoEntryDelay: 6
+    WordLength: 4
+    waitingTime: 25
+  - NumberOfOccupiedTables: 4
+    MaxMunchos: 11
+    MunchoEntryDelay: 6
+    WordLength: 3
+    waitingTime: 30
+  - NumberOfOccupiedTables: 5
+    MaxMunchos: 11
+    MunchoEntryDelay: 6
+    WordLength: 5
+    waitingTime: 25
+  - NumberOfOccupiedTables: 5
+    MaxMunchos: 13
+    MunchoEntryDelay: 5
     WordLength: 4
     waitingTime: 30
   - NumberOfOccupiedTables: 5
