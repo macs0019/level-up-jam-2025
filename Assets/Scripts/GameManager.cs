@@ -243,6 +243,8 @@ public class GameManager : MonoBehaviour
                     });
 
                     youLoseTitle.SetActive(true); // Mostrar título de derrota
+                    Cursor.lockState = CursorLockMode.Confined;
+                    Cursor.visible = true;
                     isNamingFood = true; // Desactivar el modo de nombrar comida
                     AudioController.Instance.Play("GameOver");
                 }
@@ -427,6 +429,8 @@ public class GameManager : MonoBehaviour
                 endScreen.GetComponent<RectTransform>().DOAnchorPosY(0, 0.8f).SetEase(Ease.OutBack);
                 AudioController.Instance.Play("Victory");
                 youWinTitle.SetActive(true); // Mostrar título de victoria
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = true;
             }
             else
             {
