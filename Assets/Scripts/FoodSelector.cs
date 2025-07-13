@@ -317,8 +317,8 @@ public class FoodSelector : InteractableBase
 
     private void SetFoodCallingSprites()
     {
-        // Si queda menos del 20% de la duración activa, usa el sprite "enfadado"
-        if (remainingTime < activeTime * 0.2f)
+        // Si queda menos del 35% de la duración activa, usa el sprite "enfadado"
+        if (remainingTime < activeTime * 0.35f)
         {
             targetRenderer.Sprites = foodAngryCallSprites;
 

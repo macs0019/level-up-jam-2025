@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject munchoPrefab; // Prefab del muncho
     private int occupiedTablesCount = 0; // Contador de mesas ocupadas
-    private float spawnTimer = 0f; // Temporizador para el spawn de munchos
+    private float spawnTimer = 3f; // Temporizador para el spawn de munchos
 
     public NamerManager namerManager; // Referencia al NamerManager
 
@@ -424,7 +424,7 @@ public class GameManager : MonoBehaviour
         occupiedTablesCount = 0; // Reiniciar el contador de mesas ocupadas
         exitedMunchosCount = 0; // Reiniciar el contador de munchos que han salido
         // Reiniciar el temporizador de spawn
-        spawnTimer = 0f;
+        spawnTimer = 3f;
 
         // Comenzar el nivel de forma normal
         foreach (var table in tables)
