@@ -156,7 +156,7 @@ public class GameManager : MonoBehaviour
                     if (TutorialController.Instance.gameObject.activeSelf)
                     {
                         Debug.Log("GameManager Continue");
-                        TutorialController.Instance.Continue();
+                        TutorialController.Instance.NextText();
                     }
 
                     // Reactivar el movimiento del jugador

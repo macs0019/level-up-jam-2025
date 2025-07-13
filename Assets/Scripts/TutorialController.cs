@@ -46,6 +46,8 @@ namespace Aviss
         private int currentFrameText;
         private bool canContinue;
 
+        private Tween activeTextTween;
+
         protected override void Awake()
         {
             base.Awake();
@@ -99,13 +101,22 @@ namespace Aviss
         {
             if (canContinue)
             {
-                Debug.Log(currentFrameText);
                 NextTutorial();
             }
             else
             {
                 waitTimePerCharacter = timePerCharacter / timePerCharacterMultiplier;
             }
+        }
+
+        public void NextText()
+        {
+            if (activeTextTween != null)
+            {
+                activeTextTween.Kill(true);
+            }
+
+            NextTutorial();
         }
 
         public void SkipFrame()
@@ -163,7 +174,7 @@ namespace Aviss
             float totalTime = currentText.Length * waitTimePerCharacter;
 
             AudioController.Instance.Play("Boss talk");
-            DOTween.To(() => tutorialText.text, x => tutorialText.text = x, currentText, totalTime)
+            activeTextTween = DOTween.To(() => tutorialText.text, x => tutorialText.text = x, currentText, totalTime)
                 .SetUpdate(true)
                 .OnComplete(() =>
                 {

@@ -196,7 +196,7 @@ public class FoodSelector : InteractableBase
                 if (TutorialController.Instance.gameObject.activeSelf)
                 {
                     Debug.Log("FoodSelector Continue");
-                    TutorialController.Instance.Continue();
+                    TutorialController.Instance.NextText();
                 }
 
 

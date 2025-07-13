@@ -3488,7 +3488,7 @@ MonoBehaviour:
   tutorialText: {fileID: 129552506}
   timeBeforeStartTutorial: 1
   timeBetweenTransition: 1
-  savePlayerPrefs: 1
+  savePlayerPrefs: 0
   playerPrefsKey: Tutorial
   startPosition: {x: -500, y: 0}
   endPosition: {x: 50, y: 0}
