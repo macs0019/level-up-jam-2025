@@ -30,6 +30,12 @@ public class GameManager : MonoBehaviour
     public GameObject[] lives; // Array de objetos que representan las vidas del jugador
     private int currentLives; // Contador de vidas actuales
 
+    public GameObject endScreen;
+
+    public GameObject youWinTitle;
+
+    public GameObject youLoseTitle;
+
     public float probabilityToLeave = 1f; // Probabilidad de que el último FoodSelector se vaya
 
     [System.Serializable]
@@ -65,6 +71,7 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+
         currentLives = lives.Length; // Inicializar el contador con el número de vidas del array
 
         // Buscar al jugador por el tag "Player"
@@ -225,6 +232,15 @@ public class GameManager : MonoBehaviour
                     lives[i].SetActive(false); // Deshabilitar la vida más a la derecha
                 });
                 currentLives--; // Restar una vida del contador
+
+                /*if (currentLives == 0)
+                {
+                    endScreen.SetActive(true); // Mostrar pantalla de fin de juego
+                    Time.timeScale = 0f; // Pausar el juego
+                    youLoseTitle.SetActive(true); // Mostrar título de derrota
+                    isNamingFood = false; // Desactivar el modo de nombrar comida
+                    AudioController.Instance.Play("GameOver");
+                }*/
                 break;
             }
         }
@@ -258,6 +274,7 @@ public class GameManager : MonoBehaviour
         // Comprobar si ya se ha alcanzado el límite de munchos
         if (exitedMunchosCount >= levelSO.Levels[currentLevel].MaxMunchos)
         {
+            Debug.Log("Límite de munchos alcanzado para este nivel.");
             return;
         }
 
@@ -280,7 +297,15 @@ public class GameManager : MonoBehaviour
         Transform[] path = targetTable.path;
 
         // Instanciar el muncho
+        Debug.Log($"Spawning muncho at {path[0].position} on table with path length {path.Length}");
         GameObject muncho = Instantiate(munchoPrefab, path[0].position, Quaternion.identity);
+
+        // Asignar el tiempo de espera al componente FoodSelector
+        FoodSelector munchoFoodSelector = muncho.GetComponent<FoodSelector>();
+        if (munchoFoodSelector != null)
+        {
+            munchoFoodSelector.activeTime = levelSO.Levels[currentLevel].waitingTime;
+        }
         AudioController.Instance.Play("Door");
 
         // Configurar propiedades adicionales del muncho
@@ -374,7 +399,7 @@ public class GameManager : MonoBehaviour
     public void StartNextLevel()
     {
         occupiedTablesCount = 0; // Reiniciar el contador de mesas ocupadas
-        
+        exitedMunchosCount = 0; // Reiniciar el contador de munchos que han salido
         // Reiniciar el temporizador de spawn
         spawnTimer = 0f;
 
@@ -388,6 +413,12 @@ public class GameManager : MonoBehaviour
         if (namerManager != null)
         {
             currentLevel++;
+            if (currentLevel >= levelSO.Levels.Count)
+            {
+                Time.timeScale = 0f; // Pausar el juego
+                endScreen.SetActive(true); // Mostrar pantalla de fin de juego
+                youWinTitle.SetActive(true); // Mostrar título de victoria
+            }
             namerManager.StartNamingAction();
         }
     }
