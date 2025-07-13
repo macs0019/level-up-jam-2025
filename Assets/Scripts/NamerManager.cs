@@ -73,6 +73,7 @@ public class NamerManager : MonoBehaviour
         foodIcons = new List<Sprite>();
         unamedFoods = new List<FoodPOJO>();
         currentInputIndex = 0;
+        numberOfUnamedFoods = levelSO.Levels[currentLevel].numberOfNamings;
         letterCounts.Clear();
 
         playerController.LookAtBossAnimation();
@@ -97,7 +98,7 @@ public class NamerManager : MonoBehaviour
             return;
         }
 
-        lengthText.text = levelSO.Levels[currentLevel].WordLength + " letters";
+        lengthText.text = levelSO.Levels[currentLevel].FirstWordLength + " letters";
 
         // Obtén y almacena los íconos de las comidas
         if (characterSpriteSO != null && foodRenderer != null)
@@ -201,7 +202,7 @@ public class NamerManager : MonoBehaviour
         }
 
         // Validar la longitud de la palabra
-        int requiredLength = levelSO.Levels[currentLevel].WordLength; 
+        int requiredLength = currentInputIndex == 0 ? levelSO.Levels[currentLevel].FirstWordLength : levelSO.Levels[currentLevel].SecondWordLength;
 
         Debug.Log($"[DEBUG] currentInputIndex: {currentInputIndex}, currentLevel: {currentLevel}");
 
@@ -225,11 +226,13 @@ public class NamerManager : MonoBehaviour
         currentInputIndex++;
 
         AudioController.Instance.Play("Writting Next");
-        
+
         if (currentInputIndex < foodIcons.Count)
         {
             // Cambia la imagen y limpia el input
             foodRenderer.transform.DOKill(true);
+            if (numberOfUnamedFoods > 1)
+                lengthText.text = levelSO.Levels[currentLevel].SecondWordLength + " letters";
             foodRenderer.transform.DOPunchScale(Vector3.one / 3f, 0.3f);
             foodRenderer.sprite = foodIcons[currentInputIndex];
             foodNameInput.text = string.Empty;
