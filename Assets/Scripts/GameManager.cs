@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using Aviss;
 using DG.Tweening;
 using TMPro;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -69,6 +71,10 @@ public class GameManager : MonoBehaviour
     private int currentLevel = 0; // Nivel actual, comienza en 0
     private bool isPaused = false;
 
+    public Button playButton;
+
+    public Button exitButton;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -89,6 +95,16 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("No se encontró ningún objeto con el tag 'Player'.");
         }
+
+        playButton.onClick.AddListener(() =>
+        {
+            SceneController.Instance.LoadScene(1);
+        });
+
+        exitButton.onClick.AddListener(() =>
+          {
+              SceneController.Instance.LoadScene(0);
+          });
     }
 
     // Update is called once per frame
