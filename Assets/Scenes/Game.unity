@@ -17814,7 +17814,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  mouseSensitivity: 70
+  mouseSensitivity: 40
   cameraTransform: {fileID: 330585546}
   armsCamTransform: {fileID: 53633305}
   leftArm: {fileID: 968035420}
