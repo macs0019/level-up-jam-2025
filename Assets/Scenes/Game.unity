@@ -15860,11 +15860,6 @@ MonoBehaviour:
   - {fileID: 603314154}
   - {fileID: 1129062887}
   - {fileID: 662329449}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   endScreen: {fileID: 1332324421}
   youWinTitle: {fileID: 1985457377}
   youLoseTitle: {fileID: 1682432671}
