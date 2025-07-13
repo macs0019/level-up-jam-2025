@@ -10,7 +10,13 @@ public class FoodSelector : InteractableBase
     public List<FoodPOJO> foods;
     public SingleAnimation targetRenderer; // SpriteRenderer donde se mostrará el sprite del alimento seleccionado
     public GameObject speechBalloon; // Objeto que se volverá visible
-    public float activeTime = 5.0f; // Tiempo que el objeto estará activo
+    
+    public float activeTime = 5f; // Tiempo que el objeto estará activo antes de desactivarse
+    public float ActiveTime
+    {
+        get => activeTime; // Tiempo que el objeto estará activo
+        set => activeTime = value;
+    } // Tiempo que el objeto estará activo
     public int sortingOffset = 0;
 
     public List<SpriteRenderer> renderers; // Lista de SpriteRenderers para ordenar
@@ -24,6 +30,7 @@ public class FoodSelector : InteractableBase
 
     private float remainingTime = 0f;
     private bool timerRunning = false;
+
 
     private Vector3 initialLocalPos;
     private Quaternion initialLocalRot;

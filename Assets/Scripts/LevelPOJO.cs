@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [Serializable]
@@ -9,4 +10,7 @@ public class LevelPOJO
     public float MunchoEntryDelay;
     public int FirstWordLength;
     public int SecondWordLength;
+    public float waitingTime;
+    public int numberOfFoods;
+
 }
