@@ -207,8 +207,8 @@ MonoBehaviour:
   path: []
   speed: 5
   probabilityToLeave: 1
-  minWaitTime: 3
-  maxWaitTime: 5
+  minWaitTime: 1
+  maxWaitTime: 2
   visualTransform: {fileID: 128753349315368774}
 --- !u!65 &4300754228528335970
 BoxCollider:
