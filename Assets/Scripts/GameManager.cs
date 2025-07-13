@@ -395,6 +395,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator WaitAndStartNextLevel()
     {
+        AudioController.Instance.Play("Next Level");
         yield return new WaitForSeconds(2f);
 
         isNamingFood = true;
