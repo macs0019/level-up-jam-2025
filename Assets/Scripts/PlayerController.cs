@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance.IsNamingFood) return;
+        if (GameManager.Instance.IsNamingFood || GameManager.Instance.IsPaused) return;
 
         float mouseX = lookInput.x * mouseSensitivity * Time.deltaTime;
         float mouseY = lookInput.y * mouseSensitivity * Time.deltaTime;
