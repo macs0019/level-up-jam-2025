@@ -15903,11 +15903,26 @@ MonoBehaviour:
     volume: 0.25
     pitch: 0.4
     clip: {fileID: 8300000, guid: 4288c14421203fe449cbac0ef0ea38eb, type: 3}
+  - name: Victory
+    loop: 0
+    volume: 0.25
+    pitch: 0.4
+    clip: {fileID: 8300000, guid: bcedf1bb046b5cd4d8157e70ec1fcaed, type: 3}
+  - name: GameOver
+    loop: 0
+    volume: 0.25
+    pitch: 0.4
+    clip: {fileID: 8300000, guid: ba4d946c6953bea488b47d2b288b9b1f, type: 3}
+  - name: Muncho Angry
+    loop: 0
+    volume: 1
+    pitch: 0.98
+    clip: {fileID: 8300000, guid: 776a5998d0b136f4494c52a91f8869ed, type: 3}
   multipleSounds:
   - name: Bubble
     loop: 0
     volume: 0.25
-    pitch: 0
+    pitch: 2
     clips:
     - {fileID: 8300000, guid: 4eb3b87ece7f78e4f9350b41f197e5d7, type: 3}
     - {fileID: 8300000, guid: 182f25a1d9b052446846a9edfbd80364, type: 3}
