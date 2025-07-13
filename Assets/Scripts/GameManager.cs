@@ -426,7 +426,7 @@ public class GameManager : MonoBehaviour
                 Cursor.lockState = CursorLockMode.None;
 
                 endScreen.GetComponent<RectTransform>().DOAnchorPosY(0, 0.8f).SetEase(Ease.OutBack);
-
+                AudioController.Instance.Play("Victory");
                 youWinTitle.SetActive(true); // Mostrar título de victoria
             }
             else

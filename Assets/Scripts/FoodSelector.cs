@@ -325,6 +325,7 @@ public class FoodSelector : InteractableBase
             if (!isAngry && isFoodActive)
             {
                 isAngry = true;
+                AudioController.Instance.Play("Muncho Angry");
                 targetRenderer.transform.DOPunchScale(Vector3.one / 4f, 0.5f);
             }
         }

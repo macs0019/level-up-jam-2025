@@ -40,6 +40,10 @@ namespace Aviss
                 sound.Source.pitch = pitch;
                 sound.Play();
             }
+            else
+            {
+                Debug.LogWarning($"Sound '{name}' not found in AudioController.");
+            }
         }
 
         public void Stop(string name)
