@@ -56,6 +56,8 @@ public class NamerManager : MonoBehaviour
 
     public GameObject rememberContainer;
 
+    public TMP_Text dayCounterText; // Texto que muestra el
+
     private bool canSkipRememberingView = false;
 
     private void Awake()
@@ -75,6 +77,8 @@ public class NamerManager : MonoBehaviour
         currentInputIndex = 0;
         numberOfUnamedFoods = levelSO.Levels[currentLevel].numberOfNamings;
         letterCounts.Clear();
+
+        dayCounterText.text = "Day " + (currentLevel + 1) + "/" + levelSO.Levels.Count;
 
         playerController.LookAtBossAnimation();
         foodBalloonTransform.gameObject.SetActive(false);

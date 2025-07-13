@@ -45,7 +45,6 @@ public class GameManager : MonoBehaviour
         public bool isOccupied = false; // Estado de la mesa
     }
 
-
     public List<Table> tables; // Lista de mesas con sus caminos
     [SerializeField] public List<Transform[]> paths; // Lista de caminos (cada camino es un array de puntos)
 
