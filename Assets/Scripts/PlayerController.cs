@@ -95,6 +95,10 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Anular fuerzas externas (si realmente quieres 'locked' físico)
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
         if (GameManager.Instance.IsNamingFood) return;
 
         // Actualizar el temporizador
@@ -123,10 +127,6 @@ public class PlayerController : MonoBehaviour
         }
 
         rb.MovePosition(rb.position + move * speed * Time.fixedDeltaTime);
-
-        // Anular fuerzas externas (si realmente quieres 'locked' físico)
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
     }
 
     public Vector3 GetForwardVector()
