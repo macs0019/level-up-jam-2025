@@ -15837,163 +15837,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1948620744
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1948620746}
-  - component: {fileID: 1948620745}
-  m_Layer: 0
-  m_Name: SoundManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1948620745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1948620744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08434813b82688048b336d0e1e49df38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPersistent: 1
-  singleSounds:
-  - name: Boss angry
-    loop: 0
-    volume: 0.5
-    pitch: 0.1
-    clip: {fileID: 8300000, guid: 225b6eb82e26440458bfab5f14b8774f, type: 3}
-  - name: Boss happy
-    loop: 0
-    volume: 0.5
-    pitch: 0.1
-    clip: {fileID: 8300000, guid: 8aecbd5bd8fe46a4c9b185e9ac4fffb0, type: 3}
-  - name: Music
-    loop: 1
-    volume: 0.05
-    pitch: 0.1
-    clip: {fileID: 8300000, guid: 991241b3ff0bca64f82793da2d880f48, type: 3}
-  - name: Writting
-    loop: 1
-    volume: 1
-    pitch: 1
-    clip: {fileID: 8300000, guid: 8a855a4dddaef6244b19cb7664dbe568, type: 3}
-  - name: Boss talk
-    loop: 0
-    volume: 0.25
-    pitch: 0.4
-    clip: {fileID: 8300000, guid: 70822b694794c3c4296ef966a4d3ab51, type: 3}
-  - name: Door
-    loop: 0
-    volume: 0.25
-    pitch: 0.4
-    clip: {fileID: 8300000, guid: 955e3930425374948b8a611c9d196858, type: 3}
-  - name: Next Level
-    loop: 0
-    volume: 0.25
-    pitch: 0.4
-    clip: {fileID: 8300000, guid: 4288c14421203fe449cbac0ef0ea38eb, type: 3}
-  - name: Victory
-    loop: 0
-    volume: 0.25
-    pitch: 0.4
-    clip: {fileID: 8300000, guid: bcedf1bb046b5cd4d8157e70ec1fcaed, type: 3}
-  - name: GameOver
-    loop: 0
-    volume: 0.25
-    pitch: 0.4
-    clip: {fileID: 8300000, guid: ba4d946c6953bea488b47d2b288b9b1f, type: 3}
-  - name: Muncho Angry
-    loop: 0
-    volume: 1
-    pitch: 0.98
-    clip: {fileID: 8300000, guid: 776a5998d0b136f4494c52a91f8869ed, type: 3}
-  multipleSounds:
-  - name: Bubble
-    loop: 0
-    volume: 0.25
-    pitch: 2
-    clips:
-    - {fileID: 8300000, guid: 4eb3b87ece7f78e4f9350b41f197e5d7, type: 3}
-    - {fileID: 8300000, guid: 182f25a1d9b052446846a9edfbd80364, type: 3}
-    - {fileID: 8300000, guid: e856f5c7b15905e489a02328d8406a45, type: 3}
-    - {fileID: 8300000, guid: 7121be38df055b143899bae9fbd7e47d, type: 3}
-  - name: Muncho Talk
-    loop: 0
-    volume: 0.25
-    pitch: 2.24
-    clips:
-    - {fileID: 8300000, guid: 58bce9f3b8a30844599159a1d9d212e7, type: 3}
-    - {fileID: 8300000, guid: b473b07aab7efe04d86515fdd1ab454f, type: 3}
-    - {fileID: 8300000, guid: f7667d4ce8713b64f90d9d3b303b7602, type: 3}
-  - name: Muncho Walk
-    loop: 0
-    volume: 0.15
-    pitch: 2.24
-    clips:
-    - {fileID: 8300000, guid: b154dc877f837684f8ae0dd958ac97cd, type: 3}
-    - {fileID: 8300000, guid: 3bdeb5303a040a84aa4b821c53465f6e, type: 3}
-    - {fileID: 8300000, guid: ccf2471e98311b248ae376acbb65a3c3, type: 3}
-    - {fileID: 8300000, guid: 032ab92aaddd5c94bb42c8e1ed27edfa, type: 3}
-    - {fileID: 8300000, guid: c9fd0a8286564ec4f9f0f77ea76c2985, type: 3}
-    - {fileID: 8300000, guid: ba39416259e85174bbfa1694eb415ade, type: 3}
-    - {fileID: 8300000, guid: 4060c2a668a02ee44949a8d929888016, type: 3}
-    - {fileID: 8300000, guid: 60e13d0ce1b654941a5d33de3945b6e0, type: 3}
-    - {fileID: 8300000, guid: 0d86efd3cd407bc42b42393a4cc34fff, type: 3}
-    - {fileID: 8300000, guid: 0ce258597bbc52f4a8f5b6c693ed45fe, type: 3}
-    - {fileID: 8300000, guid: 10e1b1b550fe6af43bf65cdaad420352, type: 3}
-    - {fileID: 8300000, guid: bd090baea2277dc4d9f65eafbed8a61e, type: 3}
-    - {fileID: 8300000, guid: 7a5203e9cbd176e44bd244081fdf4755, type: 3}
-    - {fileID: 8300000, guid: 840d47c1073d34c43b146ae9f38ed2b2, type: 3}
-    - {fileID: 8300000, guid: 79491158fe70c654c8f4ede68c679a51, type: 3}
-    - {fileID: 8300000, guid: 5d085edbffb1f424f824ef347b56cb68, type: 3}
-    - {fileID: 8300000, guid: c3476be37f2b55a47895cc9018c6ab9d, type: 3}
-    - {fileID: 8300000, guid: 80d629b6fd4758a449a90b1755ab450c, type: 3}
-    - {fileID: 8300000, guid: 1dbc7c5978766cc4dad1197278a7d17a, type: 3}
-    - {fileID: 8300000, guid: 960ec3cee5f8ca249a0bc1ad7cb3d6fa, type: 3}
-    - {fileID: 8300000, guid: 04ef834513cae4f4390c261ccb7e4a61, type: 3}
-  - name: Writting Next
-    loop: 0
-    volume: 0.15
-    pitch: 2.24
-    clips:
-    - {fileID: 8300000, guid: ab86b5ecab8a9c5458a2cd6c22f55b5e, type: 3}
-    - {fileID: 8300000, guid: 97b34df31134b9b43a7ef7adcbebfa58, type: 3}
-    - {fileID: 8300000, guid: 894cd1421cdaf6c4fba1dcc03b88bf99, type: 3}
-    - {fileID: 8300000, guid: c5c5f707ed3e856458263a678af6fbf8, type: 3}
-  - name: Menu Button
-    loop: 0
-    volume: 0.15
-    pitch: 2.24
-    clips:
-    - {fileID: 8300000, guid: b76169c0d9379f94c8ee1413c3acb8a4, type: 3}
-    - {fileID: 8300000, guid: d689a59b8901d9d4d9e5dba5266380c1, type: 3}
-    - {fileID: 8300000, guid: 1213457befa4d404888a3a05a20d4428, type: 3}
---- !u!4 &1948620746
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1948620744}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 526.57434, y: 0, z: 2987.8003}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1950161056
 GameObject:
   m_ObjectHideFlags: 0
@@ -16912,6 +16755,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 853941428}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &308276059753512292
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3460322591341966377, guid: 82de7d7ea6f31482191db70a65564c1a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 526.57434
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460322591341966377, guid: 82de7d7ea6f31482191db70a65564c1a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460322591341966377, guid: 82de7d7ea6f31482191db70a65564c1a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2987.8003
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460322591341966377, guid: 82de7d7ea6f31482191db70a65564c1a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460322591341966377, guid: 82de7d7ea6f31482191db70a65564c1a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460322591341966377, guid: 82de7d7ea6f31482191db70a65564c1a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460322591341966377, guid: 82de7d7ea6f31482191db70a65564c1a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460322591341966377, guid: 82de7d7ea6f31482191db70a65564c1a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460322591341966377, guid: 82de7d7ea6f31482191db70a65564c1a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3460322591341966377, guid: 82de7d7ea6f31482191db70a65564c1a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7530582222924204918, guid: 82de7d7ea6f31482191db70a65564c1a, type: 3}
+      propertyPath: m_Name
+      value: SoundManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 82de7d7ea6f31482191db70a65564c1a, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -16927,5 +16827,5 @@ SceneRoots:
   - {fileID: 1450593715}
   - {fileID: 1761123482}
   - {fileID: 395835834}
-  - {fileID: 1948620746}
+  - {fileID: 308276059753512292}
   - {fileID: 1057873229}

@@ -168,6 +168,8 @@ public class GameManager : MonoBehaviour
                     LastInteractedFoodSelector = foodSelector;
                     foodSelector.OrderTaken = true; // Marcar que el pedido ha sido tomado
 
+                    input = input.Trim();
+
                     error = !input.Equals(foodName, System.StringComparison.OrdinalIgnoreCase); // Comparar el texto ingresado con el nombre de la comida
 
                     // Agregar la palabra ingresada al texto

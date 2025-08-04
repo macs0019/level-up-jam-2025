@@ -66,5 +66,5 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
-    "dotnet.defaultSolution": "Level-up-2025.sln"
+    "dotnet.defaultSolution": "level-up-jam-2025.sln"
 }
