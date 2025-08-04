@@ -48,7 +48,8 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
         // 3) Solo si el rayo choca con este mismo objeto
         if (didHit && hit.transform == this.transform)
         {
-            if (!canInteract && GameManager.Instance.enteredWordsText.text == string.Empty)
+
+            if (!canInteract)
             {
                 canInteract = true;
                 ShowInteractionPrompt();

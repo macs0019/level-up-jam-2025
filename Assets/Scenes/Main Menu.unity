@@ -2729,7 +2729,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &295789950
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11371,8 +11371,9 @@ MonoBehaviour:
     E for interaction,
 
     Keyboard
-    for writing
+    for writing,
 
+    Escape for settings.
 
 '
   m_isRightToLeft: 0
@@ -14280,7 +14281,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8972186178850577978, guid: d96580a949aa1ae45aceac8b38832047, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8972186180943132968, guid: d96580a949aa1ae45aceac8b38832047, type: 3}
       propertyPath: m_LocalPosition.x

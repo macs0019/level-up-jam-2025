@@ -37,8 +37,6 @@ public class PlayerController : MonoBehaviour
     private Vector3 rightArmStartPos;
     private Tween leftBobTween;
     private Tween rightBobTween;
-
-    private bool stopped = true;
     private float stepCooldown = 0f; // Temporizador para controlar el intervalo entre pasos
     private const float stepInterval = 0.5f; // Intervalo de tiempo entre pasos
 
@@ -99,7 +97,7 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        if (GameManager.Instance.IsNamingFood) return;
+        if (GameManager.Instance.IsNamingFood || GameManager.Instance.IsPaused) return;
 
         // Actualizar el temporizador
         stepCooldown += Time.fixedDeltaTime;

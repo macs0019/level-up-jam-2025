@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Aviss;
 using DG.Tweening;
 using TMPro;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -75,6 +74,9 @@ public class GameManager : MonoBehaviour
 
     public Button exitButton;
 
+    public PauseController pauseController;
+    public bool isWritingFoodName = false; // Indica si se está escribiendo el nombre de la comida
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -134,8 +136,28 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject); // Persistir entre escenas
     }
 
+    public void TogglePause()
+    {
+        isPaused = !isPaused;
+
+        if (isPaused)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            AudioController.Instance.Pause("GameMusic");
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            AudioController.Instance.UnPause("GameMusic");
+        }
+    }
+
     public void AddCommand(string foodName, FoodSelector foodSelector)
     {
+        isWritingFoodName = true; // Activar el modo de nombrar comida
+
         if (commandInputField != null)
         {
             commandInputField.gameObject.SetActive(true); // Activar el InputField
@@ -160,7 +182,6 @@ public class GameManager : MonoBehaviour
             commandInputField.onEndEdit.RemoveAllListeners();
             commandInputField.onEndEdit.AddListener((input) =>
             {
-
                 if (!string.IsNullOrEmpty(input)) // Detectar cuando se finaliza la edición
                 {
 
@@ -208,7 +229,6 @@ public class GameManager : MonoBehaviour
 
     private void Resume(FoodSelector foodSelector, bool resetLastInteracted = true)
     {
-
         if (playerController != null)
         {
             if (resetLastInteracted)
@@ -231,6 +251,7 @@ public class GameManager : MonoBehaviour
             playerController.EndInteractAnimation(() =>
             {
                 playerController.enabled = true;
+                isWritingFoodName = false; // Desactivar el modo de nombrar comida
             });
         }
     }
@@ -254,6 +275,11 @@ public class GameManager : MonoBehaviour
 
                 if (currentLives == 0)
                 {
+                    if (isPaused)
+                    {
+                        pauseController.TogglePause();
+                    }
+
                     endScreen.GetComponent<RectTransform>().DOAnchorPosY(0, 0.8f).SetEase(Ease.OutBack).OnComplete(() =>
                     {
                         isPaused = true;
@@ -434,6 +460,11 @@ public class GameManager : MonoBehaviour
             table.isOccupied = false; // Liberar todas las mesas
         }
 
+        if (isPaused)
+        {
+            pauseController.TogglePause();
+        }
+
         // Reactivar el NamerManager para el nuevo nivel
         if (namerManager != null)
         {
@@ -441,14 +472,12 @@ public class GameManager : MonoBehaviour
 
             if (currentLevel >= levelSO.Levels.Count)
             {
-                isPaused = true; // Pausar el juego si se ha alcanzado el último nivel
                 Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
 
                 endScreen.GetComponent<RectTransform>().DOAnchorPosY(0, 0.8f).SetEase(Ease.OutBack);
                 AudioController.Instance.Play("Victory");
                 youWinTitle.SetActive(true); // Mostrar título de victoria
-                Cursor.lockState = CursorLockMode.Confined;
-                Cursor.visible = true;
             }
             else
             {

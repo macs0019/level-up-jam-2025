@@ -10,7 +10,7 @@ public class FoodSelector : InteractableBase
     public List<FoodPOJO> foods;
     public SingleAnimation targetRenderer; // SpriteRenderer donde se mostrará el sprite del alimento seleccionado
     public GameObject speechBalloon; // Objeto que se volverá visible
-    
+
     public float activeTime = 5f; // Tiempo que el objeto estará activo antes de desactivarse
     public float ActiveTime
     {
@@ -85,6 +85,8 @@ public class FoodSelector : InteractableBase
 
     new void Update()
     {
+        if (GameManager.Instance.IsNamingFood || GameManager.Instance.IsPaused) return;
+
         base.Update(); // Llamar al método Update de la clase base InteractableBase
 
         // Si está activo el timer, lo descontamos
@@ -188,6 +190,16 @@ public class FoodSelector : InteractableBase
         }); // Ocultar la comida y volver al sprite de foodCall
     }
 
+    public override void ShowInteractionPrompt()
+    {
+        if (GameManager.Instance.enteredWordsText.text != string.Empty)
+        {
+            return; // Si hay texto ingresado, no mostrar el prompt de interacción
+        }
+        
+        base.ShowInteractionPrompt(); // Llamar al método de la clase base para mostrar el prompt de interacción
+    }
+
     public override void OnInteract()
     {
         if (GameManager.Instance != null && GameManager.Instance.LastInteractedFoodSelector != null && GameManager.Instance.LastInteractedFoodSelector != this)
@@ -279,16 +291,6 @@ public class FoodSelector : InteractableBase
 
             onComplete?.Invoke();
         });
-    }
-
-    public override void ShowInteractionPrompt()
-    {
-        if (!isFoodActive)
-        {
-            return; // No mostrar el texto de interacción si la comida no está activa
-        }
-
-        base.ShowInteractionPrompt();
     }
 
     void LateUpdate()

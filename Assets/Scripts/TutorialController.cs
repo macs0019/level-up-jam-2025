@@ -48,6 +48,8 @@ namespace Aviss
 
         private Tween activeTextTween;
 
+        public RectTransform remainderRect;
+
         protected override void Awake()
         {
             base.Awake();
@@ -86,6 +88,8 @@ namespace Aviss
 
         private void Update()
         {
+            if (GameManager.Instance.IsPaused) return;
+
             if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
             {
                 if (tutorialFrames[currentFrame].skipWithSpace && currentFrameText < tutorialFrames[currentFrame].textList.Count)
@@ -133,7 +137,13 @@ namespace Aviss
         {
             if (currentFrame < tutorialFrames.Count)
             {
-                tutorialRect.DOAnchorPos(endPosition, timeBetweenTransition).SetUpdate(true).SetEase(Ease.InOutSine).OnComplete(() => WriteText());
+                tutorialRect.DOAnchorPos(endPosition, timeBetweenTransition).SetUpdate(true).SetEase(Ease.InOutSine).OnComplete(() =>
+                {
+                    WriteText();
+
+                    if (currentFrame == tutorialFrames.Count - 1)
+                        remainderRect.DOScale(Vector3.one, 0.2f).SetUpdate(true).SetEase(Ease.InOutSine);
+                });
             }
             else
             {

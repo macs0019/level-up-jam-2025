@@ -127,16 +127,16 @@ namespace Aviss
             switch (randomDirection)
             {
                 case TransitionDirection.UP:
-                    startPosition = new Vector2(0.0f, -1000.0f);
+                    startPosition = new Vector2(0.0f, -veilRect.rect.height);
                     break;
                 case TransitionDirection.LEFT:
-                    startPosition = new Vector2(1000.0f, 0.0f);
+                    startPosition = new Vector2(veilRect.rect.height, 0.0f);
                     break;
                 case TransitionDirection.RIGHT:
-                    startPosition = new Vector2(-1000.0f, 0.0f);
+                    startPosition = new Vector2(-veilRect.rect.height, 0.0f);
                     break;
                 case TransitionDirection.DOWN:
-                    startPosition = new Vector2(0.0f, 1000.0f);
+                    startPosition = new Vector2(0.0f, veilRect.rect.height);
                     break;
                 case TransitionDirection.CENTER:
                     veilRect.localScale = Vector2.zero;
@@ -170,16 +170,16 @@ namespace Aviss
             switch (randomDirection)
             {
                 case TransitionDirection.UP:
-                    endPosition = new Vector2(0.0f, 1000.0f);
+                    endPosition = new Vector2(0.0f, veilRect.rect.height);
                     break;
                 case TransitionDirection.LEFT:
-                    endPosition = new Vector2(-1000.0f, 0.0f);
+                    endPosition = new Vector2(-veilRect.rect.height, 0.0f);
                     break;
                 case TransitionDirection.RIGHT:
-                    endPosition = new Vector2(1000.0f, 0.0f);
+                    endPosition = new Vector2(veilRect.rect.height, 0.0f);
                     break;
                 case TransitionDirection.DOWN:
-                    endPosition = new Vector2(0.0f, -1000.0f);
+                    endPosition = new Vector2(0.0f, -veilRect.rect.height);
                     break;
                 case TransitionDirection.CENTER:
                     veilRect.DOScale(0.0f, transitionDuration).OnComplete(() => isSceneLoadInProgress = false);
